@@ -43,7 +43,7 @@ struct WeightsList: View {
     
     var body: some View {
         NavigationView {
-            if(testValues.isEmpty) {
+            if(WeightVM.weights.isEmpty) {
                 Text("No Entries")
             } else {
                 List {

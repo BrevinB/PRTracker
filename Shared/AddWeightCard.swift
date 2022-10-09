@@ -93,14 +93,18 @@ struct AddWeightCard: View {
                     self.value = nil
                 }, label: {
                     Text("Submit")
-                        .foregroundColor(.green)
+                        .frame(width: 200)
+                        //.foregroundColor(.green)
                 })
-                .buttonStyle(.bordered)
-                .buttonBorderShape(.capsule)
+                .buttonStyle(.borderedProminent)
+                .tint(Color(.systemGreen))
+                .buttonBorderShape(.roundedRectangle(radius: 12))
+                
+                
             }.padding(.bottom)
 
         }
-        .frame(maxWidth: 400, minHeight: 40)
+        .frame(minWidth: 400, minHeight: 40)
         .background {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(.secondarySystemBackground).shadow(.drop(radius: 2)))

@@ -56,6 +56,7 @@ struct Home: View {
                         .fill(Color(.systemGreen).shadow(.drop(radius: 5)))
                 }
                 .pickerStyle(.segmented)
+                .padding()
                 
                 //MARK: Uncomment for testing
 //                if(!WorkoutVM.workouts.isEmpty) {
@@ -73,6 +74,8 @@ struct Home: View {
 //                }
                 
                 AddWeightCard(WorkoutVM: WorkoutVM, WeightVM: WeightVM, type: $currentChartTypeTab, refresh: $refresh)
+                    .padding(.top)
+                    .padding(.bottom)
                 
                 VStack(alignment: .leading, spacing: 12) {
                     HStack {
@@ -94,25 +97,16 @@ struct Home: View {
                         }
                         .sheet(isPresented: $showWeightList, onDismiss: {
                             WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
+                            WeightVM.filteredWeights.removeAll()
+                            getFilteredWeights()
+
                         }) {
                             WeightsList(WeightVM: WeightVM, workoutType: currentChartTypeTab.type ?? "")
                         }
                     }
                     .onChange(of: currentChartTab) { tab in
                         WeightVM.filteredWeights.removeAll()
-                        switch(currentChartTab) {
-                        case "3":
-                            WeightVM.filterWeights(month: -3)
-                        case "6":
-                            WeightVM.filterWeights(month: -6)
-                        case "Year":
-                            WeightVM.filterWeights(month: -12)
-                        case "all":
-                            WeightVM.filterWeights(month: 0)
-                        default:
-                            WeightVM.filterWeights(month: -3)
-                            
-                        }
+                        getFilteredWeights()
                     }
                     if(currentChartTypeTab.type != "Body Weight") {
                         let max = WeightVM.weights.max { item1, item2 in
@@ -150,19 +144,7 @@ struct Home: View {
             .onChange(of: refresh) { newValue in
                 if newValue {
                     WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
-                    switch(currentChartTab) {
-                    case "3":
-                        WeightVM.filterWeights(month: -3)
-                    case "6":
-                        WeightVM.filterWeights(month: -6)
-                    case "Year":
-                        WeightVM.filterWeights(month: -12)
-                    case "all":
-                        WeightVM.filterWeights(month: 0)
-                    default:
-                        WeightVM.filterWeights(month: -3)
-                        
-                    }
+                    getFilteredWeights()
                     refresh.toggle()
                 }
             }
@@ -174,6 +156,22 @@ struct Home: View {
             let workout = WorkoutVM.workouts[offset]
             WorkoutVM.deleteWorkout(workout: workout)
             WorkoutVM.getAllWorkouts()
+        }
+    }
+    
+    private func getFilteredWeights() {
+        switch(currentChartTab) {
+        case "3":
+            WeightVM.filterWeights(month: -3)
+        case "6":
+            WeightVM.filterWeights(month: -6)
+        case "Year":
+            WeightVM.filterWeights(month: -12)
+        case "all":
+            WeightVM.filterWeights(month: 0)
+        default:
+            WeightVM.filterWeights(month: -3)
+            
         }
     }
 }
