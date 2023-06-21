@@ -18,15 +18,15 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Button(action: {
-                    showPremium.toggle()
-                }, label: {
-                    Text("Test Premium")
-                        .foregroundColor(.black)
-                })
-                .sheet(isPresented: $showPremium, content: {
-                    Paywall(isPaywallPresented: .constant(true))
-                })
+//                Button(action: {
+//                    showPremium.toggle()
+//                }, label: {
+//                    Text("Test Premium")
+//                        .foregroundColor(.black)
+//                })
+//                .sheet(isPresented: $showPremium, content: {
+//                    Paywall(isPaywallPresented: .constant(true))
+//                })
                 List {
                     Section("Unit System") {
                         HStack {
@@ -42,30 +42,31 @@ struct SettingsView: View {
                             
                         }
                     }
-//                    Section("Import HealthKit Data") {
+                   Section("Import HealthKit Data") {
                        // HStack {
+                        Text("Feature Coming Soon:")
                             Button(action: {
                                 HealthVM.importData()
                             }, label: {
                                 Text("Import Previous 3 Months")
-                            })
+                            }).disabled(true)
                             
                             Button(action: {
                                 print("Previous 6 months")
                                 //HealthVM.readBodyWeight()
                             }, label: {
                                 Text("Import Previous 6 Months")
-                            })
+                            }).disabled(true)
                             
                             Button(action: {
                                 print("Previous Year")
                                 //HealthVM.readBodyWeight()
                             }, label: {
                                 Text("Import Previous Year")
-                            })
+                            }).disabled(true)
                              
                         //}
-                    //}
+                    }
                     Section("Add Workouts") {
                         VStack {
                             Text("Feature Coming Soon:")
