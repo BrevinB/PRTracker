@@ -14,7 +14,6 @@ class WeightViewModel: ObservableObject {
     @Published var filteredWeights = [WeightModel]()
     
     func getWeightsByType(workoutModel: WorkoutModel) {
-        
         let type = CoreDataManager.shared.getWorkoutById(id: workoutModel.typeId)
         if let type = type {
             DispatchQueue.main.async {
@@ -39,26 +38,34 @@ class WeightViewModel: ObservableObject {
                 self.filteredWeights = self.weights
             } else {
                 let now = Date.now
-                let previous3Months = self.addOrSubtractMonth(month: month)
-                let range = previous3Months...now
+                var range = Date.now...Date.now
+                switch(month) {
+                case -3:
+                    let previous3Months = self.addOrSubtractMonth(month: month)
+                    range = previous3Months...now
+                    break
+                case -6:
+                    let previous6Months = self.addOrSubtractMonth(month: month)
+                    range = previous6Months...now
+                    break
+                case -12:
+                    let previous12Months = self.addOrSubtractMonth(month: month)
+                    range = previous12Months...now
+                    break
+                default:
+                    let previous12Months = self.addOrSubtractMonth(month: month)
+                    range = previous12Months...now
+                    break
+                }
+                
                 for weight in self.weights {
-                    if range.contains(weight.date ?? Date.now) {
+                    if range.contains(weight.date!) {
                         self.filteredWeights.append(weight)
                     }
                 }
                 
                 self.filteredWeights = self.filteredWeights.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
             }
-            
-//            let filtered = self.weights.filter {
-//                return calendar.isDate($0.date ?? Date.now, inSameDayAs: currentDay)
-//            }
-//
-//            DispatchQueue.main.async {
-//                withAnimation {
-//                    self.filteredWeights = filtered
-//                }
-//            }
         }
     }
     

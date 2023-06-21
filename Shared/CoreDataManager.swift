@@ -11,13 +11,13 @@ import SwiftUI
 
 class CoreDataManager {
     
-    let persistentContainer: NSPersistentContainer
+    let persistentContainer: NSPersistentCloudKitContainer
     
     static let shared = CoreDataManager()
     
     private init() {
         
-        persistentContainer = NSPersistentContainer(name: "PRTrackerModel")
+        persistentContainer = NSPersistentCloudKitContainer(name: "PRTrackerModel")
         persistentContainer.loadPersistentStores { (description, error) in
             if let error = error {
                 fatalError("Failed to initialize Core Data \(error)")
@@ -29,7 +29,9 @@ class CoreDataManager {
     }
     
     var viewContext: NSManagedObjectContext {
-        return persistentContainer.viewContext
+        let context = persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        return context
     }
     
     func getWorkoutById(id: NSManagedObjectID) -> Workout? {
@@ -88,7 +90,6 @@ class CoreDataManager {
     
     func save() {
         do {
-            print("SAVING")
             try persistentContainer.viewContext.save()
             print("SAVED")
         } catch {

@@ -18,6 +18,8 @@ class WorkoutViewModel: ObservableObject {
         if let workout = workout {
             CoreDataManager.shared.deleteWorkout(workout)
         }
+        
+        save()
     }
     
     func getAllWorkouts() {
@@ -37,6 +39,13 @@ class WorkoutViewModel: ObservableObject {
         manager.save()
     }
     
+    func addNewWorkout(type: String) {
+        
+        let workout = Workout(context: CoreDataManager.shared.viewContext)
+        workout.type = type
+        
+        save()
+    }
 }
 
 struct WorkoutModel: Hashable {

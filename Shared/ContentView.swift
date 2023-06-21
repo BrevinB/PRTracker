@@ -6,26 +6,26 @@
 //
 
 import SwiftUI
+import HealthKit
 
 struct ContentView: View {
    
     @Environment(\.managedObjectContext) var moc
+    @EnvironmentObject var HealthVM: HealthKitViewModel
     @StateObject private var WorkoutVM = WorkoutViewModel()
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
+    @AppStorage("isHealthKitAuthorized") private var authorizeHealthkit: Bool = false
     
     
     var body: some View {
-        
-        
         VStack {
-            
-            if initialWorkoutSet {
-                Home(moc: moc)
+            if authorizeHealthkit {
+                if initialWorkoutSet {
+                    Home(moc: moc)
+                }
             } else {
-                Text("Hi")
+                
             }
-            
-            
         }
         .onAppear {
             if !initialWorkoutSet {
@@ -39,13 +39,13 @@ struct ContentView: View {
                 WorkoutVM.save()
                 initialWorkoutSet = true
             }
+            
+            if !authorizeHealthkit {
+                HealthVM.healthRequest()
+                authorizeHealthkit = true
+            }
         }
     }
-    
-    func test() {
-        
-    }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {

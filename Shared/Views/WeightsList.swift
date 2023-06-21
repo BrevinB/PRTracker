@@ -17,6 +17,7 @@ struct WeightsList: View {
     @ObservedObject var WeightVM: WeightViewModel
     @Environment(\.dismiss) var dismiss
     var workoutType: String = ""
+    @Binding var refresh: Bool
     
     let testValues = [
         testData(
@@ -50,7 +51,7 @@ struct WeightsList: View {
                     ForEach(WeightVM.weights, id: \.id) { weight in
                         VStack {
                             HStack {
-                                Text(weight.value.stringFormat)
+                                Text(String(weight.value))
                                     .font(.title)
                                     .fontWeight(.bold)
                                     .padding(.trailing)
@@ -100,6 +101,6 @@ struct WeightsList: View {
     
     struct WeightsList_Previews: PreviewProvider {
         static var previews: some View {
-            WeightsList(WeightVM: WeightViewModel(), workoutType: "Body Weight")
+            WeightsList(WeightVM: WeightViewModel(), workoutType: "Body Weight", refresh: .constant(false))
         }
     }
