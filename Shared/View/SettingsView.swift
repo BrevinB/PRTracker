@@ -18,15 +18,15 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Button(action: {
-                    showPremium.toggle()
-                }, label: {
-                    Text("Test Premium")
-                        .foregroundColor(.black)
-                })
-                .sheet(isPresented: $showPremium, content: {
-                    Paywall(isPaywallPresented: .constant(true))
-                })
+//                Button(action: {
+//                    showPremium.toggle()
+//                }, label: {
+//                    Text("Test Premium")
+//                        .foregroundColor(.black)
+//                })
+//                .sheet(isPresented: $showPremium, content: {
+//                    Paywall(isPaywallPresented: .constant(true))
+//                })
                 List {
                     Section("Unit System") {
                         HStack {
