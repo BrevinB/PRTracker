@@ -44,7 +44,7 @@
 		2366F44228D3AC8D00391656 /* WorkoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutViewModel.swift; sourceTree = "<group>"; };
 		2366F44428D3AD2300391656 /* WeightViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightViewModel.swift; sourceTree = "<group>"; };
 		2366F44628D3B17C00391656 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		2366F44828E0867E00391656 /* WeightsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WeightsList.swift; path = Views/WeightsList.swift; sourceTree = "<group>"; };
+		2366F44828E0867E00391656 /* WeightsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightsList.swift; sourceTree = "<group>"; };
 		2366F44A28E099E800391656 /* KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDismiss.swift; sourceTree = "<group>"; };
 		23728909288A10C300181BFB /* AddWeightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeightCard.swift; sourceTree = "<group>"; };
 		23A9C8C628372FDE00C724BF /* PRTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRTrackerApp.swift; sourceTree = "<group>"; };
@@ -99,28 +99,13 @@
 		23A9C8C528372FDE00C724BF /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				23F5FF6A2A43795F0070CB23 /* View */,
+				23F5FF682A4379200070CB23 /* HealthKit */,
+				23F5FF672A4379050070CB23 /* ViewModels */,
 				23F5FF612A3A58C50070CB23 /* Helpers */,
-				2326071929CD456C005630AD /* HealthKitStore.swift */,
-				23BCBFB62A1C30AD005CE235 /* TestHealthKitStore.swift */,
-				2326071A29CE0C00005630AD /* HealthKitViewModel.swift */,
-				2366F44828E0867E00391656 /* WeightsList.swift */,
-				23D8F5DF28A73087003511D4 /* Views */,
 				23A9C8C628372FDE00C724BF /* PRTrackerApp.swift */,
-				23118BB02A3A3D8A00995685 /* Paywall.swift */,
-				23F5FF642A3A610B0070CB23 /* PremiumCard.swift */,
-				23A9C8C728372FDE00C724BF /* ContentView.swift */,
 				23A9C8C828372FDF00C724BF /* Assets.xcassets */,
-				233E308A28485C5C00483134 /* AddWeightView.swift */,
-				23728909288A10C300181BFB /* AddWeightCard.swift */,
-				2366F44A28E099E800391656 /* KeyboardDismiss.swift */,
-				234CFA1D288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift */,
-				23D8F5E228A7310C003511D4 /* AnimatedChart.swift */,
-				23F4E2A0290EB2E100BED6D0 /* PickerComponent.swift */,
 				23385D4828C195C900A58851 /* PRTrackerModel.xcdatamodeld */,
-				2366F44228D3AC8D00391656 /* WorkoutViewModel.swift */,
-				2366F44428D3AD2300391656 /* WeightViewModel.swift */,
-				2366F44628D3B17C00391656 /* CoreDataManager.swift */,
-				23F4E27A290A23A600BED6D0 /* SettingsView.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -141,20 +126,59 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
-		23D8F5DF28A73087003511D4 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				23D8F5E028A7309C003511D4 /* Home.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		23F5FF612A3A58C50070CB23 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				2366F44A28E099E800391656 /* KeyboardDismiss.swift */,
+				234CFA1D288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift */,
 				23F5FF622A3A58FD0070CB23 /* Extensions.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		23F5FF672A4379050070CB23 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				2366F44628D3B17C00391656 /* CoreDataManager.swift */,
+				2326071A29CE0C00005630AD /* HealthKitViewModel.swift */,
+				2366F44428D3AD2300391656 /* WeightViewModel.swift */,
+				2366F44228D3AC8D00391656 /* WorkoutViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		23F5FF682A4379200070CB23 /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				2326071929CD456C005630AD /* HealthKitStore.swift */,
+				23BCBFB62A1C30AD005CE235 /* TestHealthKitStore.swift */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		23F5FF6A2A43795F0070CB23 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				23F5FF6B2A4379A00070CB23 /* Components */,
+				23D8F5E028A7309C003511D4 /* Home.swift */,
+				2366F44828E0867E00391656 /* WeightsList.swift */,
+				23118BB02A3A3D8A00995685 /* Paywall.swift */,
+				23A9C8C728372FDE00C724BF /* ContentView.swift */,
+				233E308A28485C5C00483134 /* AddWeightView.swift */,
+				23F4E27A290A23A600BED6D0 /* SettingsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		23F5FF6B2A4379A00070CB23 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				23F4E2A0290EB2E100BED6D0 /* PickerComponent.swift */,
+				23728909288A10C300181BFB /* AddWeightCard.swift */,
+				23D8F5E228A7310C003511D4 /* AnimatedChart.swift */,
+				23F5FF642A3A610B0070CB23 /* PremiumCard.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
