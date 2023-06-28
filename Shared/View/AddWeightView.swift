@@ -12,6 +12,7 @@ struct AddWeightView: View {
     @ObservedObject var WorkoutVM: WorkoutViewModel
     @ObservedObject var WeightVM: WeightViewModel
     @ObservedObject var HealthKitVM: HealthKitViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.dismiss) var dismiss
     @State private var value: Double?
     @State private var weight = ""
@@ -20,6 +21,7 @@ struct AddWeightView: View {
     @State private var error = false
     @State private var result = ""
     @State private var isMetric = false
+    @State private var promptPremium = false
     
     let dateFormatter = DateFormatter()
     
@@ -135,6 +137,11 @@ struct AddWeightView: View {
             .alert(result, isPresented: $error) {
                 Button("Ok", role: .cancel) { }
             }
+            .sheet(isPresented: $promptPremium,  onDismiss: {
+                promptPremium = false
+            }, content: {
+                Paywall(isPaywallPresented: $promptPremium)
+            })
             
         }.onAppear {
             isMetric = UserDefaults.standard.bool(forKey: "isMetric")
@@ -145,7 +152,16 @@ struct AddWeightView: View {
         if weight == "" || weight == "0" {
            return "Please enter a weight"
         } else {
-            return "Valid"
+            if isSubscribed() {
+                return "Valid"
+            } else {
+                if countEntries() < 10 {
+                    return "Valid"
+                } else {
+                    promptPremium = true
+                    return "\(type.type!) has 10 or more entries, please subscribe to premium or delete old entries"
+                }
+            }
         }
     }
     
@@ -154,12 +170,28 @@ struct AddWeightView: View {
             weight = String(weight.prefix(upper))
         }
     }
+    
+    func isSubscribed() -> Bool {
+        if userViewModel.isSubscriptionActive {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func countEntries() -> Int {
+        return WeightVM.weights.count
+    }
 }
 
 struct AddWeightView_Previews: PreviewProvider {
+    
+    static let userViewModel = UserViewModel()
+    
     static var previews: some View {
         let workout = WorkoutModel(workout: Workout(context: CoreDataManager.shared.viewContext))
         AddWeightView(WorkoutVM: WorkoutViewModel(), WeightVM: WeightViewModel(), HealthKitVM: HealthKitViewModel(), type: workout)
+            .environmentObject(userViewModel)
             
     }
 }
