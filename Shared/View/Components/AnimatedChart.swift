@@ -27,9 +27,6 @@ struct AnimatedChart: View {
         
     
     var body: some View {
-        
-        let prevColor = Color(hue: 0.69, saturation: 0.19, brightness: 0.79)
-        //let curColor = Color(hue: 0.33, saturation: 0.81, brightness: 0.76)
         let curColor = Color(.systemGreen)
         let curGradient = LinearGradient(
             gradient: Gradient(colors: [curColor, curColor.opacity(0.2)]),
