@@ -21,7 +21,6 @@ struct PremiumCard: View {
                 
                 RoundedRectangle(cornerRadius: 20)
                     .fill(.black)
-                    //.frame(width: cardWidth, height: cardHeight)
                 
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
@@ -52,6 +51,10 @@ struct PremiumCard: View {
 
 struct PremiumCard_Previews: PreviewProvider {
     static var previews: some View {
-        PremiumCard(cardTitle: "Monthly Plan", cardDescription: "$0.99 / month", secondCardDescription: "Billed monthly")
+        VStack {
+            PremiumCard(cardTitle: "Monthly Plan", cardDescription: "$0.99 / month", secondCardDescription: "Billed monthly")
+                
+        }
+        
     }
 }

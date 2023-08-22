@@ -37,14 +37,27 @@ class WorkoutViewModel: ObservableObject {
         workout.type = type
         
         manager.save()
+        type = ""
     }
     
     func addNewWorkout(type: String) {
         
-        let workout = Workout(context: CoreDataManager.shared.viewContext)
+        let manager = CoreDataManager.shared
+        let workout = Workout(context: manager.persistentContainer.viewContext)
         workout.type = type
         
-        save()
+        manager.save()
+        
+    }
+    
+    func addGoal(workout: WorkoutModel, goal: Double) {
+        let manager = CoreDataManager.shared
+        let _workout = manager.getWorkoutById(id: workout.typeId)
+        _workout?.goal = goal
+        
+        manager.save()
+        
+        
     }
 }
 
@@ -58,5 +71,9 @@ struct WorkoutModel: Hashable {
     
     var type: String? {
         return workout.type
+    }
+    
+    var goal: Double? {
+        return workout.goal
     }
 }

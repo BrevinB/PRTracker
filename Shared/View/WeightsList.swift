@@ -15,92 +15,81 @@ struct testData: Hashable{
 
 struct WeightsList: View {
     @ObservedObject var WeightVM: WeightViewModel
+    @ObservedObject var HealthKitVM: HealthKitViewModel
+    @Binding var weights: [WeightModel]
+    @Binding var type: WorkoutModel
+    @Binding var isMetric: Bool
     @Environment(\.dismiss) var dismiss
     var workoutType: String = ""
     @Binding var refresh: Bool
     
-    let testValues = [
-        testData(
-            value: 450,
-            date: Date.now,
-            note: "Best PR ive gotten"
-        ),
-        testData(
-            value: 425,
-            date: Date.now.addingTimeInterval(-1000000),
-            note: ""
-        ),
-        testData(
-            value: 405,
-            date: Date.now.addingTimeInterval(-2000000),
-            note: "first time in the 400's!"
-        ),
-        testData(
-            value: 395,
-            date: Date.now.addingTimeInterval(-3000000),
-            note: "felt great, 400 is soon"
-        )
-    ]
-    
     var body: some View {
-        NavigationView {
-            if(WeightVM.weights.isEmpty) {
-                Text("No Entries")
+        ScrollView {
+            if weights.isEmpty {
+                Text("No Weights")
             } else {
-                List {
-                    ForEach(WeightVM.weights, id: \.id) { weight in
-                        VStack {
-                            HStack {
-                                Text(String(weight.value))
-                                    .font(.title)
-                                    .fontWeight(.bold)
-                                    .padding(.trailing)
-                                Text(weight.date!.formatted(date: .numeric, time: .omitted))
-                                    .font(.title3)
-                                
+                VStack(alignment: .trailing, spacing: 0) {
+                    //TODO: add edit button to display sheet with weightcards
+//                    HStack(spacing: 0) {
+//                        Spacer()
+//                        Button(action: {
+//
+//                        }, label: {
+//                            Text("Edit")
+//                        })
+//                        .padding(.trailing, 25)
+//                    }
+//                    .padding(.bottom, 0)
+                    
+                    List {
+                        ForEach(weights, id: \.id) { weight in
+                            VStack {
+                                HStack {
+                                    if(isMetric) {
+                                        Text(weight.value.convertToMetric.stringFormat)
+                                            .font(.title)
+                                            .fontWeight(.bold)
+                                            .padding(.trailing)
+                                    } else {
+                                        Text(weight.value.stringFormat)
+                                            .font(.title)
+                                            .fontWeight(.bold)
+                                        //.padding(.trailing)
+                                    }
+                                    
+                                    Text(weight.date!.formatted(date: .numeric, time: .omitted))
+                                        .font(.title3)
+                                    Spacer()
+                                }
+                                Text(weight.note ?? "")
+                                    .font(.subheadline)
                             }
-                            Text(weight.note ?? "")
-                                .font(.subheadline)
-                        }
-                        
-                        
-                        //for testing
-                        //                    ForEach(testValues, id: \.self) { weight in
-                        //                        VStack {
-                        //                            HStack {
-                        //                                Text(weight.value.stringFormat)
-                        //                                    .font(.title)
-                        //                                    .fontWeight(.bold)
-                        //                                    .padding(.trailing)
-                        //                                Text(weight.date.formatted(date: .numeric, time: .omitted))
-                        //                                    .font(.title3)
-                        //
-                        //                            }
-                        //                            Text(weight.note)
-                        //                                .font(.subheadline)
-                        //                        }
+                        }.onDelete(perform: deleteValue)
                     }
-                        .onDelete(perform: deleteValue)
-                    }
-                    .toolbar {
-                        EditButton()
-                    }
-                    .navigationTitle("\(workoutType)")
+                    .padding(.top, 0)
                 }
+              
+//                .toolbar {
+//                    EditButton()
+//                }
+                .frame(minWidth: 400, minHeight: 500)
+            }
             }
             
         }
         
-        private func deleteValue(at offsets: IndexSet) {
-            offsets.forEach { offset in
-                let weight = WeightVM.weights[offset]
-                WeightVM.deleteWeight(weight: weight)
+    private func deleteValue(at offsets: IndexSet) {
+        offsets.forEach { offset in
+            let weight = WeightVM.weights[offset]
+            if type.type == "Body Weight" {
+                HealthKitVM.deleteData(date: weight.date ?? Date.now, bodyMass: weight.value)
             }
+            WeightVM.deleteWeight(weight: weight)
         }
+        refresh.toggle()
+        WeightVM.weights.removeAll()
+        WeightVM.filteredWeights.removeAll()
+        WeightVM.getWeightsByType(workoutModel: type)
+        WeightVM.filterWeights(month: 0)
     }
-    
-    struct WeightsList_Previews: PreviewProvider {
-        static var previews: some View {
-            WeightsList(WeightVM: WeightViewModel(), workoutType: "Body Weight", refresh: .constant(false))
-        }
     }

@@ -13,6 +13,7 @@ struct Home: View {
     @StateObject var WorkoutVM = WorkoutViewModel()
     @StateObject var WeightVM = WeightViewModel()
     @StateObject var HealthKitVM = HealthKitViewModel()
+    @EnvironmentObject var userViewModel: UserViewModel
     @State private var currentChartTab: String = "3"
     @FetchRequest private var chartTypes: FetchedResults<Workout>
     @State private var currentChartTypeTab: WorkoutModel
@@ -22,6 +23,8 @@ struct Home: View {
     @State private var showNewWeight: Bool = false
     @State private var showWeightList: Bool = false
     @State private var showSettings: Bool = false
+    @State private var showAddGoal: Bool = false
+    @State private var showPremium: Bool = false
    
     init(moc: NSManagedObjectContext) {
         let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
@@ -38,154 +41,171 @@ struct Home: View {
     }
     
     var body: some View {
-        NavigationStack {
-            HStack {
-                Text("")
-                    .padding(.leading)
-                Menu {
-                    Picker("", selection: $currentChartTypeTab) {
-                        ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
-                            Text(workout.type ?? "")
-                                .tag(workout)
+        ZStack {
+            NavigationStack {
+                HStack {
+                    Text("")
+                        .padding(.leading)
+                    Menu {
+                        Picker("", selection: $currentChartTypeTab) {
+                            ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
+                                Text(workout.type ?? "")
+                                    .tag(workout)
+                            }
                         }
+                    } label: {
+                        pickerLabelView
                     }
-//                    .onChange(of: currentChartTypeTab) { tag in
-//                        print(tag.workout)
-//                        print("TESTING")
-//                        refresh.toggle()
-////                        if(!WeightVM.weights.isEmpty) {
-////                            WeightVM.weights.removeAll()
-////                            WeightVM.filteredWeights.removeAll()
-////                        }
-////                        WeightVM.getWeightsByType(workoutModel: tag)
-////                        getFilteredWeights()
-//                    }
-                } label: {
-                    pickerLabelView
+                    .padding(.trailing, 50)
+                    Spacer()
                 }
-                .padding(.trailing, 50)
-                Spacer()
-            }
-
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        Picker("", selection: $currentChartTab) {
-                            Text("3 Months")
-                                .tag("3")
-                            Text("6 Months")
-                                .tag("6")
-                            Text("Year")
-                                .tag("Year")
-                            Text("All Time")
-                                .tag("all")
+                
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Picker("", selection: $currentChartTab.animation(.spring(dampingFraction: 0.4))) {
+                                Text("3 Months")
+                                    .tag("3")
+                                Text("6 Months")
+                                    .tag("6")
+                                Text("Year")
+                                    .tag("Year")
+                                Text("All Time")
+                                    .tag("all")
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .labelsHidden()
                         }
-                        .pickerStyle(.segmented)
-                    }
-                    .onChange(of: currentChartTab) { tab in
-                        WeightVM.filteredWeights.removeAll()
-                        getFilteredWeights()
-                    }
-                    if(currentChartTypeTab.type != "Body Weight") {
-                        let max = WeightVM.weights.max { item1, item2 in
-                            return item2.value > item1.value
-                        }?.value ?? 0.0
-                        Text("PR: \(max.stringFormat)")
-                            .font(.largeTitle.bold())
-                        if(currentChartTypeTab.type == "Deadlift") {
-                            Image(systemName: "figure.strengthtraining.traditional")
+                        
+                        HStack {
+                            if(currentChartTypeTab.type != "Body Weight") {
+                                let max = WeightVM.weights.max { item1, item2 in
+                                    return item2.value > item1.value
+                                }?.value ?? 0.0
+                                Text("PR: \(max.stringFormat)")
+                                    .font(.largeTitle.bold())
+                                if(currentChartTypeTab.type == "Deadlift") {
+                                    Image(systemName: "figure.strengthtraining.traditional")
+                                }
+                            }
+                            
+                            Spacer()
+                            Button(action: {
+                                if !userViewModel.isSubscriptionActive {
+                                    showAddGoal.toggle()
+                                } else {
+                                    showPremium.toggle()
+                                }
+                                //toggle show goal
+                            }, label: {
+                                if currentChartTypeTab.goal == 0.0 {
+                                    Text("Add Goal")
+                                        .fontWeight(.bold)
+                                } else {
+                                    Text("Edit Goal")
+                                        .fontWeight(.bold)
+                                }
+                            })
                         }
+                        
+                        switch(currentChartTab) {
+                        case "3":
+                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.threeMonthWeights, chartRange: $currentChartTab, isMetric: $isMetric)
+                        case "6":
+                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.sixMonthWeights, chartRange: $currentChartTab, isMetric: $isMetric)
+                        case "Year":
+                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.oneYearWeights, chartRange: $currentChartTab, isMetric: $isMetric)
+                        case "all":
+                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.allTimeWeights, chartRange: $currentChartTab, isMetric: $isMetric)
+                        default:
+                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.threeMonthWeights, chartRange: $currentChartTab, isMetric: $isMetric)
+                            
+                        }
+                        
+                        
+                    }
+                    .padding()
+            
+                    //Spacer()
+                    VStack {
+                        switch(currentChartTab) {
+                            case "3":
+                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.threeMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                            case "6":
+                                WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.sixMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                            case "Year":
+                                WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.oneYearWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                            case "all":
+                                WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.allTimeWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                            default:
+                                Text("No Weights")
+                        }
+                      
                     }
                     
-                    AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, chartRange: $currentChartTab, isMetric: $isMetric)
-
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding()
-                .background {
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(Color(.secondarySystemBackground).shadow(.drop(radius: 2)))
-                }
-                
-                
-                VStack {
-                    if WeightVM.filteredWeights.isEmpty {
-                        Text("No Weights")
-                    } else {
-                        List {
-                            ForEach(WeightVM.filteredWeights, id: \.id) { weight in
-                                VStack {
-                                    HStack {
-                                        if(isMetric) {
-                                            Text(weight.value.convertToMetric.stringFormat)
-                                                .font(.title)
-                                                .fontWeight(.bold)
-                                                .padding(.trailing)
-                                        } else {
-                                            Text(weight.value.stringFormat)
-                                                .font(.title)
-                                                .fontWeight(.bold)
-                                                //.padding(.trailing)
-                                        }
-                                       
-                                        Text(weight.date!.formatted(date: .numeric, time: .omitted))
-                                            .font(.title3)
-                                        Spacer()
-                                    }
-                                    Text(weight.note ?? "")
-                                        .font(.subheadline)
-                                } 
-                            }.onDelete(perform: deleteValue)
-                        }
-                        .frame(minWidth: 400, minHeight: 500)
-                    }
-                }
-                
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding()
-            .onChange(of: currentChartTypeTab) { tag in
-                refresh.toggle()
-            }
-            .onChange(of: refresh) { newValue in
-                if newValue {
-                    WeightVM.weights.removeAll()
-                    WeightVM.filteredWeights.removeAll()
-                    WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
-                    getFilteredWeights()
+                .onChange(of: currentChartTypeTab) { tag in
                     refresh.toggle()
                 }
-            }
-            .toolbar {
-                Button(action: {
-                    showSettings.toggle()
-                }, label: {
-                    Image(systemName: "gear")
+                .onChange(of: refresh) { newValue in
+                    if newValue {
+                        WeightVM.weights.removeAll()
+                        WeightVM.filteredWeights.removeAll()
+                        WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
+                        getFilteredWeights()
+                        refresh.toggle()
+                    }
+                }
+                .toolbar {
+                    Button(action: {
+                        showSettings.toggle()
+                    }, label: {
+                        Image(systemName: "gear")
+                    })
+                    Button(action: {
+                        showNewWeight.toggle()
+                    }, label: {
+                        Image(systemName: "plus.circle")
+                    })
+                }
+                .sheet(isPresented: $showNewWeight, onDismiss: {
+                    refresh.toggle()
+                }, content: {
+                    AddWeightView(WorkoutVM: WorkoutVM, WeightVM: WeightVM, HealthKitVM: HealthKitVM, type: currentChartTypeTab)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.automatic)
                 })
-                Button(action: {
-                    showNewWeight.toggle()
-                }, label: {
-                    Image(systemName: "plus.circle")
+                .sheet(isPresented: $showSettings, onDismiss: {
+                    refresh.toggle()
+                }, content: {
+                    SettingsView(WorkoutVM: WorkoutVM, HealthVM: HealthKitVM, WeightVM: WeightVM, isMetric: $isMetric)
                 })
+                .sheet(isPresented: $showPremium, onDismiss: {
+                    
+                }, content: {
+                    Paywall(isPaywallPresented: $showPremium)
+                })
+                .sheet(isPresented: $showAddGoal, onDismiss: {
+
+                }, content: {
+                    AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh)
+                        .presentationDetents([.medium, .large])
+                        .presentationDragIndicator(.automatic)
+                })
+                
+               
             }
-            .sheet(isPresented: $showNewWeight, onDismiss: {
-                refresh.toggle()
-            }, content: {
-                AddWeightView(WorkoutVM: WorkoutVM, WeightVM: WeightVM, HealthKitVM: HealthKitVM, type: currentChartTypeTab)
-            })
-            .sheet(isPresented: $showSettings, onDismiss: {
-                refresh.toggle()
-            }, content: {
-                SettingsView(WorkoutVM: WorkoutVM, HealthVM: HealthKitVM, isMetric: $isMetric)
-            })
-        }
-        .onAppear {
-            WorkoutVM.getAllWorkouts()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                currentChartTypeTab = WorkoutVM.workouts[0]
+            .onAppear {
+                WorkoutVM.getAllWorkouts()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    currentChartTypeTab = WorkoutVM.workouts[0]
+                }
+                isMetric = UserDefaults.standard.bool(forKey: "isMetric")
             }
-            isMetric = UserDefaults.standard.bool(forKey: "isMetric")
         }
+        
     }
     
     private func deleteWorkout(at offsets: IndexSet) {
@@ -231,21 +251,16 @@ struct Home: View {
     
     
     var pickerLabelView: some View {
-            HStack {
-                Text(currentChartTypeTab.type ?? "Body Weight")
-                    
-                    Text("⌵")
-                        .offset(y: -4)
-                }
-                .foregroundColor(.white)
-                .font(.title)
-                .fontWeight(.bold)
-                .frame(maxWidth: 250)
-                .padding(5)
-                .background(Color.green)
-                .cornerRadius(16)
-                
-                
+        HStack {
+            Text(currentChartTypeTab.type ?? "Body Weight")
+            Text("⌵")
+                .offset(y: -4)
+            }
+            .foregroundColor(.primary)
+            .font(.title)
+            .fontWeight(.bold)
+            .frame(maxWidth: 250)
+            .padding()
     }
 }
 
@@ -259,7 +274,6 @@ struct Home_Previews: PreviewProvider {
 }
 
 // MARK: Extension to convert Double to String with lbs / kg
-//TODO: Implement option for kg vs lbs
 extension Double {
     var stringFormat: String {
         let isMetric = UserDefaults.standard.bool(forKey: "isMetric")

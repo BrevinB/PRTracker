@@ -19,6 +19,9 @@
 		2366F44928E0867E00391656 /* WeightsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44828E0867E00391656 /* WeightsList.swift */; };
 		2366F44B28E099E800391656 /* KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44A28E099E800391656 /* KeyboardDismiss.swift */; };
 		2372890A288A10C300181BFB /* AddWeightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23728909288A10C300181BFB /* AddWeightCard.swift */; };
+		2395AE5A2A5CE50600176218 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE592A5CE50600176218 /* ArrayDifference.swift */; };
+		2395AE762A68496000176218 /* WeightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE752A68496000176218 /* WeightCard.swift */; };
+		2395AE782A698C8E00176218 /* AddGoalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE772A698C8E00176218 /* AddGoalCard.swift */; };
 		23A9C8D628372FDF00C724BF /* PRTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A9C8C628372FDE00C724BF /* PRTrackerApp.swift */; };
 		23A9C8D828372FDF00C724BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A9C8C728372FDE00C724BF /* ContentView.swift */; };
 		23A9C8DA28372FDF00C724BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23A9C8C828372FDF00C724BF /* Assets.xcassets */; };
@@ -49,6 +52,9 @@
 		2366F44828E0867E00391656 /* WeightsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightsList.swift; sourceTree = "<group>"; };
 		2366F44A28E099E800391656 /* KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDismiss.swift; sourceTree = "<group>"; };
 		23728909288A10C300181BFB /* AddWeightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeightCard.swift; sourceTree = "<group>"; };
+		2395AE592A5CE50600176218 /* ArrayDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDifference.swift; sourceTree = "<group>"; };
+		2395AE752A68496000176218 /* WeightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCard.swift; sourceTree = "<group>"; };
+		2395AE772A698C8E00176218 /* AddGoalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalCard.swift; sourceTree = "<group>"; };
 		23A9C8C628372FDE00C724BF /* PRTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRTrackerApp.swift; sourceTree = "<group>"; };
 		23A9C8C728372FDE00C724BF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		23A9C8C828372FDF00C724BF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -134,6 +140,7 @@
 				2366F44A28E099E800391656 /* KeyboardDismiss.swift */,
 				234CFA1D288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift */,
 				23F5FF622A3A58FD0070CB23 /* Extensions.swift */,
+				2395AE592A5CE50600176218 /* ArrayDifference.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -176,8 +183,10 @@
 		23F5FF6B2A4379A00070CB23 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				2395AE752A68496000176218 /* WeightCard.swift */,
 				23F4E2A0290EB2E100BED6D0 /* PickerComponent.swift */,
 				23728909288A10C300181BFB /* AddWeightCard.swift */,
+				2395AE772A698C8E00176218 /* AddGoalCard.swift */,
 				23D8F5E228A7310C003511D4 /* AnimatedChart.swift */,
 				23F5FF642A3A610B0070CB23 /* PremiumCard.swift */,
 			);
@@ -266,14 +275,17 @@
 				23118BB12A3A3D8A00995685 /* Paywall.swift in Sources */,
 				23A9C8D828372FDF00C724BF /* ContentView.swift in Sources */,
 				23F5FF652A3A610B0070CB23 /* PremiumCard.swift in Sources */,
+				2395AE762A68496000176218 /* WeightCard.swift in Sources */,
 				23D8F5E128A7309C003511D4 /* Home.swift in Sources */,
 				233E308B28485C5C00483134 /* AddWeightView.swift in Sources */,
 				2366F44328D3AC8D00391656 /* WorkoutViewModel.swift in Sources */,
+				2395AE5A2A5CE50600176218 /* ArrayDifference.swift in Sources */,
 				2366F44728D3B17C00391656 /* CoreDataManager.swift in Sources */,
 				23F4E27B290A23A600BED6D0 /* SettingsView.swift in Sources */,
 				2366F44928E0867E00391656 /* WeightsList.swift in Sources */,
 				234CFA1E288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift in Sources */,
 				23B9932A29CE16D3001503FD /* HealthKitStore.swift in Sources */,
+				2395AE782A698C8E00176218 /* AddGoalCard.swift in Sources */,
 				2366F44528D3AD2300391656 /* WeightViewModel.swift in Sources */,
 				23A9C8D628372FDF00C724BF /* PRTrackerApp.swift in Sources */,
 				23F5FF632A3A58FD0070CB23 /* Extensions.swift in Sources */,

@@ -10,6 +10,12 @@ import HealthKit
 
 class HealthKitStore {
     
+    enum HealthKitError: Error {
+        case cantFindData
+        case insufficientFunds(coinsNeeded: Int)
+        case outOfStock
+    }
+    
     func setUpHealthRequest(healthStore: HKHealthStore, readSteps: @escaping () -> Void) {
         if HKHealthStore.isHealthDataAvailable(), let bodyWeight = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bodyMass) {
             healthStore.requestAuthorization(toShare: [bodyWeight], read: [bodyWeight]) { success, error in
@@ -40,7 +46,7 @@ class HealthKitStore {
     }
     
     
-    func getWeightData(forDay days: Int, healthStore: HKHealthStore, completion: @escaping ((_ weight: Double?, _ date: Date?) -> Void)) {
+    func getWeightData(forDay days: Int, healthStore: HKHealthStore, completion: @escaping ((_ weight: Double?, _ date: Date?) -> Void)) async {
         guard let bodyMassType = HKObjectType.quantityType(forIdentifier: .bodyMass) else {
             print("Unable to create a bodyMass type")
             return
@@ -69,7 +75,7 @@ class HealthKitStore {
             
             results.enumerateStatistics(from: startDate, to: now) { statistics, _  in
                 if let sum = statistics.mostRecentQuantity() {
-                    let bodyMassValue = sum.doubleValue(for: HKUnit.gramUnit(with: .kilo)).rounded()
+                    let bodyMassValue = sum.doubleValue(for: .pound()).rounded()
                     completion(bodyMassValue, statistics.startDate)
                     return
                 }
@@ -238,7 +244,7 @@ class HealthKitStore {
                             
                           } else {
                               // Handle error
-                              print("UH OHHHHH \(error)")
+                              print(error!)
                               print(samplesToDelete.count)
                           }
                       })

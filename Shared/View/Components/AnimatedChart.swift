@@ -11,70 +11,87 @@ import Charts
 struct AnimatedChart: View {
     @Binding var chartType: WorkoutModel
     @ObservedObject var WeightsVM: WeightViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
+    @Binding var weights: [WeightModel] 
     @Binding var chartRange : String
     @Binding var isMetric: Bool
     let highestWeight = 300
     let goalWeight = 220.0
     
     @State private var lineWidth = 2.0
-    //@State private var interpolationMethod: ChartInterpolationMethod = .cardinal
     @State private var chartColor: Color = .green
     @State private var showSymbols = true
-    //@State private var selectedElement: Sale? = SalesData.last30Days[10]
     @State private var showLollipop = true
     @State private var selectedWeight: WeightModel?
     
+        
+    
     var body: some View {
+        
+        let prevColor = Color(hue: 0.69, saturation: 0.19, brightness: 0.79)
+        //let curColor = Color(hue: 0.33, saturation: 0.81, brightness: 0.76)
+        let curColor = Color(.systemGreen)
+        let curGradient = LinearGradient(
+            gradient: Gradient(colors: [curColor, curColor.opacity(0.2)]),
+            startPoint: .bottom,
+            endPoint: .top
+        )
+        
         VStack {
-            if(WeightsVM.filteredWeights.isEmpty) {
-                Text("No data for \(chartType.type ?? "") in the past \(chartRange) Months")
-            } else {
-                let _max = WeightsVM.filteredWeights.max { item1, item2 in
+            if(!weights.isEmpty) {
+                let _max = weights.max { item1, item2 in
                     return item2.value > item1.value
                 }?.value ?? 0.0
                 
-                let _min = WeightsVM.filteredWeights.min { item1, item2 in
+                let _min = weights.min { item1, item2 in
                     return item1.value < item2.value
                 }?.value ?? 0.0
-                //TODO: Fix below code for when selecting a date
-//                HStack {
-//                    Spacer()
-//
-//                    VStack(alignment: .trailing) {
-//                        Text("\(selectedWeight?.date ?? Date.now, format: .dateTime.year().month().day())")
-//                            .font(.callout)
-//                            .foregroundStyle(.secondary)
-//                        Text("\(selectedWeight?.value.stringFormat ?? "") lbs")
-//                            .font(.title2.bold())
-//                            .foregroundColor(.primary)
-//                    }
-//                    .accessibilityElement(children: .combine)
-//                    .background {
-//                        ZStack {
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .fill(.background)
-//                            RoundedRectangle(cornerRadius: 8)
-//                                .fill(.quaternary.opacity(0.7))
-//                        }
-//                        .padding(.horizontal, -8)
-//                        .padding(.vertical, -4)
-//                    }
-//                }
+                
                 Chart {
-                    ForEach(WeightsVM.filteredWeights) { weights in
+                    ForEach(weights) { weights in
                         LineMark(x: .value("Date", weights.date ?? Date.now),
                                  y: .value("Weight", isMetric ? weights.value.convertToMetric : weights.value)
                         )
-                        .lineStyle(.init(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                        .foregroundStyle(Gradient(colors: [.green]))
+                        .lineStyle(.init(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                        .foregroundStyle(curColor)
                         .symbolSize(60)
+                        .interpolationMethod(.linear)
+                        
+                        AreaMark(
+                            x: .value("Date", weights.date ?? Date.now),
+                            y: .value("Weight", isMetric ? weights.value.convertToMetric : weights.value)
+                        )
+                        .interpolationMethod(.linear)
+                        .foregroundStyle(curGradient)
+                        .opacity(0.5)
+                        
+                        
+                        if !userViewModel.isSubscriptionActive {
+                            RuleMark(y: .value("Goal", chartType.goal ?? 0.0))
+                            .lineStyle(StrokeStyle(lineWidth: 3))
+                            .annotation(position: .top, alignment: .leading){
+                                Text("Goal \(chartType.goal!.formatted())")
+                            }
+                        }
                     }
                 }
-                .chartYScale(domain: (isMetric ? _min.convertToMetric : _min - 5)...(isMetric ? _max.convertToMetric : _max + 5))
-                .frame(height: 250)
+                .customYAxisScale(_min: _min, _max: _max, goal: chartType.goal ?? 0.0, isMetric: isMetric)
+                .chartXScale(range: .plotDimension(padding: 20.0))
+                .chartPlotStyle{plotArea in
+                    plotArea
+                        .frame(maxWidth: .infinity, minHeight: 250.0, maxHeight: 250.0)
+                        .clipped()
+                        
+                }
+                .chartYAxis{
+                    AxisMarks(position: .leading)
+                }
+
+            } else {
+                Spacer()
+                Text("No data for \(chartType.type ?? "") in the past \(chartRange) Months")
+                Spacer()
             }
-        }.onAppear {
-            print(isMetric)
         }
     }
     
@@ -100,11 +117,19 @@ struct AnimatedChart: View {
     
 }
 
-struct AnimatedChart_Previews: PreviewProvider {
-    static var previews: some View {
-        
-        let workout = WorkoutModel(workout: Workout(context: CoreDataManager.shared.viewContext))
-        
-        AnimatedChart(chartType: .constant(workout), WeightsVM: WeightViewModel(), chartRange: .constant("3 Months"), isMetric: .constant(false))
+
+extension View {
+    func customYAxisScale(_min: Double, _max: Double, goal: Double, isMetric: Bool) -> some View {
+        if goal != 0.0 {
+            if goal <= _min {
+                return self.chartYScale(domain: (isMetric ? goal.convertToMetric : goal)...(isMetric ? _max.convertToMetric : _max))
+            } else if goal >= _max {
+                return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min)...(isMetric ? goal.convertToMetric : goal + 20))
+            } else {
+                return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min - 10)...(isMetric ? _max.convertToMetric : _max + 10))
+            }
+        } else {
+            return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min - 10)...(isMetric ? _max.convertToMetric : _max + 10))
+        }
     }
 }

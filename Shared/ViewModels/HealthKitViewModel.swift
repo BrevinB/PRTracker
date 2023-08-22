@@ -11,8 +11,18 @@ import HealthKit
 class HealthKitViewModel : ObservableObject {
     private var healthStore = HKHealthStore()
     private var healthKitManager = HealthKitStore()
+    @Published var WorkoutVM = WorkoutViewModel()
+    @Published var WeightVM = WeightViewModel()
     @Published var userBodyMass = "Empty"
     @Published var isAuthorized = false
+    var isHealthDataDone = false
+    struct healthKitWeight: Identifiable, Equatable {
+        var id = UUID()
+        var weight: Double
+        var date: Date
+    }
+    var testingWeightModel: [WeightModel] = []
+    var testingData: [healthKitWeight] = []
     
     func healthRequest() {
         healthKitManager.setUpHealthRequest(healthStore: healthStore) {
@@ -42,13 +52,103 @@ class HealthKitViewModel : ObservableObject {
     }
     
     func importIntoHealthKit(date: String, bodyMass: Double) {
-        print(date)
         healthKitManager.importBodyMassData(date: date, bodyMass: bodyMass)
     }
     
     func deleteData(date: Date, bodyMass: Double) {
-        print("DATE IS \(date)")
-        print("BODY MASS IS \(bodyMass)")
         healthKitManager.deleteBodyMassData(dateDelete: date, bodyMassDelete: bodyMass)
+    }
+    
+    func getHealthKitData() async -> [healthKitWeight] {
+        
+        await healthKitManager.getWeightData(forDay: 10, healthStore: healthStore) { weight, date in
+                let newVal = healthKitWeight(weight: weight!, date: date!)
+                print(newVal)
+                self.testingData.append(newVal)
+                print(self.testingData.count)
+                //self.isHealthDataDone = true
+                
+            }
+        print(testingData.count)
+        
+        return testingData
+    }
+    
+    func checkData(workoutVM: WorkoutViewModel, weightVM: WeightViewModel) async {
+        var CDWeights: [WeightModel] = []
+        workoutVM.getAllWorkouts()
+        if let bodyWeight = workoutVM.workouts.first(where: {$0.type == "Body Weight"}) {
+           // do something with foo
+            weightVM.getWeightsByType(workoutModel: bodyWeight)
+            CDWeights = weightVM.weights
+            //let testDifferences = testingData.difference(from: CDWeights)
+            
+            var testingArrayData: [healthKitWeight] = []
+            for HKweight in testingData {
+                let newVal = healthKitWeight(weight: HKweight.weight, date: HKweight.date)
+                testingArrayData.append(newVal)
+            }
+            if CDWeights.count >= testingData.count {
+                //delete from healthkit?
+                CDWeights.removeAll()
+                testingData.removeAll()
+            } else {
+                //import old data
+                let differences = testingArrayData.difference(from: testingData)
+                _ = differences.insertions.compactMap { change -> IndexPath? in
+                  guard case let .insert(offset, _, _) = change
+                    else { return nil }
+
+                  return IndexPath(row: offset, section: 0)
+                }
+                
+                print(differences.removals)
+                
+                _ = differences.removals.compactMap { change -> IndexPath? in
+                  guard case let .remove(offset, _, _) = change
+                    else { return nil }
+
+                  return IndexPath(row: offset, section: 0)
+                }
+                
+                
+                CDWeights.removeAll()
+                testingData.removeAll()
+            }
+        } else {
+           // item could not be found
+            print("Item not found")
+        }
+    }
+    
+    func testingFetchData() async throws -> String {
+        await healthKitManager.getWeightData(forDay: 10, healthStore: healthStore) { weight, date in
+                let newVal = healthKitWeight(weight: weight!, date: date!)
+                print(newVal)
+                self.testingData.append(newVal)
+                print(self.testingData.count)
+                self.isHealthDataDone = true
+                
+            }
+        try await Task.sleep(nanoseconds: 2 * 1_000_000_000) // Simulating a 2-second delay
+        return "Fetching is done"
+    }
+    
+    func fetchDataAndReport(workoutVM: WorkoutViewModel, weightVM: WeightViewModel) async -> Bool {
+        do {
+            let data = try await testingFetchData()
+            await checkData(workoutVM: workoutVM, weightVM: weightVM)
+            DispatchQueue.main.async {
+                // Update the UI once the health data is available
+                
+                print(data)
+                print(self.testingData.count)
+                //self.healthData = data
+            }
+            return true
+        } catch {
+            print("Error fetching health data: \(error)")
+            return false
+        }
     }
 }

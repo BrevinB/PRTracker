@@ -104,11 +104,11 @@ struct AddWeightCard: View {
             }.padding(.bottom)
 
         }
-        .frame(minWidth: 400, minHeight: 40)
-        .background {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(.secondarySystemBackground).shadow(.drop(radius: 2)))
-        }
+        //.frame(minWidth: 400, minHeight: 40)
+//        .background {
+//            RoundedRectangle(cornerRadius: 10, style: .continuous)
+//                .fill(Color(.secondarySystemBackground).shadow(.drop(radius: 2)))
+//        }
         
     }
 }

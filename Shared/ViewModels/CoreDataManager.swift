@@ -91,7 +91,6 @@ class CoreDataManager {
     func save() {
         do {
             try persistentContainer.viewContext.save()
-            print("SAVED")
         } catch {
             persistentContainer.viewContext.rollback()
             print("Failed to save a workout \(error)")

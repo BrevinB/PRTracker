@@ -53,14 +53,6 @@ struct AddWeightView: View {
                         default:
                             Image(systemName: "scalemass")
                         }
-//                        TextField("Enter Weight", value: $value, format: .number)
-//                            .keyboardType(.decimalPad)
-//                            .frame(width: 200)
-//                            .padding()
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 5)
-//                                    .stroke(Color.blue, lineWidth: 1)
-//                            )
                         
                         HStack {
                             TextField("Weight", text: $weight)
@@ -76,16 +68,6 @@ struct AddWeightView: View {
                                 .padding(.leading, 5)
                         }
                         .padding(.horizontal)
-//                            .background(
-//                                ZStack(alignment: .trailing) {
-//                                    if value !=  nil {
-//                                        Text("lbs")
-//                                            .font(.system(size: 16, weight: .semibold))
-//                                            .padding(.leading, 50)
-//                                    }
-//
-//                                }
-//                            )
                     }
                     }
             }
@@ -93,9 +75,13 @@ struct AddWeightView: View {
             .onTapGesture {
                 self.hideKeyboard()
             }
-
-            DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
-                .datePickerStyle(GraphicalDatePickerStyle())
+            
+            HStack {
+                Spacer()
+                DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                Spacer()
+            }
                 
             TextField("Enter Note", text: $note)
                 .padding(.leading)
@@ -114,7 +100,7 @@ struct AddWeightView: View {
                     WeightVM.date = dateFormatter.date(from: formattedDate) ?? Date.now
                     WeightVM.note = note
                     WeightVM.addWeightForWorkout(workoutModel: type)
-                    if type.type == "Body Weight" {
+                    if type.type == "Body Weight" && HealthKitVM.isAuthorized {
                         HealthKitVM.importIntoHealthKit(date: dateFormatter.string(from: date), bodyMass: Double(weight) ?? 0.0)
                     }
                     date = Date.now

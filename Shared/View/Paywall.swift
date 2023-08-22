@@ -80,7 +80,6 @@ struct Paywall: View {
 
                 }
                 
-                //Text("Lourum Ipsum")
             }
             .padding(50)
             .onAppear {
@@ -99,19 +98,6 @@ struct Paywall: View {
                 .edgesIgnoringSafeArea(.all)
         
         }
-        
-        
-    
     }
-    
 }
 
-struct Paywall_Previews: PreviewProvider {
-    
-    static let userViewModel = UserViewModel()
-    
-    static var previews: some View {
-        Paywall(isPaywallPresented: .constant(true))
-            .environmentObject(userViewModel)
-    }
-}
