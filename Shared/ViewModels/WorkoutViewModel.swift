@@ -25,8 +25,13 @@ class WorkoutViewModel: ObservableObject {
     func getAllWorkouts() {
         let workouts = CoreDataManager.shared.getAllWorkouts()
         DispatchQueue.main.async {
-            self.workouts = workouts.map(WorkoutModel.init)
+            self.workouts = workouts.compactMap(WorkoutModel.init)
+            print("Number of Workouts: \(self.workouts.count)")
+            self.checkForEmptyWorkouts()
+            print("Number of Workouts: \(self.workouts.count)")
         }
+        
+       
     }
     
     var type: String = ""
@@ -48,6 +53,19 @@ class WorkoutViewModel: ObservableObject {
         
         manager.save()
         
+    }
+    
+    //func to remove empty workouts after bug was fixed, TODO: Remove eventually
+    func checkForEmptyWorkouts() {
+        for workout in self.workouts {
+            if workout.type == "" {
+                print("DELTE")
+                print(workout.typeId)
+                self.deleteWorkout(workout: workout)
+            } else {
+                print("\(workout.type ?? "EMPTY") TYPE")
+            }
+        }
     }
     
     func addGoal(workout: WorkoutModel, goal: Double) {

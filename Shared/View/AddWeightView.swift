@@ -31,7 +31,7 @@ struct AddWeightView: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack(alignment: .firstTextBaseline) {
-                Text(type.type ?? "Test")
+                Text(type.type ?? "No Data")
                     .font(.title)
                     .fontWeight(.bold)
                 .padding()
@@ -63,7 +63,6 @@ struct AddWeightView: View {
                                     RoundedRectangle(cornerRadius: 5)
                                         .stroke(Color.blue, lineWidth: 1)
                                 )
-                                .onReceive(Just(weight)) { _ in limitText(weightLimit)}
                             Text(isMetric ? "kg" : "lbs")
                                 .padding(.leading, 5)
                         }
@@ -115,7 +114,6 @@ struct AddWeightView: View {
             }, label: {
                 Text("Submit")
                     .frame(width: 200)
-                    //.foregroundColor(.green)
             })
             .buttonStyle(.borderedProminent)
             .tint(Color(.systemGreen))
@@ -148,12 +146,6 @@ struct AddWeightView: View {
                     return "\(type.type!) has 10 or more entries, please subscribe to premium or delete old entries"
                 }
             }
-        }
-    }
-    
-    func limitText(_ upper: Int) {
-        if weight.count > upper {
-            weight = String(weight.prefix(upper))
         }
     }
     

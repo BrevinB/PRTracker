@@ -8,11 +8,27 @@
 import SwiftUI
 
 struct AddGoalCard: View {
+    @AppStorage("isImperial") private var isImperial = true
     @ObservedObject var WorkoutVM: WorkoutViewModel
     @Binding var type: WorkoutModel
     @Environment(\.dismiss) var dismiss
     @Binding var refresh: Bool
     @State private var goal: Double?
+    
+    
+    @Binding var startingValue : Double
+    @State var targetValue : Double
+    @Binding var currentValue: Double
+    
+    var progress: Double {
+            guard startingValue != targetValue else { return 1.0 }
+            return (currentValue - targetValue) / (startingValue - targetValue)
+    }
+    
+    var progress2: Double {
+        guard currentValue != targetValue else { return 1.0 }
+        return (currentValue / targetValue)
+    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -101,14 +117,41 @@ struct AddGoalCard: View {
                 
                 
             }.padding(.bottom)
-
+            
+            if type.type == "Body Weight" {
+                ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
+                    .padding()
+                    .onAppear {
+                        
+                        let testProgress = (currentValue - targetValue) / (startingValue - targetValue)
+                        print("Current Value: \(currentValue)")
+                        print("Target Value: \(targetValue)")
+                        print("Starting Value: \(startingValue)")
+                        print("Value of progress = \(testProgress)")
+                    }
+                    
+            } else {
+//                ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
+//                    .padding()
+            }
+            
+            
+        }
+    }
+    
+    struct CustomProgressViewStyle: ProgressViewStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            GeometryReader { geometry in
+                Capsule()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 20)
+                    .overlay(
+                        Capsule()
+                            .fill(Color.blue)
+                            .frame(width: geometry.size.width * CGFloat(configuration.fractionCompleted ?? 0), height: 20)
+                    )
+            }
         }
     }
 }
 
-struct AddGoalCard_Previews: PreviewProvider {
-    static var previews: some View {
-        let workout = WorkoutModel(workout: Workout(context: CoreDataManager.shared.viewContext))
-        AddGoalCard(WorkoutVM: WorkoutViewModel(), type: .constant(workout), refresh: .constant(false))
-    }
-}

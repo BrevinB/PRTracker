@@ -59,6 +59,7 @@ class CoreDataManager {
         
         do {
             try persistentContainer.viewContext.save()
+            print("WORKOUT DELETED")
         } catch {
             persistentContainer.viewContext.rollback()
             fatalError("Issue deleting workout...\(error)")

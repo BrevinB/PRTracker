@@ -63,7 +63,7 @@ struct AnimatedChart: View {
                         .opacity(0.5)
                         
                         
-                        if !userViewModel.isSubscriptionActive {
+                        if userViewModel.isSubscriptionActive {
                             RuleMark(y: .value("Goal", chartType.goal ?? 0.0))
                             .lineStyle(StrokeStyle(lineWidth: 3))
                             .annotation(position: .top, alignment: .leading){
@@ -118,8 +118,9 @@ struct AnimatedChart: View {
 extension View {
     func customYAxisScale(_min: Double, _max: Double, goal: Double, isMetric: Bool) -> some View {
         if goal != 0.0 {
+            //if BodyWeight
             if goal <= _min {
-                return self.chartYScale(domain: (isMetric ? goal.convertToMetric : goal)...(isMetric ? _max.convertToMetric : _max))
+                return self.chartYScale(domain: (isMetric ? goal.convertToMetric : goal - 20)...(isMetric ? _max.convertToMetric : _max + 1))
             } else if goal >= _max {
                 return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min)...(isMetric ? goal.convertToMetric : goal + 20))
             } else {

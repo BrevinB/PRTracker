@@ -25,6 +25,8 @@ struct Home: View {
     @State private var showSettings: Bool = false
     @State private var showAddGoal: Bool = false
     @State private var showPremium: Bool = false
+    @State private var recentWeight: Double = 0.0
+    @State private var firstWeight: Double = 0.0
    
     init(moc: NSManagedObjectContext) {
         let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
@@ -44,8 +46,6 @@ struct Home: View {
         ZStack {
             NavigationStack {
                 HStack {
-                    Text("")
-                        .padding(.leading)
                     Menu {
                         Picker("", selection: $currentChartTypeTab) {
                             ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
@@ -54,9 +54,10 @@ struct Home: View {
                             }
                         }
                     } label: {
-                        pickerLabelView
+                        withAnimation {
+                            pickerLabelView
+                        }
                     }
-                    .padding(.trailing, 50)
                     Spacer()
                 }
                 
@@ -91,10 +92,13 @@ struct Home: View {
                             
                             Spacer()
                             Button(action: {
-                                if !userViewModel.isSubscriptionActive {
-                                    showAddGoal.toggle()
-                                } else {
-                                    showPremium.toggle()
+                                getRecentWeight()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                    if userViewModel.isSubscriptionActive {
+                                        showAddGoal.toggle()
+                                    } else {
+                                        showPremium.toggle()
+                                    }
                                 }
                                 //toggle show goal
                             }, label: {
@@ -155,6 +159,7 @@ struct Home: View {
                         WeightVM.filteredWeights.removeAll()
                         WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
                         getFilteredWeights()
+                        getRecentWeight()
                         refresh.toggle()
                     }
                 }
@@ -190,7 +195,7 @@ struct Home: View {
                 .sheet(isPresented: $showAddGoal, onDismiss: {
 
                 }, content: {
-                    AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh)
+                    AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh, startingValue: $firstWeight, targetValue: currentChartTypeTab.goal ?? 0.0, currentValue: $recentWeight)
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.automatic)
                 })
@@ -203,9 +208,17 @@ struct Home: View {
                     currentChartTypeTab = WorkoutVM.workouts[0]
                 }
                 isMetric = UserDefaults.standard.bool(forKey: "isMetric")
+               
             }
         }
         
+    }
+    
+    private func getRecentWeight() {
+        recentWeight = WeightVM.allTimeWeights.first?.value ?? 2.0
+        firstWeight = WeightVM.allTimeWeights.last?.value ?? 2.0
+        print("Recent Weight: \(recentWeight)")
+        print("First Weight: \(firstWeight)")
     }
     
     private func deleteWorkout(at offsets: IndexSet) {
@@ -252,24 +265,19 @@ struct Home: View {
     
     var pickerLabelView: some View {
         HStack {
-            Text(currentChartTypeTab.type ?? "Body Weight")
+            Text(currentChartTypeTab.type!)
+                .padding(.leading)
             Text("⌵")
                 .offset(y: -4)
             }
+            .frame(width: currentChartTypeTab.type != "Body Weight" ? 150 : 250)
             .foregroundColor(.primary)
             .font(.title)
             .fontWeight(.bold)
-            .frame(maxWidth: 250)
-            .padding()
-    }
-}
-
-struct Home_Previews: PreviewProvider {
-    static var previews: some View {
-        ZStack {
-            Home(moc: CoreDataManager.shared.viewContext)
-            
-        }
+            .padding(.leading)
+            .onAppear {
+                print("\(String(describing: currentChartTypeTab.type))")
+            }
     }
 }
 
@@ -277,7 +285,7 @@ struct Home_Previews: PreviewProvider {
 extension Double {
     var stringFormat: String {
         let isMetric = UserDefaults.standard.bool(forKey: "isMetric")
-        return String(format: "%.0f \(isMetric ? "kg" : "lbs")", self)
+        return String(format: "%.2f \(isMetric ? "kg" : "lbs")", self)
     }
     
     var convertToMetric: Double {
