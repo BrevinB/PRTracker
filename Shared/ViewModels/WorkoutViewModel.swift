@@ -59,8 +59,6 @@ class WorkoutViewModel: ObservableObject {
     func checkForEmptyWorkouts() {
         for workout in self.workouts {
             if workout.type == "" {
-                print("DELTE")
-                print(workout.typeId)
                 self.deleteWorkout(workout: workout)
             } else {
                 print("\(workout.type ?? "EMPTY") TYPE")

@@ -83,11 +83,21 @@ struct Home: View {
                                 let max = WeightVM.weights.max { item1, item2 in
                                     return item2.value > item1.value
                                 }?.value ?? 0.0
-                                Text("PR: \(max.stringFormat)")
-                                    .font(.largeTitle.bold())
-                                if(currentChartTypeTab.type == "Deadlift") {
-                                    Image(systemName: "figure.strengthtraining.traditional")
+                                
+                                if checkInt(val: max) {
+                                    Text("PR: \(max.intFormat)")
+                                        .font(.largeTitle.bold())
+                                    if(currentChartTypeTab.type == "Deadlift") {
+                                        Image(systemName: "figure.strengthtraining.traditional")
+                                    }
+                                } else {
+                                    Text("PR: \(max.doubleFormat)")
+                                        .font(.largeTitle.bold())
+                                    if(currentChartTypeTab.type == "Deadlift") {
+                                        Image(systemName: "figure.strengthtraining.traditional")
+                                    }
                                 }
+                                
                             }
                             
                             Spacer()
@@ -195,7 +205,7 @@ struct Home: View {
                 .sheet(isPresented: $showAddGoal, onDismiss: {
 
                 }, content: {
-                    AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh, startingValue: $firstWeight, targetValue: currentChartTypeTab.goal ?? 0.0, currentValue: $recentWeight)
+                    AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh, isMetric: $isMetric, startingValue: $firstWeight, targetValue: currentChartTypeTab.goal ?? 0.0, currentValue: $recentWeight)
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.automatic)
                 })
@@ -217,8 +227,6 @@ struct Home: View {
     private func getRecentWeight() {
         recentWeight = WeightVM.allTimeWeights.first?.value ?? 2.0
         firstWeight = WeightVM.allTimeWeights.last?.value ?? 2.0
-        print("Recent Weight: \(recentWeight)")
-        print("First Weight: \(firstWeight)")
     }
     
     private func deleteWorkout(at offsets: IndexSet) {
@@ -262,6 +270,9 @@ struct Home: View {
         getFilteredWeights()
     }
     
+    func checkInt(val: Double) -> Bool {
+        return floor(val) == val
+    }
     
     var pickerLabelView: some View {
         HStack {
@@ -275,17 +286,19 @@ struct Home: View {
             .font(.title)
             .fontWeight(.bold)
             .padding(.leading)
-            .onAppear {
-                print("\(String(describing: currentChartTypeTab.type))")
-            }
     }
 }
 
 // MARK: Extension to convert Double to String with lbs / kg
 extension Double {
-    var stringFormat: String {
+    var doubleFormat: String {
         let isMetric = UserDefaults.standard.bool(forKey: "isMetric")
-        return String(format: "%.2f \(isMetric ? "kg" : "lbs")", self)
+        return String(format: "%.2f \(isMetric ? "kgs" : "lbs")", self)
+    }
+    
+    var intFormat: String {
+        let isMetric = UserDefaults.standard.bool(forKey: "isMetric")
+        return String(format: "%.0f \(isMetric ? "kgs" : "lbs")", self)
     }
     
     var convertToMetric: Double {

@@ -14,6 +14,7 @@ struct AddGoalCard: View {
     @Environment(\.dismiss) var dismiss
     @Binding var refresh: Bool
     @State private var goal: Double?
+    @Binding var isMetric: Bool
     
     
     @Binding var startingValue : Double
@@ -68,7 +69,7 @@ struct AddGoalCard: View {
                             .background(
                                 ZStack(alignment: .trailing) {
                                     if goal !=  nil {
-                                        Text("lbs")
+                                        Text("\(isMetric ? "lbs" : "kgs")")
                                             .font(.system(size: 16, weight: .semibold))
                                             .padding(.leading, 50)
                                     }
@@ -76,20 +77,38 @@ struct AddGoalCard: View {
                                 }
                             )
                     } else {
-                        TextField("Current Goal: \(type.goal!.formatted())", value: $goal, format: .number)
-                            .keyboardType(.decimalPad)
-                            .textFieldStyle(.automatic)
-                            //.frame(width: 100)
-                            .background(
-                                ZStack(alignment: .trailing) {
-                                    if goal !=  nil {
-                                        Text("lbs")
-                                            .font(.system(size: 16, weight: .semibold))
-                                            .padding(.leading, 50)
-                                    }
+                        if isMetric {
+                            TextField("Current Goal: \(type.goal!.convertToMetric.formatted())", value: $goal, format: .number)
+                                .keyboardType(.decimalPad)
+                                .textFieldStyle(.automatic)
+                                //.frame(width: 100)
+                                .background(
+                                    ZStack(alignment: .trailing) {
+                                        if goal !=  nil {
+                                            Text("kgs")
+                                                .font(.system(size: 16, weight: .semibold))
+                                                .padding(.leading, 50)
+                                        }
 
-                                }
-                            )
+                                    }
+                                )
+                        } else {
+                            TextField("Current Goal: \(type.goal!.formatted())", value: $goal, format: .number)
+                                .keyboardType(.decimalPad)
+                                .textFieldStyle(.automatic)
+                                //.frame(width: 100)
+                                .background(
+                                    ZStack(alignment: .trailing) {
+                                        if goal !=  nil {
+                                            Text("lbs")
+                                                .font(.system(size: 16, weight: .semibold))
+                                                .padding(.leading, 50)
+                                        }
+
+                                    }
+                                )
+                        }
+                       
                     }
                   
                 }
@@ -121,14 +140,6 @@ struct AddGoalCard: View {
             if type.type == "Body Weight" {
                 ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
                     .padding()
-                    .onAppear {
-                        
-                        let testProgress = (currentValue - targetValue) / (startingValue - targetValue)
-                        print("Current Value: \(currentValue)")
-                        print("Target Value: \(targetValue)")
-                        print("Starting Value: \(startingValue)")
-                        print("Value of progress = \(testProgress)")
-                    }
                     
             } else {
 //                ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)

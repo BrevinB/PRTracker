@@ -72,7 +72,7 @@ struct AnimatedChart: View {
                         }
                     }
                 }
-                .customYAxisScale(_min: _min, _max: _max, goal: chartType.goal ?? 0.0, isMetric: isMetric)
+                .customYAxisScale(_min: _min, _max: _max, goal: chartType.goal ?? 0.0, isMetric: isMetric, isSubscribed: userViewModel.isSubscriptionActive)
                 .chartXScale(range: .plotDimension(padding: 20.0))
                 .chartPlotStyle{plotArea in
                     plotArea
@@ -116,18 +116,23 @@ struct AnimatedChart: View {
 
 
 extension View {
-    func customYAxisScale(_min: Double, _max: Double, goal: Double, isMetric: Bool) -> some View {
-        if goal != 0.0 {
-            //if BodyWeight
-            if goal <= _min {
-                return self.chartYScale(domain: (isMetric ? goal.convertToMetric : goal - 20)...(isMetric ? _max.convertToMetric : _max + 1))
-            } else if goal >= _max {
-                return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min)...(isMetric ? goal.convertToMetric : goal + 20))
+    func customYAxisScale(_min: Double, _max: Double, goal: Double, isMetric: Bool, isSubscribed: Bool) -> some View {
+        if isSubscribed {
+            if goal != 0.0 {
+                //if BodyWeight
+                if goal <= _min {
+                    return self.chartYScale(domain: (isMetric ? goal.convertToMetric : goal - 20)...(isMetric ? _max.convertToMetric : _max + 1))
+                } else if goal >= _max {
+                    return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min)...(isMetric ? goal.convertToMetric : goal + 20))
+                } else {
+                    return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min - 10)...(isMetric ? _max.convertToMetric : _max + 10))
+                }
             } else {
                 return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min - 10)...(isMetric ? _max.convertToMetric : _max + 10))
             }
         } else {
             return self.chartYScale(domain: (isMetric ? _min.convertToMetric : _min - 10)...(isMetric ? _max.convertToMetric : _max + 10))
         }
+        
     }
 }

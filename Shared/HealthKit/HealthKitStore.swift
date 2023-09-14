@@ -130,11 +130,9 @@ class HealthKitStore {
                             let startDate = sample.startDate
                             let formattedDate = dateFormatter.string(from: date)
                             let formattedStartDate = dateFormatter.string(from: startDate)
-                            print("Body Mass: \(bodyMass) lbs")
-                            print("TESTING DATE \(date)")
-                            print("TESTING DATE 2 \(startDate)")
-                            print("\(formattedDate)")
-                            print("\(formattedStartDate)")
+                            print(bodyMass.description)
+                            print(formattedDate)
+                            print(formattedStartDate)
                         }
                     }
                 }

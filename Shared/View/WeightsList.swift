@@ -45,16 +45,30 @@ struct WeightsList: View {
                         ForEach(weights, id: \.id) { weight in
                             VStack {
                                 HStack {
-                                    if(isMetric) {
-                                        Text(weight.value.convertToMetric.stringFormat)
-                                            .font(.title)
-                                            .fontWeight(.bold)
-                                            .padding(.trailing)
+                                    if checkInt(val: weight.value) {
+                                        if(isMetric) {
+                                            Text(weight.value.convertToMetric.intFormat)
+                                                .font(.title)
+                                                .fontWeight(.bold)
+                                                .padding(.trailing)
+                                        } else {
+                                            Text(weight.value.intFormat)
+                                                .font(.title)
+                                                .fontWeight(.bold)
+                                            //.padding(.trailing)
+                                        }
                                     } else {
-                                        Text(weight.value.stringFormat)
-                                            .font(.title)
-                                            .fontWeight(.bold)
-                                        //.padding(.trailing)
+                                        if(isMetric) {
+                                            Text(weight.value.convertToMetric.doubleFormat)
+                                                .font(.title)
+                                                .fontWeight(.bold)
+                                                .padding(.trailing)
+                                        } else {
+                                            Text(weight.value.doubleFormat)
+                                                .font(.title)
+                                                .fontWeight(.bold)
+                                            //.padding(.trailing)
+                                        }
                                     }
                                     
                                     Text(weight.date!.formatted(date: .numeric, time: .omitted))
@@ -91,5 +105,9 @@ struct WeightsList: View {
         WeightVM.filteredWeights.removeAll()
         WeightVM.getWeightsByType(workoutModel: type)
         WeightVM.filterWeights(month: 0)
+    }
+    
+    func checkInt(val: Double) -> Bool {
+        return floor(val) == val
     }
     }

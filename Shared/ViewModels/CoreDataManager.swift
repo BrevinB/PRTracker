@@ -24,8 +24,7 @@ class CoreDataManager {
             }
         }
         
-        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        print(directories[0])
+//        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     }
     
     var viewContext: NSManagedObjectContext {

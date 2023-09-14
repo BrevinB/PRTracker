@@ -63,13 +63,10 @@ class HealthKitViewModel : ObservableObject {
         
         await healthKitManager.getWeightData(forDay: 10, healthStore: healthStore) { weight, date in
                 let newVal = healthKitWeight(weight: weight!, date: date!)
-                print(newVal)
                 self.testingData.append(newVal)
-                print(self.testingData.count)
                 //self.isHealthDataDone = true
                 
             }
-        print(testingData.count)
         
         return testingData
     }
@@ -124,9 +121,7 @@ class HealthKitViewModel : ObservableObject {
     func testingFetchData() async throws -> String {
         await healthKitManager.getWeightData(forDay: 10, healthStore: healthStore) { weight, date in
                 let newVal = healthKitWeight(weight: weight!, date: date!)
-                print(newVal)
                 self.testingData.append(newVal)
-                print(self.testingData.count)
                 self.isHealthDataDone = true
                 
             }
@@ -140,10 +135,8 @@ class HealthKitViewModel : ObservableObject {
             await checkData(workoutVM: workoutVM, weightVM: weightVM)
             DispatchQueue.main.async {
                 // Update the UI once the health data is available
-                
-                print(data)
-                print(self.testingData.count)
                 //self.healthData = data
+                print(data.count)
             }
             return true
         } catch {
