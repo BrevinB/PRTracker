@@ -12,6 +12,7 @@ struct AddWeightView: View {
     @ObservedObject var WorkoutVM: WorkoutViewModel
     @ObservedObject var WeightVM: WeightViewModel
     @ObservedObject var HealthKitVM: HealthKitViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.dismiss) var dismiss
     @State private var value: Double?
     @State private var weight = ""
@@ -20,6 +21,7 @@ struct AddWeightView: View {
     @State private var error = false
     @State private var result = ""
     @State private var isMetric = false
+    @State private var promptPremium = false
     
     let dateFormatter = DateFormatter()
     
@@ -29,7 +31,7 @@ struct AddWeightView: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack(alignment: .firstTextBaseline) {
-                Text(type.type ?? "Test")
+                Text(type.type ?? "No Data")
                     .font(.title)
                     .fontWeight(.bold)
                 .padding()
@@ -51,14 +53,6 @@ struct AddWeightView: View {
                         default:
                             Image(systemName: "scalemass")
                         }
-//                        TextField("Enter Weight", value: $value, format: .number)
-//                            .keyboardType(.decimalPad)
-//                            .frame(width: 200)
-//                            .padding()
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 5)
-//                                    .stroke(Color.blue, lineWidth: 1)
-//                            )
                         
                         HStack {
                             TextField("Weight", text: $weight)
@@ -69,21 +63,10 @@ struct AddWeightView: View {
                                     RoundedRectangle(cornerRadius: 5)
                                         .stroke(Color.blue, lineWidth: 1)
                                 )
-                                .onReceive(Just(weight)) { _ in limitText(weightLimit)}
                             Text(isMetric ? "kg" : "lbs")
                                 .padding(.leading, 5)
                         }
                         .padding(.horizontal)
-//                            .background(
-//                                ZStack(alignment: .trailing) {
-//                                    if value !=  nil {
-//                                        Text("lbs")
-//                                            .font(.system(size: 16, weight: .semibold))
-//                                            .padding(.leading, 50)
-//                                    }
-//
-//                                }
-//                            )
                     }
                     }
             }
@@ -91,9 +74,13 @@ struct AddWeightView: View {
             .onTapGesture {
                 self.hideKeyboard()
             }
-
-            DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
-                .datePickerStyle(GraphicalDatePickerStyle())
+            
+            HStack {
+                Spacer()
+                DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                Spacer()
+            }
                 
             TextField("Enter Note", text: $note)
                 .padding(.leading)
@@ -112,7 +99,7 @@ struct AddWeightView: View {
                     WeightVM.date = dateFormatter.date(from: formattedDate) ?? Date.now
                     WeightVM.note = note
                     WeightVM.addWeightForWorkout(workoutModel: type)
-                    if type.type == "Body Weight" {
+                    if type.type == "Body Weight" && HealthKitVM.isAuthorized {
                         HealthKitVM.importIntoHealthKit(date: dateFormatter.string(from: date), bodyMass: Double(weight) ?? 0.0)
                     }
                     date = Date.now
@@ -127,7 +114,6 @@ struct AddWeightView: View {
             }, label: {
                 Text("Submit")
                     .frame(width: 200)
-                    //.foregroundColor(.green)
             })
             .buttonStyle(.borderedProminent)
             .tint(Color(.systemGreen))
@@ -135,6 +121,11 @@ struct AddWeightView: View {
             .alert(result, isPresented: $error) {
                 Button("Ok", role: .cancel) { }
             }
+            .sheet(isPresented: $promptPremium,  onDismiss: {
+                promptPremium = false
+            }, content: {
+                Paywall(isPaywallPresented: $promptPremium)
+            })
             
         }.onAppear {
             isMetric = UserDefaults.standard.bool(forKey: "isMetric")
@@ -145,21 +136,40 @@ struct AddWeightView: View {
         if weight == "" || weight == "0" {
            return "Please enter a weight"
         } else {
-            return "Valid"
+            if isSubscribed() {
+                return "Valid"
+            } else {
+                if countEntries() < 10 {
+                    return "Valid"
+                } else {
+                    promptPremium = true
+                    return "\(type.type!) has 10 or more entries, please subscribe to premium or delete old entries"
+                }
+            }
         }
     }
     
-    func limitText(_ upper: Int) {
-        if weight.count > upper {
-            weight = String(weight.prefix(upper))
+    func isSubscribed() -> Bool {
+        if userViewModel.isSubscriptionActive {
+            return true
+        } else {
+            return false
         }
+    }
+    
+    func countEntries() -> Int {
+        return WeightVM.weights.count
     }
 }
 
 struct AddWeightView_Previews: PreviewProvider {
+    
+    static let userViewModel = UserViewModel()
+    
     static var previews: some View {
         let workout = WorkoutModel(workout: Workout(context: CoreDataManager.shared.viewContext))
         AddWeightView(WorkoutVM: WorkoutViewModel(), WeightVM: WeightViewModel(), HealthKitVM: HealthKitViewModel(), type: workout)
+            .environmentObject(userViewModel)
             
     }
 }

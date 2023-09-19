@@ -13,82 +13,91 @@ struct Paywall: View {
     @Binding var isPaywallPresented: Bool
     
     @State var currentOffering: Offering?
+    @State private var isPurchasing = false
+    
+    @EnvironmentObject var userViewModel: UserViewModel
     
     var body: some View {
         
-        VStack(alignment: .leading, spacing: 20) {
-            Text("PR-Tracker Premium")
-                .bold()
-                .font(Font.largeTitle)
-            
-            Text("Unlock all features.")
-            
-            Spacer()
-            
-            VStack(spacing: 40) {
-                HStack {
-                    Image(systemName: "brain.head.profile")
-                    Text("Testing Image       a")
-                }
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("PR-Tracker Premium")
+                    .bold()
+                    .font(Font.largeTitle)
                 
-                HStack {
-                    Image(systemName: "checkmark.icloud")
-                    Text("Download for ofline")
-                }
+                Text("Unlock all features.")
                 
-                HStack {
-                    Image(systemName: "shareplay")
-                    Text("Destress              a")
-                }
-            }
-            
-            Spacer()
-            
-            if currentOffering != nil {
+                Spacer()
                 
-                ForEach(currentOffering!.availablePackages) { pkg in
-                    VStack(spacing: 50) {
-                        Button  {
-                            //BUY
-                        } label: {
-                            
-                            PremiumCard(cardTitle: pkg.storeProduct.subscriptionPeriod!.periodTitle, cardDescription: pkg.storeProduct.localizedPriceString, secondCardDescription: pkg.storeProduct.localizedDescription)
-                            
-    //                        ZStack {
-    //                            Rectangle()
-    //                                .frame(height: 55)
-    //                                .foregroundColor(.blue)
-    //                                .cornerRadius(10)
-    //
-    //                            Text("\(pkg.storeProduct.subscriptionPeriod!.periodTitle) \(pkg.storeProduct.localizedPriceString)")
-    //                                .foregroundColor(.white)
-    //                        }
-                        }
-                        Spacer()
+                VStack(spacing: 40) {
+                    HStack {
+                        Image(systemName: "dumbbell")
+                        Text("Unlimited entries for any workout")
+                    }
+                    
+                    HStack {
+                        Image(systemName: "plus.circle")
+                        Text("Add additional workout options to track")
+                    }
+                    
+                    HStack {
+                        Image(systemName: "paintpalette")
+                        Text("Customize chart colors and more")
+                    }
+                    
+                    HStack {
+                        Image(systemName: "arrow.up.heart")
+                        Text("Import old data from HealthKit")
                     }
                 }
-            
-
-            }
                 
-            Spacer()
-            
-            Text("Lourum Ipsum")
-        }
-        .padding(50)
-        .onAppear {
-            Purchases.shared.getOfferings { offerings, error in
-                if let offer = offerings?.current, error == nil {
+                Spacer()
+                
+                if currentOffering != nil {
                     
-                    currentOffering = offer
+                    ForEach(currentOffering!.availablePackages) { pkg in
+                        VStack {
+                            Button  {
+                                Purchases.shared.purchase(package: pkg) { (transaction, customerInfo, error, userCancelled) in
+                                    isPurchasing = true
+                                    if customerInfo?.entitlements.all["Premium"]?.isActive == true {
+                                        // Unlock that great "pro" content
+                                        userViewModel.isSubscriptionActive = true
+                                        isPaywallPresented = false
+                                    }
+                                }
+                                isPurchasing = false
+                            } label: {
+                                
+                                PremiumCard(cardTitle: pkg.storeProduct.subscriptionPeriod!.periodTitle, cardDescription: pkg.storeProduct.localizedPriceString, secondCardDescription: pkg.storeProduct.localizedDescription)
+                                
+                            }
+                            .padding(30)
+                            //Spacer()
+                        }
+                    }
+                    Spacer()
+
+                }
+                
+            }
+            .padding(50)
+            .onAppear {
+                Purchases.shared.getOfferings { offerings, error in
+                    if let offer = offerings?.current, error == nil {
+                        
+                        currentOffering = offer
+                    }
                 }
             }
+            
+            /// - Display an overlay during a purchase
+            Rectangle()
+                .foregroundColor(Color.black)
+                .opacity(isPurchasing ? 0.5: 0.0)
+                .edgesIgnoringSafeArea(.all)
+        
         }
     }
 }
 
-struct Paywall_Previews: PreviewProvider {
-    static var previews: some View {
-        Paywall(isPaywallPresented: .constant(true))
-    }
-}

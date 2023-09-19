@@ -20,9 +20,6 @@ struct PickerComponent: View {
         } label: {
             pickerLabelView
         }
-
-
-        
     }
     
     var pickerLabelView: some View {
@@ -41,8 +38,6 @@ struct PickerComponent: View {
                 .cornerRadius(16)
     }
 }
-
-
 
 struct PickerComponent_Previews: PreviewProvider {
     static var previews: some View {

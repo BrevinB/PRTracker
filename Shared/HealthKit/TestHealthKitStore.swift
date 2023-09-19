@@ -55,8 +55,8 @@ func fetchBodyMass() {
                         let bodyMass = sample.quantity.doubleValue(for: .pound())
                         let date = sample.endDate
                         let formattedDate = dateFormatter.string(from: date)
-                        print("Body Mass: \(bodyMass) lbs")
-                        print("\(formattedDate)")
+                        print(bodyMass)
+                        print(formattedDate)
                     }
                 }
             }

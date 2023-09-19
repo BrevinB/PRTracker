@@ -24,8 +24,7 @@ class CoreDataManager {
             }
         }
         
-        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-        print(directories[0])
+//        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     }
     
     var viewContext: NSManagedObjectContext {
@@ -59,6 +58,7 @@ class CoreDataManager {
         
         do {
             try persistentContainer.viewContext.save()
+            print("WORKOUT DELETED")
         } catch {
             persistentContainer.viewContext.rollback()
             fatalError("Issue deleting workout...\(error)")
@@ -91,7 +91,6 @@ class CoreDataManager {
     func save() {
         do {
             try persistentContainer.viewContext.save()
-            print("SAVED")
         } catch {
             persistentContainer.viewContext.rollback()
             print("Failed to save a workout \(error)")

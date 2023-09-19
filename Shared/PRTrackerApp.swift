@@ -14,12 +14,14 @@ struct PRTrackerApp: App {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
     @AppStorage("isImperial") private var isImperial: Bool = true
     @StateObject var healthViewModel = HealthKitViewModel()
+    @StateObject var userViewModel = UserViewModel()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, CoreDataManager.shared.viewContext)
                 .environmentObject(healthViewModel)
+                .environmentObject(userViewModel)
         }
     }
     
