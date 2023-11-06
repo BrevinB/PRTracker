@@ -131,6 +131,19 @@ class WeightViewModel: ObservableObject {
             CoreDataManager.shared.deleteWeight(value)
         }
     }
+    
+    func updateWeight(weightId: NSManagedObjectID, weight: Double, note: String, date: Date) {
+        let value = CoreDataManager.shared.getWeightById(id: weightId)
+        
+        if let value = value {
+            value.value = weight
+            value.note = note
+            value.date = date
+            CoreDataManager.shared.save()
+        }
+    }
+    
+    
 }
 
 struct WeightModel: Comparable, Identifiable {
