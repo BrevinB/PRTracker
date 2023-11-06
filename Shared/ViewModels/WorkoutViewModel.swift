@@ -19,7 +19,7 @@ class WorkoutViewModel: ObservableObject {
             CoreDataManager.shared.deleteWorkout(workout)
         }
         
-        save()
+        CoreDataManager.shared.save()
     }
     
     func getAllWorkouts() {
@@ -34,16 +34,16 @@ class WorkoutViewModel: ObservableObject {
        
     }
     
-    var type: String = ""
+    var type: String = "TESTING"
     
-    func save() {
-        let manager = CoreDataManager.shared
-        let workout = Workout(context: manager.persistentContainer.viewContext)
-        workout.type = type
-        
-        manager.save()
-        type = ""
-    }
+//    func save() {
+//        let manager = CoreDataManager.shared
+//        let workout = Workout(context: manager.persistentContainer.viewContext)
+//        workout.type = type
+//        
+//        manager.save()
+//        type = ""
+//    }
     
     func addNewWorkout(type: String) {
         

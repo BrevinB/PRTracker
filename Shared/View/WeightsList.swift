@@ -24,73 +24,66 @@ struct WeightsList: View {
     @Binding var refresh: Bool
     
     var body: some View {
-        ScrollView {
-            if weights.isEmpty {
-                Text("No Weights")
-            } else {
-                VStack(alignment: .trailing, spacing: 0) {
-                    //TODO: add edit button to display sheet with weightcards
-//                    HStack(spacing: 0) {
-//                        Spacer()
-//                        Button(action: {
-//
-//                        }, label: {
-//                            Text("Edit")
-//                        })
-//                        .padding(.trailing, 25)
-//                    }
-//                    .padding(.bottom, 0)
-                    
-                    List {
-                        ForEach(weights, id: \.id) { weight in
-                            VStack {
-                                HStack {
-                                    if checkInt(val: weight.value) {
-                                        if(isMetric) {
-                                            Text(weight.value.convertToMetric.intFormat)
-                                                .font(.title)
-                                                .fontWeight(.bold)
-                                                .padding(.trailing)
-                                        } else {
-                                            Text(weight.value.intFormat)
-                                                .font(.title)
-                                                .fontWeight(.bold)
-                                            //.padding(.trailing)
+        NavigationStack {
+            ScrollView {
+                if weights.isEmpty {
+                    Text("No Weights")
+                } else {
+                    VStack(alignment: .trailing, spacing: 0) {
+                        List {
+                            ForEach(weights, id: \.id) { weight in
+                                NavigationLink {
+                                    EditWeightView(WeightVM: WeightVM, weight: weight)
+                                } label: {
+                                    VStack {
+                                        HStack {
+                                            if checkInt(val: weight.value) {
+                                                if(isMetric) {
+                                                    Text(weight.value.convertToMetric.intFormat)
+                                                        .font(.title)
+                                                        .fontWeight(.bold)
+                                                        .padding(.trailing)
+                                                } else {
+                                                    Text(weight.value.intFormat)
+                                                        .font(.title)
+                                                        .fontWeight(.bold)
+                                                    //.padding(.trailing)
+                                                }
+                                            } else {
+                                                if(isMetric) {
+                                                    Text(weight.value.convertToMetric.doubleFormat)
+                                                        .font(.title)
+                                                        .fontWeight(.bold)
+                                                        .padding(.trailing)
+                                                } else {
+                                                    Text(weight.value.doubleFormat)
+                                                        .font(.title)
+                                                        .fontWeight(.bold)
+                                                    //.padding(.trailing)
+                                                }
+                                            }
+                                            
+                                            Text(weight.date?.formatted(date: .numeric, time: .omitted) ?? Date.now.formatted(date:.numeric, time: .omitted))
+                                                .font(.title3)
+                                            Spacer()
                                         }
-                                    } else {
-                                        if(isMetric) {
-                                            Text(weight.value.convertToMetric.doubleFormat)
-                                                .font(.title)
-                                                .fontWeight(.bold)
-                                                .padding(.trailing)
-                                        } else {
-                                            Text(weight.value.doubleFormat)
-                                                .font(.title)
-                                                .fontWeight(.bold)
-                                            //.padding(.trailing)
-                                        }
+                                        Text(weight.note ?? "")
+                                            .font(.subheadline)
                                     }
-                                    
-                                    Text(weight.date!.formatted(date: .numeric, time: .omitted))
-                                        .font(.title3)
-                                    Spacer()
                                 }
-                                Text(weight.note ?? "")
-                                    .font(.subheadline)
-                            }
-                        }.onDelete(perform: deleteValue)
+                            }.onDelete(perform: deleteValue)
+                        }
+                        .padding(.top, 0)
                     }
-                    .padding(.top, 0)
+                    
+                    //                .toolbar {
+                    //                    EditButton()
+                    //                }
+                    .frame(minWidth: 400, minHeight: 500)
                 }
-              
-//                .toolbar {
-//                    EditButton()
-//                }
-                .frame(minWidth: 400, minHeight: 500)
             }
-            }
-            
         }
+    }
         
     private func deleteValue(at offsets: IndexSet) {
         offsets.forEach { offset in

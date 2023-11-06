@@ -69,7 +69,7 @@ struct AddGoalCard: View {
                             .background(
                                 ZStack(alignment: .trailing) {
                                     if goal !=  nil {
-                                        Text("\(isMetric ? "lbs" : "kgs")")
+                                        Text("\(isMetric ? "kgs" : "lbs")")
                                             .font(.system(size: 16, weight: .semibold))
                                             .padding(.leading, 50)
                                     }
