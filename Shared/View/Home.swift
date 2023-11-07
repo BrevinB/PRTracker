@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import RevenueCatUI
 
 struct Home: View {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = true
@@ -200,7 +201,7 @@ struct Home: View {
                 .sheet(isPresented: $showPremium, onDismiss: {
                     
                 }, content: {
-                    Paywall(isPaywallPresented: $showPremium)
+                    PaywallView(displayCloseButton: true)
                 })
                 .sheet(isPresented: $showAddGoal, onDismiss: {
 
