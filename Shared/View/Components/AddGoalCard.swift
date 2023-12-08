@@ -23,8 +23,10 @@ struct AddGoalCard: View {
     
     var progress: Double {
             guard startingValue != targetValue else { return 1.0 }
+            guard currentValue != targetValue else { return 1.0}
             guard startingValue != currentValue else { return targetValue / currentValue}
-            return (startingValue - targetValue) / (currentValue - targetValue)
+            guard currentValue > targetValue else { return 1.0 }
+            return (currentValue - targetValue) / (startingValue - targetValue)
     }
     
     var progress2: Double {
@@ -66,7 +68,6 @@ struct AddGoalCard: View {
                         TextField("Enter Goal", value: $goal, format: .number)
                             .keyboardType(.decimalPad)
                             .textFieldStyle(.automatic)
-                            //.frame(width: 100)
                             .background(
                                 ZStack(alignment: .trailing) {
                                     if goal !=  nil {
@@ -74,7 +75,6 @@ struct AddGoalCard: View {
                                             .font(.system(size: 16, weight: .semibold))
                                             .padding(.leading, 50)
                                     }
-
                                 }
                             )
                     } else {
@@ -82,7 +82,6 @@ struct AddGoalCard: View {
                             TextField("Current Goal: \(type.goal!.convertToMetric.formatted())", value: $goal, format: .number)
                                 .keyboardType(.decimalPad)
                                 .textFieldStyle(.automatic)
-                                //.frame(width: 100)
                                 .background(
                                     ZStack(alignment: .trailing) {
                                         if goal !=  nil {
@@ -90,14 +89,12 @@ struct AddGoalCard: View {
                                                 .font(.system(size: 16, weight: .semibold))
                                                 .padding(.leading, 50)
                                         }
-
                                     }
                                 )
                         } else {
                             TextField("Current Goal: \(type.goal!.formatted())", value: $goal, format: .number)
                                 .keyboardType(.decimalPad)
                                 .textFieldStyle(.automatic)
-                                //.frame(width: 100)
                                 .background(
                                     ZStack(alignment: .trailing) {
                                         if goal !=  nil {
@@ -105,16 +102,12 @@ struct AddGoalCard: View {
                                                 .font(.system(size: 16, weight: .semibold))
                                                 .padding(.leading, 50)
                                         }
-
                                     }
                                 )
                         }
-                       
                     }
-                  
                 }
             }
-            //.padding()
             .onTapGesture {
                 self.hideKeyboard()
             }.padding()
@@ -142,12 +135,11 @@ struct AddGoalCard: View {
                 if type.type == "Body Weight" {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
                         .padding()
-                        
                 } else {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
                         .padding()
                 }
-            }  
+            }
         }
     }
     
