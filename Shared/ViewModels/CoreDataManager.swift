@@ -8,10 +8,13 @@
 import Foundation
 import CoreData
 import SwiftUI
+import CloudKit
 
 class CoreDataManager {
     
     let persistentContainer: NSPersistentCloudKitContainer
+    
+    @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
     
     static let shared = CoreDataManager()
     
@@ -31,6 +34,13 @@ class CoreDataManager {
         let context = persistentContainer.viewContext
         context.automaticallyMergesChangesFromParent = true
         return context
+    }
+    
+    func deleteAllWorkouts() {
+        let fetchRequest1: NSFetchRequest<NSFetchRequestResult> = Workout.fetchRequest()
+             let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1)
+            _ = try? persistentContainer.viewContext.execute(batchDeleteRequest1)
+        print("SUCESS")
     }
     
     func getWorkoutById(id: NSManagedObjectID) -> Workout? {
@@ -95,5 +105,25 @@ class CoreDataManager {
             persistentContainer.viewContext.rollback()
             print("Failed to save a workout \(error)")
         }
+    }
+    
+    func checkForExistingData() -> Bool {
+        let request: NSFetchRequest<Workout> = Workout.fetchRequest()
+        
+        do {
+            let data = try persistentContainer.viewContext.fetch(request)
+            if !data.isEmpty {
+    //            self.initialWorkoutSet = true
+                return true
+            } else {
+    //            self.initialWorkoutSet = false
+                return false
+            }
+        } catch {
+            
+            return false
+        }
+        
+        
     }
 }

@@ -23,7 +23,8 @@ struct AddGoalCard: View {
     
     var progress: Double {
             guard startingValue != targetValue else { return 1.0 }
-            return (currentValue - targetValue) / (startingValue - targetValue)
+            guard startingValue != currentValue else { return targetValue / currentValue}
+            return (startingValue - targetValue) / (currentValue - targetValue)
     }
     
     var progress2: Double {
@@ -69,7 +70,7 @@ struct AddGoalCard: View {
                             .background(
                                 ZStack(alignment: .trailing) {
                                     if goal !=  nil {
-                                        Text("\(isMetric ? "lbs" : "kgs")")
+                                        Text("\(isMetric ? "kgs" : "lbs")")
                                             .font(.system(size: 16, weight: .semibold))
                                             .padding(.leading, 50)
                                     }
@@ -137,16 +138,16 @@ struct AddGoalCard: View {
                 
             }.padding(.bottom)
             
-            if type.type == "Body Weight" {
-                ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
-                    .padding()
-                    
-            } else {
-//                ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
-//                    .padding()
-            }
-            
-            
+            if targetValue != 0.0 {
+                if type.type == "Body Weight" {
+                    ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
+                        .padding()
+                        
+                } else {
+                    ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
+                        .padding()
+                }
+            }  
         }
     }
     

@@ -7,11 +7,14 @@
 
 import SwiftUI
 import RevenueCat
+import StoreKit
+import RevenueCatUI
 
 struct SettingsView: View {
     @ObservedObject var WorkoutVM: WorkoutViewModel
     @ObservedObject var HealthVM: HealthKitViewModel
     @EnvironmentObject var userViewModel: UserViewModel
+    @Environment(\.requestReview) var requestReview
     @ObservedObject var WeightVM: WeightViewModel
     @State private var workoutName = ""
     @AppStorage("isImperial") private var isImperial = true
@@ -19,6 +22,7 @@ struct SettingsView: View {
     @Binding var isMetric: Bool
     @State private var showPremium = false
     @State private var isImporting = false
+    @State private var isPurchaseRestored = false
     
     var body: some View {
         NavigationView {
@@ -118,6 +122,13 @@ struct SettingsView: View {
                             .onDelete(perform: deleteWorkout)
                         }
                         
+                        Section("Leave a Review") {
+                            Button("Leave a review") {
+                                  requestReview()
+                                }
+                                .animation(.linear(duration: 1), value: 5)
+                        }
+                        
                         Section("Premium") {
                             Button("Restore Purchases") {
                                 Purchases.shared.restorePurchases { (customerInfo, error) in
@@ -125,7 +136,7 @@ struct SettingsView: View {
                                     if customerInfo?.entitlements.all["Premium"]?.isActive == true {
                                         // Unlock that great "pro" content
                                         userViewModel.isSubscriptionActive = true
-                                        
+                                        isPurchaseRestored = true
                                     }
                                 }
                             }
@@ -143,7 +154,7 @@ struct SettingsView: View {
                 .sheet(isPresented: $showPremium, onDismiss: {
                     
                 }, content: {
-                    Paywall(isPaywallPresented: $showPremium)
+                    PaywallView(displayCloseButton: true)
                 })
                 
                 VStack {
@@ -154,8 +165,11 @@ struct SettingsView: View {
                 }
                 .background(.black)
                 .frame(width: 350, height: 100)
-                    
-                
+                .alert("Purchase Restored", isPresented: $isPurchaseRestored)  {
+                    Button("Ok", role: .cancel) {
+                        isPurchaseRestored = false
+                    }
+                }
             }
         }
        
@@ -165,6 +179,7 @@ struct SettingsView: View {
         offsets.forEach { offset in
             let workout = WorkoutVM.workouts[offset]
             WorkoutVM.deleteWorkout(workout: workout)
+            WorkoutVM.getAllWorkouts()
         }
     }
 }

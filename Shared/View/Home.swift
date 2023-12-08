@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import RevenueCatUI
 
 struct Home: View {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = true
@@ -200,7 +201,7 @@ struct Home: View {
                 .sheet(isPresented: $showPremium, onDismiss: {
                     
                 }, content: {
-                    Paywall(isPaywallPresented: $showPremium)
+                    PaywallView(displayCloseButton: true)
                 })
                 .sheet(isPresented: $showAddGoal, onDismiss: {
 
@@ -218,7 +219,6 @@ struct Home: View {
                     currentChartTypeTab = WorkoutVM.workouts[0]
                 }
                 isMetric = UserDefaults.standard.bool(forKey: "isMetric")
-               
             }
         }
         
@@ -276,12 +276,12 @@ struct Home: View {
     
     var pickerLabelView: some View {
         HStack {
-            Text(currentChartTypeTab.type!)
+            Text(currentChartTypeTab.type ?? "Body Weight")
                 .padding(.leading)
             Text("⌵")
                 .offset(y: -4)
             }
-            .frame(width: currentChartTypeTab.type != "Body Weight" ? 150 : 250)
+            .frame(minWidth: currentChartTypeTab.type != "Body Weight" ? 150 : 250)
             .foregroundColor(.primary)
             .font(.title)
             .fontWeight(.bold)

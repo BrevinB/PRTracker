@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2301D9D72AF5941D004D8860 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301D9D62AF5941D004D8860 /* OnboardingView.swift */; };
+		2301D9D92AF9622E004D8860 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 2301D9D82AF9622E004D8860 /* RevenueCat */; };
+		2301D9DB2AF9622E004D8860 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2301D9DA2AF9622E004D8860 /* RevenueCatUI */; };
+		2301D9DD2AF96832004D8860 /* Blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2301D9DC2AF96832004D8860 /* Blur.swift */; };
 		230884BD2A3A3A5900E95426 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 230884BC2A3A3A5900E95426 /* StoreKit.framework */; };
 		23118BB12A3A3D8A00995685 /* Paywall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23118BB02A3A3D8A00995685 /* Paywall.swift */; };
 		233788E82A465C3B0043C17F /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233788E72A465C3B0043C17F /* UserViewModel.swift */; };
@@ -18,6 +22,8 @@
 		2366F44728D3B17C00391656 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44628D3B17C00391656 /* CoreDataManager.swift */; };
 		2366F44928E0867E00391656 /* WeightsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44828E0867E00391656 /* WeightsList.swift */; };
 		2366F44B28E099E800391656 /* KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44A28E099E800391656 /* KeyboardDismiss.swift */; };
+		2373C1BD2AEEE5A80037C229 /* EditWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373C1BC2AEEE5A80037C229 /* EditWeightView.swift */; };
+		2384000A2AF0989900BB70BA /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238400082AEF1BC300BB70BA /* CloudKit.framework */; };
 		2395AE5A2A5CE50600176218 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE592A5CE50600176218 /* ArrayDifference.swift */; };
 		2395AE762A68496000176218 /* WeightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE752A68496000176218 /* WeightCard.swift */; };
 		2395AE782A698C8E00176218 /* AddGoalCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE772A698C8E00176218 /* AddGoalCard.swift */; };
@@ -37,6 +43,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2301D9D62AF5941D004D8860 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		2301D9DC2AF96832004D8860 /* Blur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Blur.swift; sourceTree = "<group>"; };
 		230884BC2A3A3A5900E95426 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		23118BB02A3A3D8A00995685 /* Paywall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paywall.swift; sourceTree = "<group>"; };
 		2326071929CD456C005630AD /* HealthKitStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitStore.swift; sourceTree = "<group>"; };
@@ -50,6 +58,8 @@
 		2366F44628D3B17C00391656 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		2366F44828E0867E00391656 /* WeightsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightsList.swift; sourceTree = "<group>"; };
 		2366F44A28E099E800391656 /* KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDismiss.swift; sourceTree = "<group>"; };
+		2373C1BC2AEEE5A80037C229 /* EditWeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditWeightView.swift; sourceTree = "<group>"; };
+		238400082AEF1BC300BB70BA /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS17.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		2395AE592A5CE50600176218 /* ArrayDifference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayDifference.swift; sourceTree = "<group>"; };
 		2395AE752A68496000176218 /* WeightCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightCard.swift; sourceTree = "<group>"; };
 		2395AE772A698C8E00176218 /* AddGoalCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalCard.swift; sourceTree = "<group>"; };
@@ -74,7 +84,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2301D9D92AF9622E004D8860 /* RevenueCat in Frameworks */,
+				2384000A2AF0989900BB70BA /* CloudKit.framework in Frameworks */,
 				23F5FF602A3A401A0070CB23 /* RevenueCat in Frameworks */,
+				2301D9DB2AF9622E004D8860 /* RevenueCatUI in Frameworks */,
 				230884BD2A3A3A5900E95426 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -85,6 +98,7 @@
 		230884BB2A3A3A5900E95426 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				238400082AEF1BC300BB70BA /* CloudKit.framework */,
 				230884BC2A3A3A5900E95426 /* StoreKit.framework */,
 			);
 			name = Frameworks;
@@ -139,6 +153,7 @@
 				234CFA1D288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift */,
 				23F5FF622A3A58FD0070CB23 /* Extensions.swift */,
 				2395AE592A5CE50600176218 /* ArrayDifference.swift */,
+				2301D9DC2AF96832004D8860 /* Blur.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -172,8 +187,10 @@
 				2366F44828E0867E00391656 /* WeightsList.swift */,
 				23118BB02A3A3D8A00995685 /* Paywall.swift */,
 				23A9C8C728372FDE00C724BF /* ContentView.swift */,
+				2301D9D62AF5941D004D8860 /* OnboardingView.swift */,
 				233E308A28485C5C00483134 /* AddWeightView.swift */,
 				23F4E27A290A23A600BED6D0 /* SettingsView.swift */,
+				2373C1BC2AEEE5A80037C229 /* EditWeightView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -208,6 +225,8 @@
 			name = "PRTracker (iOS)";
 			packageProductDependencies = (
 				23F5FF5F2A3A401A0070CB23 /* RevenueCat */,
+				2301D9D82AF9622E004D8860 /* RevenueCat */,
+				2301D9DA2AF9622E004D8860 /* RevenueCatUI */,
 			);
 			productName = "PRTracker (iOS)";
 			productReference = 23A9C8CD28372FDF00C724BF /* PRTracker.app */;
@@ -221,7 +240,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					23A9C8CC28372FDF00C724BF = {
 						CreatedOnToolsVersion = 13.4;
@@ -271,17 +290,20 @@
 				23118BB12A3A3D8A00995685 /* Paywall.swift in Sources */,
 				23A9C8D828372FDF00C724BF /* ContentView.swift in Sources */,
 				23F5FF652A3A610B0070CB23 /* PremiumCard.swift in Sources */,
+				2301D9DD2AF96832004D8860 /* Blur.swift in Sources */,
 				2395AE762A68496000176218 /* WeightCard.swift in Sources */,
 				23D8F5E128A7309C003511D4 /* Home.swift in Sources */,
 				233E308B28485C5C00483134 /* AddWeightView.swift in Sources */,
 				2366F44328D3AC8D00391656 /* WorkoutViewModel.swift in Sources */,
 				2395AE5A2A5CE50600176218 /* ArrayDifference.swift in Sources */,
+				2301D9D72AF5941D004D8860 /* OnboardingView.swift in Sources */,
 				2366F44728D3B17C00391656 /* CoreDataManager.swift in Sources */,
 				23F4E27B290A23A600BED6D0 /* SettingsView.swift in Sources */,
 				2366F44928E0867E00391656 /* WeightsList.swift in Sources */,
 				234CFA1E288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift in Sources */,
 				23B9932A29CE16D3001503FD /* HealthKitStore.swift in Sources */,
 				2395AE782A698C8E00176218 /* AddGoalCard.swift in Sources */,
+				2373C1BD2AEEE5A80037C229 /* EditWeightView.swift in Sources */,
 				2366F44528D3AD2300391656 /* WeightViewModel.swift in Sources */,
 				23A9C8D628372FDF00C724BF /* PRTrackerApp.swift in Sources */,
 				23F5FF632A3A58FD0070CB23 /* Extensions.swift in Sources */,
@@ -332,6 +354,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -393,6 +416,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -434,7 +458,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.brevinb.PRTracker;
 				PRODUCT_NAME = PRTracker;
 				SDKROOT = iphoneos;
@@ -468,7 +492,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = co.brevinb.PRTracker;
 				PRODUCT_NAME = PRTracker;
 				SDKROOT = iphoneos;
@@ -514,6 +538,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2301D9D82AF9622E004D8860 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23F5FF5E2A3A401A0070CB23 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		2301D9DA2AF9622E004D8860 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 23F5FF5E2A3A401A0070CB23 /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
+		};
 		23F5FF5F2A3A401A0070CB23 /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 23F5FF5E2A3A401A0070CB23 /* XCRemoteSwiftPackageReference "purchases-ios" */;

@@ -16,34 +16,25 @@ struct ContentView: View {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
     @AppStorage("isHealthKitAuthorized") private var authorizeHealthkit: Bool = false
     
-    
     var body: some View {
         VStack {
             if authorizeHealthkit {
                 if initialWorkoutSet {
                     Home(moc: moc)
+                } else {
+                    OnboardingView()
                 }
             } else {
                 
             }
         }
         .onAppear {
-            if !initialWorkoutSet {
-                WorkoutVM.type = "Body Weight"
-                WorkoutVM.save()
-                WorkoutVM.type = "Squat"
-                WorkoutVM.save()
-                WorkoutVM.type = "Bench"
-                WorkoutVM.save()
-                WorkoutVM.type = "Deadlift"
-                WorkoutVM.save()
-                initialWorkoutSet = true
-            }
-            
+
             if !authorizeHealthkit {
                 HealthVM.healthRequest()
                 authorizeHealthkit = true
             }
+            
         }
     }
 }
