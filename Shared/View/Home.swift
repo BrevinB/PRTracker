@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import RevenueCatUI
+import ConfettiSwiftUI
 
 struct Home: View {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = true
@@ -28,6 +29,8 @@ struct Home: View {
     @State private var showPremium: Bool = false
     @State private var recentWeight: Double = 0.0
     @State private var firstWeight: Double = 0.0
+    @State private var confettiCount: Int = 0
+    @State private var showCongratsAlert: Bool = false
    
     init(moc: NSManagedObjectContext) {
         let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
@@ -166,6 +169,7 @@ struct Home: View {
                 }
                 .onChange(of: refresh) { newValue in
                     if newValue {
+                        //Get new weight
                         WeightVM.weights.removeAll()
                         WeightVM.filteredWeights.removeAll()
                         WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
@@ -187,7 +191,10 @@ struct Home: View {
                     })
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {
-                    refresh.toggle()
+                    Task {
+                        refresh.toggle()
+                        await checkGoal()
+                    }
                 }, content: {
                     AddWeightView(WorkoutVM: WorkoutVM, WeightVM: WeightVM, HealthKitVM: HealthKitVM, type: currentChartTypeTab)
                         .presentationDetents([.medium, .large])
@@ -210,8 +217,7 @@ struct Home: View {
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.automatic)
                 })
-                
-               
+                .confettiCannon(counter: $confettiCount)
             }
             .onAppear {
                 WorkoutVM.getAllWorkouts()
@@ -220,13 +226,21 @@ struct Home: View {
                 }
                 isMetric = UserDefaults.standard.bool(forKey: "isMetric")
             }
+            .alert("Congrats on hitting your goal of \(currentChartTypeTab.goal?.doubleFormat ?? "0.0 lbs")! Consider setting a new goal!!", isPresented: $showCongratsAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Set new goal", role: .cancel) {
+                    getRecentWeight()
+                    showAddGoal.toggle()
+                    showCongratsAlert = false
+                }
+            }
         }
         
     }
     
     private func getRecentWeight() {
-        recentWeight = WeightVM.allTimeWeights.first?.value ?? 2.0
-        firstWeight = WeightVM.allTimeWeights.last?.value ?? 2.0
+        recentWeight = WeightVM.allTimeWeights.first?.value ?? 0.0
+        firstWeight = WeightVM.allTimeWeights.last?.value ?? 0.0
     }
     
     private func deleteWorkout(at offsets: IndexSet) {
@@ -286,6 +300,31 @@ struct Home: View {
             .font(.title)
             .fontWeight(.bold)
             .padding(.leading)
+    }
+    
+    private func checkGoalStatus(currWeight: Double, goalWeight: Double, type: String) -> Bool {
+        if type == "Body Weight" {
+            return currWeight <= goalWeight
+        } else {
+            return currWeight >= goalWeight
+        }
+        
+        
+    }
+    
+    private func checkGoal() async {
+        //Check if new weight meets the goal
+        if userViewModel.isSubscriptionActive {
+            if checkGoalStatus(currWeight: recentWeight, goalWeight: currentChartTypeTab.goal ?? 0.0, type: currentChartTypeTab.type ?? "Body Weight") {
+                //GOAL HIT
+                //show a congrats card
+                showCongratsAlert = true
+                confettiCount += 1
+                //Prompt new goal
+            } else {
+                print("NO GOAL")
+            }
+        }
     }
 }
 
