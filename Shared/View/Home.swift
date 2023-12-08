@@ -304,8 +304,6 @@ struct Home: View {
     
     private func checkGoalStatus(currWeight: Double, goalWeight: Double, type: String) -> Bool {
         if type == "Body Weight" {
-            print("\(currWeight)")
-            print("\(goalWeight)")
             return currWeight <= goalWeight
         } else {
             return currWeight >= goalWeight

@@ -106,7 +106,7 @@ struct AddGoalCard: View {
                                 )
                         }
                     }
-                }
+                }.padding(.leading).padding(.trailing)
             }
             .onTapGesture {
                 self.hideKeyboard()
@@ -121,15 +121,13 @@ struct AddGoalCard: View {
                     dismiss()
                 }, label: {
                     Text("Submit")
-                        .frame(width: 400)
+                        .frame(maxWidth: 400)
                         //.foregroundColor(.green)
                 })
                 .buttonStyle(.borderedProminent)
                 .tint(Color(.systemGreen))
                 .buttonBorderShape(.roundedRectangle(radius: 12))
-                
-                
-            }.padding(.bottom)
+            }.padding(.bottom).padding(.trailing).padding(.leading)
             
             if targetValue != 0.0 {
                 if type.type == "Body Weight" {
