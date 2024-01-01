@@ -141,6 +141,15 @@ struct SettingsView: View {
                                 }
                             }
                         }
+                        
+                        Section() {
+                            Text("[Terms of Service](https://sites.google.com/view/pr-tracker-tos/home)")
+                            Text("[Privacy Policy](https://sites.google.com/view/pr-tracker-privacy-policy/home)")
+                            Text("[Terms of Use](http://www.apple.com/legal/itunes/appstore/dev/stdeula)")
+                        }
+                            
+                        
+                        
                     }
                 }
                 .navigationTitle("Settings")

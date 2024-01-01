@@ -332,12 +332,12 @@ struct Home: View {
 extension Double {
     var doubleFormat: String {
         let isMetric = UserDefaults.standard.bool(forKey: "isMetric")
-        return String(format: "%.2f \(isMetric ? "kgs" : "lbs")", self)
+        return String(format: "%.2f \(isMetric ? "kgs" : "lbs")", isMetric ? self.convertToMetric : self)
     }
     
     var intFormat: String {
         let isMetric = UserDefaults.standard.bool(forKey: "isMetric")
-        return String(format: "%.0f \(isMetric ? "kgs" : "lbs")", self)
+        return String(format: "%.0f \(isMetric ? "kgs" : "lbs")", isMetric ? self.convertToMetric : self)
     }
     
     var convertToMetric: Double {
