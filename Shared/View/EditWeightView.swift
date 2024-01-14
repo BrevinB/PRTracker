@@ -50,7 +50,7 @@ struct EditWeightView: View {
                 .foregroundColor(.primary)
                 .font(.headline)
                 .padding(.horizontal)
-        }
+        }.padding()
         
         VStack() {
             Button {
@@ -58,7 +58,10 @@ struct EditWeightView: View {
                 dismiss()
             } label: {
                 Text("Update")
-            }.buttonStyle(.borderedProminent).buttonBorderShape(.capsule)
+                    .frame(width: 200)
+            }.buttonStyle(.borderedProminent)
+                .tint(Color(.systemGreen))
+                .buttonBorderShape(.roundedRectangle(radius: 12))
         }
         .padding(.vertical, 20)
         .onAppear {

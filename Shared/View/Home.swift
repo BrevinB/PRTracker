@@ -31,7 +31,8 @@ struct Home: View {
     @State private var firstWeight: Double = 0.0
     @State private var confettiCount: Int = 0
     @State private var showCongratsAlert: Bool = false
-   
+    @State private var isLoading: Bool = false
+    
     init(moc: NSManagedObjectContext) {
         let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \Workout.type, ascending: true)]
@@ -143,22 +144,22 @@ struct Home: View {
                         
                     }
                     .padding()
-            
+                    
                     //Spacer()
                     VStack {
                         switch(currentChartTab) {
-                            case "3":
+                        case "3":
                             WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.threeMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                            case "6":
-                                WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.sixMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                            case "Year":
-                                WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.oneYearWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                            case "all":
-                                WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.allTimeWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                            default:
-                                Text("No Weights")
+                        case "6":
+                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.sixMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                        case "Year":
+                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.oneYearWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                        case "all":
+                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.allTimeWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                        default:
+                            Text("No Weights")
                         }
-                      
+                        
                     }
                     
                 }
@@ -191,10 +192,17 @@ struct Home: View {
                     })
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {
-                    Task {
+                    isLoading = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         refresh.toggle()
-                        await checkGoal()
+                        WeightVM.filterAllTime()
                     }
+                    Task  {
+                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                        await checkGoal()
+                        isLoading = false
+                    }
+                    
                 }, content: {
                     AddWeightView(WorkoutVM: WorkoutVM, WeightVM: WeightVM, HealthKitVM: HealthKitVM, type: currentChartTypeTab)
                         .presentationDetents([.medium, .large])
@@ -211,7 +219,7 @@ struct Home: View {
                     PaywallView(displayCloseButton: true)
                 })
                 .sheet(isPresented: $showAddGoal, onDismiss: {
-
+                    
                 }, content: {
                     AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh, isMetric: $isMetric, startingValue: $firstWeight, targetValue: currentChartTypeTab.goal ?? 0.0, currentValue: $recentWeight)
                         .presentationDetents([.medium, .large])
@@ -233,6 +241,10 @@ struct Home: View {
                     showAddGoal.toggle()
                     showCongratsAlert = false
                 }
+            }
+            
+            if isLoading {
+                ProgressView("Loading...").progressViewStyle(.circular).tint(.blue).foregroundStyle(.blue) // Display a loading spinner
             }
         }
         
@@ -277,7 +289,6 @@ struct Home: View {
             }
             WeightVM.deleteWeight(weight: weight)
         }
-//        refresh.toggle()
         WeightVM.weights.removeAll()
         WeightVM.filteredWeights.removeAll()
         WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
@@ -294,25 +305,35 @@ struct Home: View {
                 .padding(.leading)
             Text("⌵")
                 .offset(y: -4)
-            }
-            .frame(minWidth: currentChartTypeTab.type != "Body Weight" ? 150 : 250)
-            .foregroundColor(.primary)
-            .font(.title)
-            .fontWeight(.bold)
-            .padding(.leading)
+        }
+        .frame(minWidth: currentChartTypeTab.type != "Body Weight" ? 150 : 250)
+        .foregroundColor(.primary)
+        .font(.title)
+        .fontWeight(.bold)
+        .padding(.leading)
     }
     
     private func checkGoalStatus(currWeight: Double, goalWeight: Double, type: String) -> Bool {
-        if type == "Body Weight" {
-            return currWeight <= goalWeight
+        if currWeight != 0.0 {
+            if type == "Body Weight" {
+                return currWeight <= goalWeight
+            } else {
+                if goalWeight != 0.0 {
+                    return currWeight >= goalWeight
+                } else {
+                    return false
+                }
+            }
         } else {
-            return currWeight >= goalWeight
+            return false
         }
+        
         
         
     }
     
     private func checkGoal() async {
+        getRecentWeight()
         //Check if new weight meets the goal
         if userViewModel.isSubscriptionActive {
             if checkGoalStatus(currWeight: recentWeight, goalWeight: currentChartTypeTab.goal ?? 0.0, type: currentChartTypeTab.type ?? "Body Weight") {
