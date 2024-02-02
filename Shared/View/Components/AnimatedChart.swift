@@ -86,7 +86,7 @@ struct AnimatedChart: View {
 
             } else {
                 Spacer()
-                Text("No data for \(chartType.type ?? "") in the past \(chartRange) Months")
+                Text("No data for \(chartType.type ?? "") \(checkType(chartType: chartRange))")
                 Spacer()
             }
         }
@@ -110,6 +110,21 @@ struct AnimatedChart: View {
             }
         }
         return nil
+    }
+    
+    private func checkType(chartType: String) -> String {
+        switch chartType {
+        case "3":
+            return "in the past 3 months"
+        case "6":
+            return "in the past 6 months"
+        case "Year":
+            return "in the past year"
+        case  "all":
+            return "yet, add a beginning weight!"
+        default:
+            return "yet, add a beginning weight!"
+        }
     }
     
 }

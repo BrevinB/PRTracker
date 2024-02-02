@@ -36,6 +36,7 @@
 		23BCBFB72A1C30AD005CE235 /* TestHealthKitStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BCBFB62A1C30AD005CE235 /* TestHealthKitStore.swift */; };
 		23D8F5E128A7309C003511D4 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D8F5E028A7309C003511D4 /* Home.swift */; };
 		23D8F5E328A7310C003511D4 /* AnimatedChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D8F5E228A7310C003511D4 /* AnimatedChart.swift */; };
+		23E022132B6ADC72007EDF3C /* WeightRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E022122B6ADC72007EDF3C /* WeightRowView.swift */; };
 		23F4E27B290A23A600BED6D0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F4E27A290A23A600BED6D0 /* SettingsView.swift */; };
 		23F4E2A1290EB2E100BED6D0 /* PickerComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F4E2A0290EB2E100BED6D0 /* PickerComponent.swift */; };
 		23F5FF602A3A401A0070CB23 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 23F5FF5F2A3A401A0070CB23 /* RevenueCat */; };
@@ -74,6 +75,7 @@
 		23BCBFB62A1C30AD005CE235 /* TestHealthKitStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHealthKitStore.swift; sourceTree = "<group>"; };
 		23D8F5E028A7309C003511D4 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		23D8F5E228A7310C003511D4 /* AnimatedChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedChart.swift; sourceTree = "<group>"; };
+		23E022122B6ADC72007EDF3C /* WeightRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightRowView.swift; sourceTree = "<group>"; };
 		23F4E27A290A23A600BED6D0 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		23F4E2A0290EB2E100BED6D0 /* PickerComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerComponent.swift; sourceTree = "<group>"; };
 		23F5FF622A3A58FD0070CB23 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				23F5FF6B2A4379A00070CB23 /* Components */,
 				23D8F5E028A7309C003511D4 /* Home.swift */,
 				2366F44828E0867E00391656 /* WeightsList.swift */,
+				23E022122B6ADC72007EDF3C /* WeightRowView.swift */,
 				23118BB02A3A3D8A00995685 /* Paywall.swift */,
 				23A9C8C728372FDE00C724BF /* ContentView.swift */,
 				2301D9D62AF5941D004D8860 /* OnboardingView.swift */,
@@ -243,7 +246,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					23A9C8CC28372FDF00C724BF = {
 						CreatedOnToolsVersion = 13.4;
@@ -289,6 +292,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D8F5E328A7310C003511D4 /* AnimatedChart.swift in Sources */,
+				23E022132B6ADC72007EDF3C /* WeightRowView.swift in Sources */,
 				233788E82A465C3B0043C17F /* UserViewModel.swift in Sources */,
 				23BCBFB72A1C30AD005CE235 /* TestHealthKitStore.swift in Sources */,
 				23118BB12A3A3D8A00995685 /* Paywall.swift in Sources */,
@@ -325,6 +329,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -387,6 +392,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -463,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = co.brevinb.PRTracker;
 				PRODUCT_NAME = PRTracker;
 				SDKROOT = iphoneos;
@@ -498,7 +504,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.4;
 				PRODUCT_BUNDLE_IDENTIFIER = co.brevinb.PRTracker;
 				PRODUCT_NAME = PRTracker;
 				SDKROOT = iphoneos;

@@ -33,34 +33,24 @@ struct WeightsList: View {
                         List {
                             ForEach(weights, id: \.id) { weight in
                                 NavigationLink {
-                                    EditWeightView(WeightVM: WeightVM, weight: weight)
+                                    EditWeightView(WeightVM: WeightVM, weight: weight, isMetric: $isMetric)
                                 } label: {
                                     VStack {
                                         HStack {
                                             if checkInt(val: weight.value) {
-                                                if(isMetric) {
-                                                    Text(weight.value.convertToMetric.intFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                        .padding(.trailing)
-                                                } else {
-                                                    Text(weight.value.intFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                    //.padding(.trailing)
-                                                }
+                                                
+                                                Text(weight.value.intFormat)
+                                                    .font(.title)
+                                                    .fontWeight(.bold)
+                                                    .padding(.trailing)
+                                             
                                             } else {
-                                                if(isMetric) {
-                                                    Text(weight.value.convertToMetric.doubleFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                        .padding(.trailing)
-                                                } else {
-                                                    Text(weight.value.doubleFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                    //.padding(.trailing)
-                                                }
+                                              
+                                                Text(weight.value.doubleFormat)
+                                                    .font(.title)
+                                                    .fontWeight(.bold)
+                                                    .padding(.trailing)
+                                             
                                             }
                                             
                                             Text(weight.date?.formatted(date: .numeric, time: .omitted) ?? Date.now.formatted(date:.numeric, time: .omitted))
@@ -73,6 +63,7 @@ struct WeightsList: View {
                                 }
                             }.onDelete(perform: deleteValue)
                         }
+                        //.scrollContentBackground(.hidden)
                         .padding(.top, 0)
                     }
                     
