@@ -362,7 +362,7 @@ extension Double {
     }
     
     var convertToMetric: Double {
-        return self * 0.45359237
+        return self * 0.453592
     }
     
     var convertToImperial: Double {

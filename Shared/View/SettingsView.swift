@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 import StoreKit
 import RevenueCatUI
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @ObservedObject var WorkoutVM: WorkoutViewModel
@@ -23,6 +24,7 @@ struct SettingsView: View {
     @State private var showPremium = false
     @State private var isImporting = false
     @State private var isPurchaseRestored = false
+    @State private var draggedWorkout: WorkoutModel?
     
     var body: some View {
         NavigationView {
@@ -118,8 +120,10 @@ struct SettingsView: View {
                         Section("Workouts") {
                             ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
                                 Text(workout.type ?? "")
+                                    
                             }
                             .onDelete(perform: deleteWorkout)
+                           
                         }
                         
                         Section("Leave a Review") {
@@ -189,6 +193,18 @@ struct SettingsView: View {
             let workout = WorkoutVM.workouts[offset]
             WorkoutVM.deleteWorkout(workout: workout)
             WorkoutVM.getAllWorkouts()
+        }
+    }
+    
+    private func moveWorkoutOrder(at sets: IndexSet, destination: Int) {
+        let itemToMove = sets.first!
+        
+        if itemToMove < destination {
+            var startIndex = itemToMove + 1
+            let endIndex = destination + 1
+            var startOrder = WorkoutVM.workouts[itemToMove]
+        } else if destination < itemToMove {
+            
         }
     }
 }
