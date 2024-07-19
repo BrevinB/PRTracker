@@ -16,7 +16,7 @@ struct Paywall: View {
     @State private var isPurchasing = false
     @State private var isLoading = false
     @State private var showAlert = false
-    @EnvironmentObject var userViewModel: UserViewModel
+    @Environment(UserManager.self) private var userViewModel
     
     var body: some View {
         

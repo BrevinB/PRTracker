@@ -14,7 +14,7 @@
 		2301DA1C2B06DBB8004D8860 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2301DA1B2B06DBB8004D8860 /* ConfettiSwiftUI */; };
 		230884BD2A3A3A5900E95426 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 230884BC2A3A3A5900E95426 /* StoreKit.framework */; };
 		23118BB12A3A3D8A00995685 /* Paywall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23118BB02A3A3D8A00995685 /* Paywall.swift */; };
-		233788E82A465C3B0043C17F /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233788E72A465C3B0043C17F /* UserViewModel.swift */; };
+		233788E82A465C3B0043C17F /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233788E72A465C3B0043C17F /* UserManager.swift */; };
 		23385D4A28C195C900A58851 /* PRTrackerModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 23385D4828C195C900A58851 /* PRTrackerModel.xcdatamodeld */; };
 		233E308B28485C5C00483134 /* AddWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233E308A28485C5C00483134 /* AddWeightView.swift */; };
 		234CFA1E288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234CFA1D288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift */; };
@@ -31,7 +31,7 @@
 		23A9C8D628372FDF00C724BF /* PRTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A9C8C628372FDE00C724BF /* PRTrackerApp.swift */; };
 		23A9C8D828372FDF00C724BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A9C8C728372FDE00C724BF /* ContentView.swift */; };
 		23A9C8DA28372FDF00C724BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23A9C8C828372FDF00C724BF /* Assets.xcassets */; };
-		23B9932929CE16D2001503FD /* HealthKitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326071A29CE0C00005630AD /* HealthKitViewModel.swift */; };
+		23B9932929CE16D2001503FD /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326071A29CE0C00005630AD /* HealthKitManager.swift */; };
 		23B9932A29CE16D3001503FD /* HealthKitStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2326071929CD456C005630AD /* HealthKitStore.swift */; };
 		23BCBFB72A1C30AD005CE235 /* TestHealthKitStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BCBFB62A1C30AD005CE235 /* TestHealthKitStore.swift */; };
 		23D8F5E128A7309C003511D4 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D8F5E028A7309C003511D4 /* Home.swift */; };
@@ -50,8 +50,8 @@
 		230884BC2A3A3A5900E95426 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS16.4.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
 		23118BB02A3A3D8A00995685 /* Paywall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paywall.swift; sourceTree = "<group>"; };
 		2326071929CD456C005630AD /* HealthKitStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitStore.swift; sourceTree = "<group>"; };
-		2326071A29CE0C00005630AD /* HealthKitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitViewModel.swift; sourceTree = "<group>"; };
-		233788E72A465C3B0043C17F /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		2326071A29CE0C00005630AD /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		233788E72A465C3B0043C17F /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		23385D4928C195C900A58851 /* Weights.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Weights.xcdatamodel; sourceTree = "<group>"; };
 		233E308A28485C5C00483134 /* AddWeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWeightView.swift; sourceTree = "<group>"; };
 		234CFA1D288A4B87007BC5FB /* PreviewLayoutComponentModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewLayoutComponentModifier.swift; sourceTree = "<group>"; };
@@ -125,7 +125,7 @@
 			children = (
 				23F5FF6A2A43795F0070CB23 /* View */,
 				23F5FF682A4379200070CB23 /* HealthKit */,
-				23F5FF672A4379050070CB23 /* ViewModels */,
+				23F5FF672A4379050070CB23 /* Manager */,
 				23F5FF612A3A58C50070CB23 /* Helpers */,
 				23A9C8C628372FDE00C724BF /* PRTrackerApp.swift */,
 				23A9C8C828372FDF00C724BF /* Assets.xcassets */,
@@ -162,16 +162,16 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
-		23F5FF672A4379050070CB23 /* ViewModels */ = {
+		23F5FF672A4379050070CB23 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
 				2366F44628D3B17C00391656 /* CoreDataManager.swift */,
-				2326071A29CE0C00005630AD /* HealthKitViewModel.swift */,
+				2326071A29CE0C00005630AD /* HealthKitManager.swift */,
 				2366F44428D3AD2300391656 /* WeightViewModel.swift */,
 				2366F44228D3AC8D00391656 /* WorkoutViewModel.swift */,
-				233788E72A465C3B0043C17F /* UserViewModel.swift */,
+				233788E72A465C3B0043C17F /* UserManager.swift */,
 			);
-			path = ViewModels;
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		23F5FF682A4379200070CB23 /* HealthKit */ = {
@@ -293,7 +293,7 @@
 			files = (
 				23D8F5E328A7310C003511D4 /* AnimatedChart.swift in Sources */,
 				23E022132B6ADC72007EDF3C /* WeightRowView.swift in Sources */,
-				233788E82A465C3B0043C17F /* UserViewModel.swift in Sources */,
+				233788E82A465C3B0043C17F /* UserManager.swift in Sources */,
 				23BCBFB72A1C30AD005CE235 /* TestHealthKitStore.swift in Sources */,
 				23118BB12A3A3D8A00995685 /* Paywall.swift in Sources */,
 				23A9C8D828372FDF00C724BF /* ContentView.swift in Sources */,
@@ -316,7 +316,7 @@
 				23A9C8D628372FDF00C724BF /* PRTrackerApp.swift in Sources */,
 				23F5FF632A3A58FD0070CB23 /* Extensions.swift in Sources */,
 				2366F44B28E099E800391656 /* KeyboardDismiss.swift in Sources */,
-				23B9932929CE16D2001503FD /* HealthKitViewModel.swift in Sources */,
+				23B9932929CE16D2001503FD /* HealthKitManager.swift in Sources */,
 				23F4E2A1290EB2E100BED6D0 /* PickerComponent.swift in Sources */,
 				23385D4A28C195C900A58851 /* PRTrackerModel.xcdatamodeld in Sources */,
 			);
@@ -464,7 +464,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -499,7 +499,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

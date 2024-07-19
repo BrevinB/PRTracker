@@ -10,13 +10,30 @@ import CoreData
 import RevenueCatUI
 import ConfettiSwiftUI
 
+enum DataDurationContext: CaseIterable, Identifiable {
+    case three, six, year, alltime
+    var id: Self { self }
+    var title: String {
+        switch self {
+        case .three:
+            return "3 Months"
+        case .six:
+            return "6 Months"
+        case .year:
+            return "Year"
+        case .alltime:
+            return "All"
+        }
+    }
+}
+
 struct Home: View {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = true
-    @StateObject var WorkoutVM = WorkoutViewModel()
-    @StateObject var WeightVM = WeightViewModel()
-    @StateObject var HealthKitVM = HealthKitViewModel()
-    @EnvironmentObject var userViewModel: UserViewModel
-    @State private var currentChartTab: String = "3"
+    @Environment(WorkoutViewModel.self) private var WorkoutVM
+    @Environment(WeightViewModel.self) private var WeightVM
+    @Environment(HealthKitManager.self) private var HealthKitVM
+    @Environment(UserManager.self) private var userViewModel
+    
     @FetchRequest private var chartTypes: FetchedResults<Workout>
     @State private var currentChartTypeTab: WorkoutModel
     @State private var type = ""
@@ -32,6 +49,7 @@ struct Home: View {
     @State private var confettiCount: Int = 0
     @State private var showCongratsAlert: Bool = false
     @State private var isLoading: Bool = false
+    @State private var selectedDuration: DataDurationContext = .three
     
     init(moc: NSManagedObjectContext) {
         let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
@@ -69,15 +87,10 @@ struct Home: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
                         HStack {
-                            Picker("", selection: $currentChartTab.animation(.spring(dampingFraction: 0.4))) {
-                                Text("3 Months")
-                                    .tag("3")
-                                Text("6 Months")
-                                    .tag("6")
-                                Text("Year")
-                                    .tag("Year")
-                                Text("All Time")
-                                    .tag("all")
+                            Picker("", selection: $selectedDuration) {
+                                ForEach(DataDurationContext.allCases) {
+                                    Text($0.title)
+                                }
                             }
                             .pickerStyle(SegmentedPickerStyle())
                             .labelsHidden()
@@ -102,116 +115,95 @@ struct Home: View {
                                         Image(systemName: "figure.strengthtraining.traditional")
                                     }
                                 }
-                                
                             }
                             
                             Spacer()
+                            
                             Button(action: {
-                                getRecentWeight()
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    if userViewModel.isSubscriptionActive {
+                                    if !userViewModel.isSubscriptionActive {
                                         showAddGoal.toggle()
                                     } else {
                                         showPremium.toggle()
                                     }
                                 }
-                                //toggle show goal
                             }, label: {
                                 if currentChartTypeTab.goal == 0.0 {
                                     Text("Add Goal")
                                         .fontWeight(.bold)
+                                        .tint(.green)
                                 } else {
                                     Text("Edit Goal")
                                         .fontWeight(.bold)
+                                        .tint(.green)
                                 }
                             })
                         }
                         
-                        switch(currentChartTab) {
-                        case "3":
-                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.threeMonthWeights, chartRange: $currentChartTab, isMetric: $isMetric)
-                        case "6":
-                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.sixMonthWeights, chartRange: $currentChartTab, isMetric: $isMetric)
-                        case "Year":
-                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.oneYearWeights, chartRange: $currentChartTab, isMetric: $isMetric)
-                        case "all":
-                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.allTimeWeights, chartRange: $currentChartTab, isMetric: $isMetric)
-                        default:
-                            AnimatedChart(chartType: $currentChartTypeTab, WeightsVM: WeightVM, weights: $WeightVM.threeMonthWeights, chartRange: $currentChartTab, isMetric: $isMetric)
-                            
+                        switch selectedDuration {
+                        case .three:
+                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.threeMonthWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                        case .six:
+                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.sixMonthWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                        case .year:
+                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.oneYearWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                        case .alltime:
+                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.allTimeWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
                         }
-                        
-                        
                     }
                     .padding()
                     
-                    //Spacer()
                     VStack {
-                        switch(currentChartTab) {
-                        case "3":
-                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.threeMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                        case "6":
-                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.sixMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                        case "Year":
-                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.oneYearWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                        case "all":
-                            WeightsList(WeightVM: WeightVM, HealthKitVM: HealthKitVM, weights: $WeightVM.allTimeWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
-                        default:
-                            Text("No Weights")
+                        switch selectedDuration {
+                        case .three:
+                            WeightsList(weights: WeightVM.threeMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                        case .six:
+                            WeightsList(weights: WeightVM.sixMonthWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                        case .year:
+                            WeightsList(weights: WeightVM.oneYearWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
+                        case .alltime:
+                            WeightsList(weights: WeightVM.allTimeWeights, type: $currentChartTypeTab, isMetric: $isMetric, refresh: $refresh)
                         }
-                        
                     }
-                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding()
-                .onChange(of: currentChartTypeTab) { tag in
+                .onChange(of: currentChartTypeTab) {
                     refresh.toggle()
                 }
-                .onChange(of: refresh) { newValue in
-                    if newValue {
-                        //Get new weight
-                        WeightVM.weights.removeAll()
-                        WeightVM.filteredWeights.removeAll()
-                        WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
-                        getFilteredWeights()
-                        getRecentWeight()
-                        refresh.toggle()
-                    }
+                .onChange(of: refresh) {
+                    WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
+                    getFilteredWeights()
                 }
                 .toolbar {
                     Button(action: {
                         showSettings.toggle()
                     }, label: {
                         Image(systemName: "gear")
+                            .tint(.green)
                     })
                     Button(action: {
                         showNewWeight.toggle()
                     }, label: {
                         Image(systemName: "plus.circle")
+                            .tint(.green)
                     })
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {
                     isLoading = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        refresh.toggle()
-                        WeightVM.filterAllTime()
-                    }
-                    Task  {
-                        try await Task.sleep(nanoseconds: 1_000_000_000)
+                    getFilteredWeights()
+                    Task {
                         await checkGoal()
-                        isLoading = false
                     }
-                    
                 }, content: {
-                    AddWeightView(WorkoutVM: WorkoutVM, WeightVM: WeightVM, HealthKitVM: HealthKitVM, type: currentChartTypeTab)
+                    AddWeightView(type: currentChartTypeTab)
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.automatic)
                 })
                 .sheet(isPresented: $showSettings, onDismiss: {
                     refresh.toggle()
                 }, content: {
-                    SettingsView(WorkoutVM: WorkoutVM, HealthVM: HealthKitVM, WeightVM: WeightVM, isMetric: $isMetric)
+                    SettingsView(isMetric: $isMetric)
                 })
                 .sheet(isPresented: $showPremium, onDismiss: {
                     
@@ -221,7 +213,7 @@ struct Home: View {
                 .sheet(isPresented: $showAddGoal, onDismiss: {
                     
                 }, content: {
-                    AddGoalCard(WorkoutVM: WorkoutVM, type: $currentChartTypeTab, refresh: $refresh, isMetric: $isMetric, startingValue: $firstWeight, targetValue: currentChartTypeTab.goal ?? 0.0, currentValue: $recentWeight)
+                    AddGoalCard(type: $currentChartTypeTab, refresh: $refresh, targetValue: currentChartTypeTab.goal ?? 0.0, isMetric: $isMetric)
                         .presentationDetents([.medium, .large])
                         .presentationDragIndicator(.automatic)
                 })
@@ -237,20 +229,15 @@ struct Home: View {
             .alert("Congrats on hitting your goal of \(currentChartTypeTab.goal?.doubleFormat ?? "0.0 lbs")! Consider setting a new goal!!", isPresented: $showCongratsAlert) {
                 Button("Cancel", role: .cancel) { }
                 Button("Set new goal", role: .cancel) {
-                    getRecentWeight()
                     showAddGoal.toggle()
                     showCongratsAlert = false
                 }
-            }
-            
-            if isLoading {
-                ProgressView("Loading...").progressViewStyle(.circular).tint(.blue).foregroundStyle(.blue) // Display a loading spinner
             }
         }
         
     }
     
-    private func getRecentWeight() {
+    private func getRecentWeight() async {
         recentWeight = WeightVM.allTimeWeights.first?.value ?? 0.0
         firstWeight = WeightVM.allTimeWeights.last?.value ?? 0.0
     }
@@ -266,18 +253,15 @@ struct Home: View {
     }
     
     private func getFilteredWeights() {
-        switch(currentChartTab) {
-        case "3":
+        switch selectedDuration {
+        case .three:
             WeightVM.filterWeights(month: -3)
-        case "6":
+        case .six:
             WeightVM.filterWeights(month: -6)
-        case "Year":
+        case .year:
             WeightVM.filterWeights(month: -12)
-        case "all":
+        case .alltime:
             WeightVM.filterWeights(month: 0)
-        default:
-            WeightVM.filterWeights(month: -3)
-            
         }
     }
     
@@ -289,9 +273,9 @@ struct Home: View {
             }
             WeightVM.deleteWeight(weight: weight)
         }
-        WeightVM.weights.removeAll()
-        WeightVM.filteredWeights.removeAll()
+        
         WeightVM.getWeightsByType(workoutModel: currentChartTypeTab)
+        
         getFilteredWeights()
     }
     
@@ -327,16 +311,12 @@ struct Home: View {
         } else {
             return false
         }
-        
-        
-        
     }
     
     private func checkGoal() async {
-        getRecentWeight()
         //Check if new weight meets the goal
-        if userViewModel.isSubscriptionActive {
-            if checkGoalStatus(currWeight: recentWeight, goalWeight: currentChartTypeTab.goal ?? 0.0, type: currentChartTypeTab.type ?? "Body Weight") {
+        if !userViewModel.isSubscriptionActive {
+            if checkGoalStatus(currWeight: WeightVM.weights.first?.value ?? 0.0, goalWeight: currentChartTypeTab.goal ?? 0.0, type: currentChartTypeTab.type ?? "Body Weight") {
                 //GOAL HIT
                 //show a congrats card
                 showCongratsAlert = true

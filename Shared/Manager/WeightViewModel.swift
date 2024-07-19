@@ -9,13 +9,13 @@ import Foundation
 import CoreData
 import SwiftUI
 
-class WeightViewModel: ObservableObject {
-    @Published var weights = [WeightModel]()
-    @Published var filteredWeights = [WeightModel]()
-    @Published var threeMonthWeights = [WeightModel]()
-    @Published var sixMonthWeights = [WeightModel]()
-    @Published var oneYearWeights = [WeightModel]()
-    @Published var allTimeWeights = [WeightModel]()
+@Observable class WeightViewModel {
+    var weights = [WeightModel]()
+    var filteredWeights = [WeightModel]()
+    var threeMonthWeights = [WeightModel]()
+    var sixMonthWeights = [WeightModel]()
+    var oneYearWeights = [WeightModel]()
+    var allTimeWeights = [WeightModel]()
     
     func getWeightsByType(workoutModel: WorkoutModel) {
         let type = CoreDataManager.shared.getWorkoutById(id: workoutModel.typeId)
@@ -29,18 +29,16 @@ class WeightViewModel: ObservableObject {
         }
     }
     
-    
-    
     func addOrSubtractMonth(month: Int) -> Date {
         Calendar.current.date(byAdding: .month, value: month, to: Date())!
     }
     
     func filterWeights(month: Int) {
         DispatchQueue.main.async {
-            self.threeMonthWeights.removeAll()
-            self.sixMonthWeights.removeAll()
-            self.oneYearWeights.removeAll()
-            self.allTimeWeights.removeAll()
+//            self.threeMonthWeights.removeAll()
+//            self.sixMonthWeights.removeAll()
+//            self.oneYearWeights.removeAll()
+//            self.allTimeWeights.removeAll()
             
             self.filterThreeMonth()
             self.filterSixMonth()
@@ -52,52 +50,27 @@ class WeightViewModel: ObservableObject {
     func filterThreeMonth() {
         DispatchQueue.main.async {
             let now = Date.now
-            var range = Date.now...Date.now
             let previous3Months = self.addOrSubtractMonth(month: -3)
-            range = previous3Months...now
             
-            for weight in self.weights {
-                if range.contains(weight.date!) {
-                    self.threeMonthWeights.append(weight)
-                }
-            }
-            
-            self.threeMonthWeights = self.threeMonthWeights.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
-            print(self.threeMonthWeights.count)
+            self.threeMonthWeights = self.weights.filter{ $0.date ?? Date.now > previous3Months}.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
         }
     }
     
     func filterSixMonth() {
         DispatchQueue.main.async {
             let now = Date.now
-            var range = Date.now...Date.now
             let previous6Months = self.addOrSubtractMonth(month: -6)
-            range = previous6Months...now
             
-            for weight in self.weights {
-                if range.contains(weight.date!) {
-                    self.sixMonthWeights.append(weight)
-                }
-            }
-            
-            self.sixMonthWeights = self.sixMonthWeights.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
+            self.sixMonthWeights = self.weights.filter{ $0.date ?? Date.now > previous6Months}.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
         }
     }
     
     func filterOneYear() {
         DispatchQueue.main.async {
             let now = Date.now
-            var range = Date.now...Date.now
             let previous12Months = self.addOrSubtractMonth(month: -12)
-            range = previous12Months...now
             
-            for weight in self.weights {
-                if range.contains(weight.date!) {
-                    self.oneYearWeights.append(weight)
-                }
-            }
-            
-            self.oneYearWeights = self.oneYearWeights.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
+            self.oneYearWeights = self.weights.filter{ $0.date ?? Date.now > previous12Months}.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
         }
     }
     

@@ -14,9 +14,10 @@ struct testData: Hashable{
 }
 
 struct WeightsList: View {
-    @ObservedObject var WeightVM: WeightViewModel
-    @ObservedObject var HealthKitVM: HealthKitViewModel
-    @Binding var weights: [WeightModel]
+    @Environment(WeightViewModel.self) private var WeightVM
+    @Environment(HealthKitManager.self) private var HealthKitVM
+    
+    var weights: [WeightModel]
     @Binding var type: WorkoutModel
     @Binding var isMetric: Bool
     @Environment(\.dismiss) var dismiss
@@ -33,7 +34,7 @@ struct WeightsList: View {
                         List {
                             ForEach(weights, id: \.id) { weight in
                                 NavigationLink {
-                                    EditWeightView(WeightVM: WeightVM, weight: weight, isMetric: $isMetric)
+                                    EditWeightView(weight: weight, isMetric: $isMetric)
                                 } label: {
                                     VStack {
                                         HStack {
@@ -84,11 +85,14 @@ struct WeightsList: View {
             }
             WeightVM.deleteWeight(weight: weight)
         }
-        refresh.toggle()
-        WeightVM.weights.removeAll()
-        WeightVM.filteredWeights.removeAll()
-        WeightVM.getWeightsByType(workoutModel: type)
-        WeightVM.filterWeights(month: 0)
+        //refresh.toggle()
+       // WeightVM.weights.removeAll()
+        //WeightVM.filteredWeights.removeAll()
+        Task {
+            await WeightVM.getWeightsByType(workoutModel: type)
+            WeightVM.filterWeights(month: 0)
+        }
+        
     }
     
     func checkInt(val: Double) -> Bool {

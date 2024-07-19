@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditWeightView: View {
-    @ObservedObject var WeightVM: WeightViewModel
+    @Environment(WeightViewModel.self) private var WeightVM
     @Environment(\.dismiss) private var dismiss
     var weight: WeightModel
     @State private var weightValue: Double = 0.0

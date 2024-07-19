@@ -10,14 +10,14 @@ import Charts
 
 struct AnimatedChart: View {
     @Binding var chartType: WorkoutModel
-    @ObservedObject var WeightsVM: WeightViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-    @Binding var weights: [WeightModel] 
-    @Binding var chartRange : String
+    @Environment(WeightViewModel.self) private var WeightsVM
+    @Environment(UserManager.self) private var userViewModel
+    var weights: [WeightModel]
+    var selectedDuration: DataDurationContext
     @Binding var isMetric: Bool
     let highestWeight = 300
     let goalWeight = 220.0
-    
+
     @State private var lineWidth = 2.0
     @State private var chartColor: Color = .green
     @State private var showSymbols = true
@@ -86,7 +86,7 @@ struct AnimatedChart: View {
 
             } else {
                 Spacer()
-                Text("No data for \(chartType.type ?? "") \(checkType(chartType: chartRange))")
+                Text("No data for \(selectedDuration.title) \(checkType(chartType: selectedDuration))")
                 Spacer()
             }
         }
@@ -112,21 +112,18 @@ struct AnimatedChart: View {
         return nil
     }
     
-    private func checkType(chartType: String) -> String {
+    private func checkType(chartType: DataDurationContext) -> String {
         switch chartType {
-        case "3":
+        case .three:
             return "in the past 3 months"
-        case "6":
+        case .six:
             return "in the past 6 months"
-        case "Year":
+        case .year:
             return "in the past year"
-        case  "all":
-            return "yet, add a beginning weight!"
-        default:
+        case  .alltime:
             return "yet, add a beginning weight!"
         }
     }
-    
 }
 
 
