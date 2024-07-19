@@ -113,7 +113,6 @@ struct AddWeightView: View {
                 } else {
                     error = true
                 }
-                
             }, label: {
                 Text("Submit")
                     .frame(width: 200)
@@ -129,7 +128,6 @@ struct AddWeightView: View {
             }, content: {
                 Paywall(isPaywallPresented: $promptPremium)
             })
-            
         }.onAppear {
             isMetric = UserDefaults.standard.bool(forKey: "isMetric")
         }

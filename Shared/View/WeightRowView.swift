@@ -15,41 +15,37 @@ struct WeightRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-        HStack {
-            if checkInt(val: weight) {
-                if(isMetric) {
-                    Text(weight.convertToMetric.intFormat)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.trailing)
+            HStack {
+                if checkInt(val: weight) {
+                    if(isMetric) {
+                        Text(weight.convertToMetric.intFormat)
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.trailing)
+                    } else {
+                        Text(weight.intFormat)
+                            .font(.title)
+                            .fontWeight(.bold)
+                    }
                 } else {
-                    Text(weight.intFormat)
-                        .font(.title)
-                        .fontWeight(.bold)
-                    
-                    //.padding(.trailing)
+                    if(isMetric) {
+                        Text(weight.convertToMetric.doubleFormat)
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .padding(.trailing)
+                    } else {
+                        Text(weight.doubleFormat)
+                            .font(.title)
+                            .fontWeight(.bold)
+                    }
                 }
-            } else {
-                if(isMetric) {
-                    Text(weight.convertToMetric.doubleFormat)
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.trailing)
-                } else {
-                    Text(weight.doubleFormat)
-                        .font(.title)
-                        .fontWeight(.bold)
-                    //.padding(.trailing)
-                }
-            }
-            
-            Text(date.formatted(date: .numeric, time: .shortened))
-                .font(.title3)
-            Spacer()
-            
-        }.padding([.horizontal])
-        
-    }
+                
+                Text(date.formatted(date: .numeric, time: .shortened))
+                    .font(.title3)
+                
+                Spacer()
+            }.padding([.horizontal])
+        }
         Text(note)
             .font(.subheadline)
             .lineLimit(1)
@@ -68,11 +64,7 @@ struct WeightRowView: View {
     }
 }
 
-
-
 #Preview {
     WeightRowView()
-        
+    
 }
-
-

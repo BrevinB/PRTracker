@@ -26,8 +26,6 @@ class CoreDataManager {
                 fatalError("Failed to initialize Core Data \(error)")
             }
         }
-        
-//        let directories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     }
     
     var viewContext: NSManagedObjectContext {
@@ -38,8 +36,8 @@ class CoreDataManager {
     
     func deleteAllWorkouts() {
         let fetchRequest1: NSFetchRequest<NSFetchRequestResult> = Workout.fetchRequest()
-             let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1)
-            _ = try? persistentContainer.viewContext.execute(batchDeleteRequest1)
+        let batchDeleteRequest1 = NSBatchDeleteRequest(fetchRequest: fetchRequest1)
+        _ = try? persistentContainer.viewContext.execute(batchDeleteRequest1)
         print("SUCESS")
     }
     
@@ -113,17 +111,13 @@ class CoreDataManager {
         do {
             let data = try persistentContainer.viewContext.fetch(request)
             if !data.isEmpty {
-    //            self.initialWorkoutSet = true
                 return true
             } else {
-    //            self.initialWorkoutSet = false
                 return false
             }
         } catch {
             
             return false
         }
-        
-        
     }
 }

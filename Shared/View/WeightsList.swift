@@ -39,19 +39,15 @@ struct WeightsList: View {
                                     VStack {
                                         HStack {
                                             if checkInt(val: weight.value) {
-                                                
                                                 Text(weight.value.intFormat)
                                                     .font(.title)
                                                     .fontWeight(.bold)
                                                     .padding(.trailing)
-                                             
                                             } else {
-                                              
                                                 Text(weight.value.doubleFormat)
                                                     .font(.title)
                                                     .fontWeight(.bold)
                                                     .padding(.trailing)
-                                             
                                             }
                                             
                                             Text(weight.date?.formatted(date: .numeric, time: .omitted) ?? Date.now.formatted(date:.numeric, time: .omitted))
@@ -64,19 +60,14 @@ struct WeightsList: View {
                                 }
                             }.onDelete(perform: deleteValue)
                         }
-                        //.scrollContentBackground(.hidden)
                         .padding(.top, 0)
                     }
-                    
-                    //                .toolbar {
-                    //                    EditButton()
-                    //                }
                     .frame(minWidth: 400, minHeight: 500)
                 }
             }
         }
     }
-        
+    
     private func deleteValue(at offsets: IndexSet) {
         offsets.forEach { offset in
             let weight = WeightVM.weights[offset]
@@ -85,17 +76,14 @@ struct WeightsList: View {
             }
             WeightVM.deleteWeight(weight: weight)
         }
-        //refresh.toggle()
-       // WeightVM.weights.removeAll()
-        //WeightVM.filteredWeights.removeAll()
+        
         Task {
             await WeightVM.getWeightsByType(workoutModel: type)
             WeightVM.filterWeights(month: 0)
         }
-        
     }
     
     func checkInt(val: Double) -> Bool {
         return floor(val) == val
     }
-    }
+}

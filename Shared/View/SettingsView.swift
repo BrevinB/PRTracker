@@ -114,7 +114,6 @@ struct SettingsView: View {
                             }
                         }
                         
-
                         Section("Workouts") {
                             ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
                                 Text(workout.type ?? "")
@@ -149,9 +148,6 @@ struct SettingsView: View {
                             Text("[Privacy Policy](https://sites.google.com/view/pr-tracker-privacy-policy/home)")
                             Text("[Terms of Use](http://www.apple.com/legal/itunes/appstore/dev/stdeula)")
                         }.tint(.green)
-                            
-                        
-                        
                     }
                 }
                 .navigationTitle("Settings")

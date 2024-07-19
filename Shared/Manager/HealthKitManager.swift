@@ -80,7 +80,6 @@ import HealthKit
                 await weightVM.getWeightsByType(workoutModel: bodyWeight)
             }
             CDWeights = weightVM.weights
-            //let testDifferences = testingData.difference(from: CDWeights)
             
             var testingArrayData: [healthKitWeight] = []
             for HKweight in testingData {

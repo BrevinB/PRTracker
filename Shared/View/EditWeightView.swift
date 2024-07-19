@@ -15,12 +15,9 @@ struct EditWeightView: View {
     @State private var dateValue: Date? = nil
     @State private var noteValue: String = ""
     @Binding var isMetric: Bool
-   
     
     var body: some View {
-        
         VStack(alignment: .leading, spacing: 20) {
-            
             Text("Weight")
                 .font(.headline)
             
@@ -35,7 +32,6 @@ struct EditWeightView: View {
             DatePicker(
                 "Date and Time", selection: Binding<Date>(get: {self.dateValue ?? Date()}, set: {self.dateValue = $0})
             ).datePickerStyle(.compact)
-            
             
             Text("Notes")
                 .font(.headline)
@@ -65,11 +61,10 @@ struct EditWeightView: View {
             } else {
                 weightValue = weight.value
             }
-            
             dateValue = weight.date ?? Date.now
             noteValue = weight.note ?? ""
         }
-       
+        
     }
     
     private func submitWeight(_ isMetric: Bool) {
@@ -80,9 +75,5 @@ struct EditWeightView: View {
         } else {
             WeightVM.updateWeight(weightId: weight.weightId, weight: weightValue, note: noteValue, date: dateValue ?? Date.now)
         }
-        
-       
     }
 }
-
-

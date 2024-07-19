@@ -24,8 +24,6 @@ struct AnimatedChart: View {
     @State private var showLollipop = true
     @State private var selectedWeight: WeightModel?
     
-        
-    
     var body: some View {
         let curColor = Color(.systemGreen)
         let curGradient = LinearGradient(
@@ -125,7 +123,6 @@ struct AnimatedChart: View {
         }
     }
 }
-
 
 extension View {
     func customYAxisScale(_min: Double, _max: Double, goal: Double, isMetric: Bool, isSubscribed: Bool, count: Int) -> some View {

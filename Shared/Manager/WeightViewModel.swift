@@ -35,11 +35,6 @@ import SwiftUI
     
     func filterWeights(month: Int) {
         DispatchQueue.main.async {
-//            self.threeMonthWeights.removeAll()
-//            self.sixMonthWeights.removeAll()
-//            self.oneYearWeights.removeAll()
-//            self.allTimeWeights.removeAll()
-            
             self.filterThreeMonth()
             self.filterSixMonth()
             self.filterOneYear()
@@ -80,7 +75,6 @@ import SwiftUI
         }
     }
     
-    
     var value: Double = 0.0
     var date: Date = Date()
     var note: String = ""
@@ -115,8 +109,6 @@ import SwiftUI
             CoreDataManager.shared.save()
         }
     }
-    
-    
 }
 
 struct WeightModel: Comparable, Identifiable {
