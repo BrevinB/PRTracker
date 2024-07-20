@@ -18,7 +18,6 @@ struct PremiumCard: View {
     var body: some View {
         VStack {
             ZStack {
-                
                 RoundedRectangle(cornerRadius: 20)
                     .fill(.black)
                 

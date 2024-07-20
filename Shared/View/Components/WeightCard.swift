@@ -18,7 +18,6 @@ struct WeightCard: View {
                 Text("Notes")
                     .padding(.leading)
                     .padding(.trailing)
-                
             }
         }
     }

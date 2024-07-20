@@ -9,10 +9,10 @@ import SwiftUI
 import CoreData
 import Combine
 struct AddWeightView: View {
-    @ObservedObject var WorkoutVM: WorkoutViewModel
-    @ObservedObject var WeightVM: WeightViewModel
-    @ObservedObject var HealthKitVM: HealthKitViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
+    @Environment(WorkoutViewModel.self) private var WorkoutVM
+    @Environment(WeightViewModel.self) private var WeightVM
+    @Environment(HealthKitManager.self) private var HealthKitVM
+    @Environment(UserManager.self) private var userViewModel
     @Environment(\.dismiss) var dismiss
     @State private var value: Double?
     @State private var weight = ""
@@ -106,11 +106,13 @@ struct AddWeightView: View {
                     self.note = ""
                     self.hideKeyboard()
                     self.value = nil
+                    
+                    WeightVM.getWeightsByType(workoutModel: type)
+                    
                     dismiss()
                 } else {
                     error = true
                 }
-                
             }, label: {
                 Text("Submit")
                     .frame(width: 200)
@@ -126,7 +128,6 @@ struct AddWeightView: View {
             }, content: {
                 Paywall(isPaywallPresented: $promptPremium)
             })
-            
         }.onAppear {
             isMetric = UserDefaults.standard.bool(forKey: "isMetric")
         }
@@ -164,12 +165,12 @@ struct AddWeightView: View {
 
 struct AddWeightView_Previews: PreviewProvider {
     
-    static let userViewModel = UserViewModel()
+    static let userViewModel = UserManager()
     
     static var previews: some View {
         let workout = WorkoutModel(workout: Workout(context: CoreDataManager.shared.viewContext))
-        AddWeightView(WorkoutVM: WorkoutViewModel(), WeightVM: WeightViewModel(), HealthKitVM: HealthKitViewModel(), type: workout)
-            .environmentObject(userViewModel)
+        AddWeightView(type: workout)
+            .environment(userViewModel)
             
     }
 }

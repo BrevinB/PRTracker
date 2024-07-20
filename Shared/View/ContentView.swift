@@ -11,8 +11,9 @@ import HealthKit
 struct ContentView: View {
    
     @Environment(\.managedObjectContext) var moc
-    @EnvironmentObject var HealthVM: HealthKitViewModel
-    @StateObject private var WorkoutVM = WorkoutViewModel()
+    @Environment(HealthKitManager.self) private var hkManager
+    @Environment(WorkoutViewModel.self) private var workoutVM
+    @Environment(WeightViewModel.self) private var weightVM
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
     @AppStorage("isHealthKitAuthorized") private var authorizeHealthkit: Bool = false
     
@@ -29,12 +30,10 @@ struct ContentView: View {
             }
         }
         .onAppear {
-
             if !authorizeHealthkit {
-                HealthVM.healthRequest()
+                hkManager.healthRequest()
                 authorizeHealthkit = true
             }
-            
         }
     }
 }

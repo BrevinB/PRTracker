@@ -14,9 +14,10 @@ struct testData: Hashable{
 }
 
 struct WeightsList: View {
-    @ObservedObject var WeightVM: WeightViewModel
-    @ObservedObject var HealthKitVM: HealthKitViewModel
-    @Binding var weights: [WeightModel]
+    @Environment(WeightViewModel.self) private var WeightVM
+    @Environment(HealthKitManager.self) private var HealthKitVM
+    
+    var weights: [WeightModel]
     @Binding var type: WorkoutModel
     @Binding var isMetric: Bool
     @Environment(\.dismiss) var dismiss
@@ -33,34 +34,20 @@ struct WeightsList: View {
                         List {
                             ForEach(weights, id: \.id) { weight in
                                 NavigationLink {
-                                    EditWeightView(WeightVM: WeightVM, weight: weight)
+                                    EditWeightView(weight: weight, isMetric: $isMetric)
                                 } label: {
                                     VStack {
                                         HStack {
                                             if checkInt(val: weight.value) {
-                                                if(isMetric) {
-                                                    Text(weight.value.convertToMetric.intFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                        .padding(.trailing)
-                                                } else {
-                                                    Text(weight.value.intFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                    //.padding(.trailing)
-                                                }
+                                                Text(weight.value.intFormat)
+                                                    .font(.title)
+                                                    .fontWeight(.bold)
+                                                    .padding(.trailing)
                                             } else {
-                                                if(isMetric) {
-                                                    Text(weight.value.convertToMetric.doubleFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                        .padding(.trailing)
-                                                } else {
-                                                    Text(weight.value.doubleFormat)
-                                                        .font(.title)
-                                                        .fontWeight(.bold)
-                                                    //.padding(.trailing)
-                                                }
+                                                Text(weight.value.doubleFormat)
+                                                    .font(.title)
+                                                    .fontWeight(.bold)
+                                                    .padding(.trailing)
                                             }
                                             
                                             Text(weight.date?.formatted(date: .numeric, time: .omitted) ?? Date.now.formatted(date:.numeric, time: .omitted))
@@ -75,16 +62,12 @@ struct WeightsList: View {
                         }
                         .padding(.top, 0)
                     }
-                    
-                    //                .toolbar {
-                    //                    EditButton()
-                    //                }
                     .frame(minWidth: 400, minHeight: 500)
                 }
             }
         }
     }
-        
+    
     private func deleteValue(at offsets: IndexSet) {
         offsets.forEach { offset in
             let weight = WeightVM.weights[offset]
@@ -93,14 +76,14 @@ struct WeightsList: View {
             }
             WeightVM.deleteWeight(weight: weight)
         }
-        refresh.toggle()
-        WeightVM.weights.removeAll()
-        WeightVM.filteredWeights.removeAll()
-        WeightVM.getWeightsByType(workoutModel: type)
-        WeightVM.filterWeights(month: 0)
+        
+        Task {
+            await WeightVM.getWeightsByType(workoutModel: type)
+            WeightVM.filterWeights(month: 0)
+        }
     }
     
     func checkInt(val: Double) -> Bool {
         return floor(val) == val
     }
-    }
+}

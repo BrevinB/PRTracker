@@ -12,7 +12,7 @@ import RevenueCatUI
 
 struct OnboardingView: View {
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
-    @StateObject private var WorkoutVM = WorkoutViewModel()
+    @Environment(WorkoutViewModel.self) private var WorkoutVM
     @State private var allowClose: Bool = false
     @State private var loadingData: Bool = false
     @State private var showPremium: Bool = false
@@ -32,12 +32,6 @@ struct OnboardingView: View {
                     }.padding(.leading)
                     Spacer()
                 }.padding()
-                    
-                //            Button("TEST") {
-                //                initialWorkoutSet = true
-                //                print("DOES DATA EXIST? \(CoreDataManager.shared.checkForExistingData())")
-                
-                
                
                 VStack(alignment: .leading, spacing: 40) {
                     HStack {
@@ -110,8 +104,6 @@ struct OnboardingView: View {
                      }
                 }
             }
-            
-            
         }.ignoresSafeArea(.all, edges: .all)
     }
 }

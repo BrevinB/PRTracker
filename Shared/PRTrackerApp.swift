@@ -13,20 +13,19 @@ struct PRTrackerApp: App {
     
     @AppStorage("initialWorkoutSet") private var initialWorkoutSet: Bool = false
     @AppStorage("isImperial") private var isImperial: Bool = true
-    @StateObject var healthViewModel = HealthKitViewModel()
-    @StateObject var userViewModel = UserViewModel()
+    let hkManager = HealthKitManager()
+    let userManager = UserManager()
+    let weightVM = WeightViewModel()
+    let workoutVM = WorkoutViewModel()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, CoreDataManager.shared.viewContext)
-                .environmentObject(healthViewModel)
-                .environmentObject(userViewModel)
+                .environment(hkManager)
+                .environment(userManager)
+                .environment(weightVM)
+                .environment(workoutVM)
         }
-    }
-    
-    init() {
-        Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: "appl_yhjPcPtPaIzsgSrkfvGGkjBTfmT")
     }
 }
