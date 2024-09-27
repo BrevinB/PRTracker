@@ -1,5 +1,5 @@
 # PR-Tracker
-PR-Tracker is a workout personal record tracking app. The free version contains sections to track your body weight, bench, squat, deadlift.
+[PR-Tracker](https://apps.apple.com/us/app/pr-tracker/id6443760870) is a workout personal record tracking app. The free version contains sections to track your body weight, bench, squat, deadlift.
 Purchasing premium allows you to add aditional lifts to track such as overhead press, log press, atlas stones, etc. 
 
 The goal of this app is to allow users to track their personal records with simple charts to see their progress and get motivated to beat previous records! 
