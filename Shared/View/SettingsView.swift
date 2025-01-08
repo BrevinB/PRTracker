@@ -102,7 +102,7 @@ struct SettingsView: View {
                                 TextField("Workout", text: $workoutName)
                                 Button("Add") {
                                     if(workoutName != "") {
-                                        if !userViewModel.isSubscriptionActive {
+                                        if userViewModel.isSubscriptionActive {
                                             WorkoutVM.addNewWorkout(type: workoutName)
                                             workoutName = ""
                                             WorkoutVM.getAllWorkouts()
@@ -190,17 +190,17 @@ struct SettingsView: View {
         }
     }
     
-    private func moveWorkoutOrder(at sets: IndexSet, destination: Int) {
-        let itemToMove = sets.first!
-        
-        if itemToMove < destination {
-            var startIndex = itemToMove + 1
-            let endIndex = destination + 1
-            var startOrder = WorkoutVM.workouts[itemToMove]
-        } else if destination < itemToMove {
-            
-        }
-    }
+//    private func moveWorkoutOrder(at sets: IndexSet, destination: Int) {
+//        let itemToMove = sets.first!
+//        
+//        if itemToMove < destination {
+//            var startIndex = itemToMove + 1
+//            let endIndex = destination + 1
+//            var startOrder = WorkoutVM.workouts[itemToMove]
+//        } else if destination < itemToMove {
+//            
+//        }
+//    }
 }
 
 struct SettingsView_Previews: PreviewProvider {

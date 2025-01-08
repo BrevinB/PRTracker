@@ -121,7 +121,7 @@ struct Home: View {
                             
                             Button(action: {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    if !userViewModel.isSubscriptionActive {
+                                    if userViewModel.isSubscriptionActive {
                                         showAddGoal.toggle()
                                     } else {
                                         showPremium.toggle()
@@ -142,13 +142,20 @@ struct Home: View {
                         
                         switch selectedDuration {
                         case .three:
-                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.threeMonthWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+//                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.threeMonthWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                            WeightLineChart(chartData: WeightVM.threeMonthWeights, workout: currentChartTypeTab)
                         case .six:
-                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.sixMonthWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+//                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.sixMonthWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                            WeightLineChart(chartData: WeightVM.sixMonthWeights, workout: currentChartTypeTab)
+
                         case .year:
-                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.oneYearWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+//                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.oneYearWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                            WeightLineChart(chartData: WeightVM.oneYearWeights, workout: currentChartTypeTab)
+
                         case .alltime:
-                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.allTimeWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+//                            AnimatedChart(chartType: $currentChartTypeTab, weights: WeightVM.allTimeWeights, selectedDuration: selectedDuration, isMetric: $isMetric)
+                            WeightLineChart(chartData: WeightVM.allTimeWeights, workout: currentChartTypeTab)
+
                         }
                     }
                     .padding()
@@ -315,7 +322,7 @@ struct Home: View {
     
     private func checkGoal() async {
         //Check if new weight meets the goal
-        if !userViewModel.isSubscriptionActive {
+        if userViewModel.isSubscriptionActive {
             if checkGoalStatus(currWeight: WeightVM.weights.first?.value ?? 0.0, goalWeight: currentChartTypeTab.goal ?? 0.0, type: currentChartTypeTab.type ?? "Body Weight") {
                 //GOAL HIT
                 //show a congrats card
@@ -333,7 +340,7 @@ struct Home: View {
 extension Double {
     var doubleFormat: String {
         let isMetric = UserDefaults.standard.bool(forKey: "isMetric")
-        return String(format: "%.2f \(isMetric ? "kgs" : "lbs")", isMetric ? self.convertToMetric : self)
+        return String(format: "%.1f \(isMetric ? "kgs" : "lbs")", isMetric ? self.convertToMetric : self)
     }
     
     var intFormat: String {

@@ -138,9 +138,11 @@ struct AddGoalCard: View {
                 if type.type == "Body Weight" {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
                         .padding()
+                        .tint(.green)
                 } else {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
                         .padding()
+                        .tint(.green)
                 }
             }
         }

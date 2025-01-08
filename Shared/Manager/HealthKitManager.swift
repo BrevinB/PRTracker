@@ -77,7 +77,7 @@ import HealthKit
         if let bodyWeight = workoutVM.workouts.first(where: {$0.type == "Body Weight"}) {
            // do something with foo
             Task {
-                await weightVM.getWeightsByType(workoutModel: bodyWeight)
+                weightVM.getWeightsByType(workoutModel: bodyWeight)
             }
             CDWeights = weightVM.weights
             
