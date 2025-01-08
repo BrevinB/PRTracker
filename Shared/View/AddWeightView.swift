@@ -61,8 +61,9 @@ struct AddWeightView: View {
                                 .padding(10)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.blue, lineWidth: 1)
+                                        .stroke(Color.green, lineWidth: 1)
                                 )
+                                .tint(.green)
                             Text(isMetric ? "kg" : "lbs")
                                 .padding(.leading, 5)
                         }

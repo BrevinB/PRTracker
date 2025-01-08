@@ -64,7 +64,6 @@ struct EditWeightView: View {
             dateValue = weight.date ?? Date.now
             noteValue = weight.note ?? ""
         }
-        
     }
     
     private func submitWeight(_ isMetric: Bool) {

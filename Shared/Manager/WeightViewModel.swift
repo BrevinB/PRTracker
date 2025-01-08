@@ -44,7 +44,6 @@ import SwiftUI
     
     func filterThreeMonth() {
         DispatchQueue.main.async {
-            let now = Date.now
             let previous3Months = self.addOrSubtractMonth(month: -3)
             
             self.threeMonthWeights = self.weights.filter{ $0.date ?? Date.now > previous3Months}.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
@@ -53,7 +52,6 @@ import SwiftUI
     
     func filterSixMonth() {
         DispatchQueue.main.async {
-            let now = Date.now
             let previous6Months = self.addOrSubtractMonth(month: -6)
             
             self.sixMonthWeights = self.weights.filter{ $0.date ?? Date.now > previous6Months}.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})
@@ -62,7 +60,6 @@ import SwiftUI
     
     func filterOneYear() {
         DispatchQueue.main.async {
-            let now = Date.now
             let previous12Months = self.addOrSubtractMonth(month: -12)
             
             self.oneYearWeights = self.weights.filter{ $0.date ?? Date.now > previous12Months}.sorted(by: { $0.date!.compare($1.date!) == .orderedDescending})

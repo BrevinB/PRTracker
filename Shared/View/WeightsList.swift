@@ -65,7 +65,7 @@ struct WeightsList: View {
                     .frame(minWidth: 400, minHeight: 500)
                 }
             }
-        }
+        }.tint(.green)
     }
     
     private func deleteValue(at offsets: IndexSet) {
@@ -78,7 +78,7 @@ struct WeightsList: View {
         }
         
         Task {
-            await WeightVM.getWeightsByType(workoutModel: type)
+            WeightVM.getWeightsByType(workoutModel: type)
             WeightVM.filterWeights(month: 0)
         }
     }
