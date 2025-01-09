@@ -12,11 +12,11 @@ import RevenueCatUI
 import UniformTypeIdentifiers
 
 struct SettingsView: View {
-    @ObservedObject var WorkoutVM: WorkoutViewModel
-    @ObservedObject var HealthVM: HealthKitViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
+    @Environment(WorkoutViewModel.self) private var WorkoutVM
+    @Environment(HealthKitManager.self) private var HealthVM
+    @Environment(UserManager.self) private var userViewModel
+    @Environment(WeightViewModel.self) private var WeightVM
     @Environment(\.requestReview) var requestReview
-    @ObservedObject var WeightVM: WeightViewModel
     @State private var workoutName = ""
     @AppStorage("isImperial") private var isImperial = true
     @Environment(\.dismiss) var dismiss
@@ -37,71 +37,69 @@ struct SettingsView: View {
                                     Toggle(isOn: $isMetric) {
                                         Text("Use Metric Units")
                                     }
-                                    .onChange(of: isMetric) { _ in
+                                    .onChange(of: isMetric) {
                                         UserDefaults.standard.set(isMetric, forKey: "isMetric")
                                     }
                                 }
-                          
-                                
                             }
                         }
-                       Section("Import HealthKit Data") {
-                           // HStack {
-                            Text("Feature Coming Soon:")
-                           if userViewModel.isSubscriptionActive {
-                               Button(action: {
-                                   HealthVM.importData()
-                               }, label: {
-                                   Text("Import Previous 3 Months")
-                               }).disabled(true)
-                               
-                               Button(action: {
-                                   print("Previous 6 months")
-                                   //HealthVM.readBodyWeight()
-    //                               HealthVM.checkData()
-                               }, label: {
-                                   Text("Import Previous 6 Months")
-                               }).disabled(true)
-                               
-                               Button(action: {
-                                   print("Previous Year")
-                                   //HealthVM.readBodyWeight()
-                               }, label: {
-                                   Text("Import Previous Year")
-                               }).disabled(true)
-                           } else {
-                               Button(action: {
-                                   showPremium = true
-                               }, label: {
-                                   Text("Import Previous 3 Months")
-                               }).disabled(true)
-                               
-                               Button(action: {
-                                   isImporting = true
-                                   print("Previous 6 months")
-                                   Task {
-                                       if await HealthVM.fetchDataAndReport(workoutVM: WorkoutVM, weightVM: WeightVM) {
-                                           isImporting = false
-                                       } else {
-                                           //display error?
-                                           isImporting = false
-                                       }
-                                   }
-                               }, label: {
-                                   Text("Import Previous 6 Months")
-                               }).disabled(true)
-                               
-                               Button(action: {
-                                   showPremium = true
-                                   
-                               }, label: {
-                                   Text("Import Previous Year")
-                               }).disabled(true)
-                           }
-                        }
+                        
+                        //TODO: Upcoming Feature, removing from app for now
+//                       Section("Import HealthKit Data") {
+//                            Text("Feature Coming Soon:")
+//                           if userViewModel.isSubscriptionActive {
+//                               Button(action: {
+//                                   HealthVM.importData()
+//                               }, label: {
+//                                   Text("Import Previous 3 Months")
+//                               }).disabled(true)
+//                               
+//                               Button(action: {
+//                                   print("Previous 6 months")
+//                               }, label: {
+//                                   Text("Import Previous 6 Months")
+//                               }).disabled(true)
+//                               
+//                               Button(action: {
+//                                   print("Previous Year")
+//                                   //HealthVM.readBodyWeight()
+//                               }, label: {
+//                                   Text("Import Previous Year")
+//                               }).disabled(true)
+//                           } else {
+//                               Button(action: {
+//                                   showPremium = true
+//                               }, label: {
+//                                   Text("Import Previous 3 Months")
+//                               }).disabled(true)
+//                               
+//                               Button(action: {
+//                                   isImporting = true
+//                                   print("Previous 6 months")
+//                                   Task {
+//                                       if await HealthVM.fetchDataAndReport(workoutVM: WorkoutVM, weightVM: WeightVM) {
+//                                           isImporting = false
+//                                       } else {
+//                                           //display error?
+//                                           isImporting = false
+//                                       }
+//                                   }
+//                               }, label: {
+//                                   Text("Import Previous 6 Months")
+//                               }).disabled(true)
+//                               
+//                               Button(action: {
+//                                   showPremium = true
+//                                   
+//                               }, label: {
+//                                   Text("Import Previous Year")
+//                               }).disabled(true)
+//                           }
+//                        }
+                        
                         Section("Add Workouts") {
                             VStack {
-                                TextField("Workout", text: $workoutName)//.disabled(true)
+                                TextField("Workout", text: $workoutName)
                                 Button("Add") {
                                     if(workoutName != "") {
                                         if userViewModel.isSubscriptionActive {
@@ -112,11 +110,10 @@ struct SettingsView: View {
                                             showPremium = true
                                         }
                                     }
-                                }
+                                }.tint(.green)
                             }
                         }
                         
-
                         Section("Workouts") {
                             ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
                                 Text(workout.type ?? "")
@@ -129,7 +126,7 @@ struct SettingsView: View {
                         Section("Leave a Review") {
                             Button("Leave a review") {
                                   requestReview()
-                                }
+                                }.tint(.green)
                                 .animation(.linear(duration: 1), value: 5)
                         }
                         
@@ -143,17 +140,14 @@ struct SettingsView: View {
                                         isPurchaseRestored = true
                                     }
                                 }
-                            }
+                            }.tint(.green)
                         }
                         
                         Section() {
                             Text("[Terms of Service](https://sites.google.com/view/pr-tracker-tos/home)")
                             Text("[Privacy Policy](https://sites.google.com/view/pr-tracker-privacy-policy/home)")
                             Text("[Terms of Use](http://www.apple.com/legal/itunes/appstore/dev/stdeula)")
-                        }
-                            
-                        
-                        
+                        }.tint(.green)
                     }
                 }
                 .navigationTitle("Settings")
@@ -196,25 +190,25 @@ struct SettingsView: View {
         }
     }
     
-    private func moveWorkoutOrder(at sets: IndexSet, destination: Int) {
-        let itemToMove = sets.first!
-        
-        if itemToMove < destination {
-            var startIndex = itemToMove + 1
-            let endIndex = destination + 1
-            var startOrder = WorkoutVM.workouts[itemToMove]
-        } else if destination < itemToMove {
-            
-        }
-    }
+//    private func moveWorkoutOrder(at sets: IndexSet, destination: Int) {
+//        let itemToMove = sets.first!
+//        
+//        if itemToMove < destination {
+//            var startIndex = itemToMove + 1
+//            let endIndex = destination + 1
+//            var startOrder = WorkoutVM.workouts[itemToMove]
+//        } else if destination < itemToMove {
+//            
+//        }
+//    }
 }
 
 struct SettingsView_Previews: PreviewProvider {
     
-    static let userViewModel = UserViewModel()
+    static let userViewModel = UserManager()
     
     static var previews: some View {
-        SettingsView(WorkoutVM: WorkoutViewModel(), HealthVM: HealthKitViewModel(), WeightVM: WeightViewModel(), isMetric: .constant(false))
-            .environmentObject(userViewModel)
+        SettingsView(isMetric: .constant(false))
+            .environment(userViewModel)
     }
 }

@@ -8,9 +8,9 @@
 import Foundation
 import CoreData
 
-class WorkoutViewModel: ObservableObject {
+@Observable class WorkoutViewModel {
     
-    @Published var workouts = [WorkoutModel]()
+    var workouts = [WorkoutModel]()
     
     func deleteWorkout(workout: WorkoutModel) {
         let workout = CoreDataManager.shared.getWorkoutById(id: workout.typeId)

@@ -16,10 +16,9 @@ struct Paywall: View {
     @State private var isPurchasing = false
     @State private var isLoading = false
     @State private var showAlert = false
-    @EnvironmentObject var userViewModel: UserViewModel
+    @Environment(UserManager.self) private var userViewModel
     
     var body: some View {
-        
         ScrollView {
             ZStack {
                 VStack(alignment: .leading, spacing: 20) {
@@ -72,16 +71,12 @@ struct Paywall: View {
                                 } label: {
                                     
                                     PremiumCard(cardTitle: pkg.storeProduct.subscriptionPeriod!.periodTitle, cardDescription: pkg.storeProduct.localizedPriceString, secondCardDescription: pkg.storeProduct.localizedDescription)
-                                    
                                 }
                                 .padding(30)
-                                //Spacer()
                             }
                         }
                         Spacer()
-                        
                     }
-                    
                 }
                 .padding(50)
                 .onAppear {
@@ -109,8 +104,6 @@ struct Paywall: View {
                 .foregroundColor(Color.black)
                 .opacity(isPurchasing ? 0.5: 0.0)
                 .edgesIgnoringSafeArea(.all)
-        
         }
     }
 }
-

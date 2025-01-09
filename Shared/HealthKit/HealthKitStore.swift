@@ -37,14 +37,12 @@ class HealthKitStore {
                    self.importHealthKitData()
                }
            }
-           
            healthStore.execute(query)
     }
     
     func importHealthKitData() {
         
     }
-    
     
     func getWeightData(forDay days: Int, healthStore: HKHealthStore, completion: @escaping ((_ weight: Double?, _ date: Date?) -> Void)) async {
         guard let bodyMassType = HKObjectType.quantityType(forIdentifier: .bodyMass) else {
@@ -252,5 +250,4 @@ class HealthKitStore {
             }
         }
     }
-
 }

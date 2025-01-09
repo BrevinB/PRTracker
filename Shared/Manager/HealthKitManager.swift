@@ -8,13 +8,13 @@
 import Foundation
 import HealthKit
 
-class HealthKitViewModel : ObservableObject {
+@Observable class HealthKitManager {
     private var healthStore = HKHealthStore()
     private var healthKitManager = HealthKitStore()
-    @Published var WorkoutVM = WorkoutViewModel()
-    @Published var WeightVM = WeightViewModel()
-    @Published var userBodyMass = "Empty"
-    @Published var isAuthorized = false
+    let WorkoutVM = WorkoutViewModel()
+    let WeightVM = WeightViewModel()
+    var userBodyMass = "Empty"
+    var isAuthorized = false
     var isHealthDataDone = false
     struct healthKitWeight: Identifiable, Equatable {
         var id = UUID()
@@ -76,9 +76,10 @@ class HealthKitViewModel : ObservableObject {
         workoutVM.getAllWorkouts()
         if let bodyWeight = workoutVM.workouts.first(where: {$0.type == "Body Weight"}) {
            // do something with foo
-            weightVM.getWeightsByType(workoutModel: bodyWeight)
+            Task {
+                weightVM.getWeightsByType(workoutModel: bodyWeight)
+            }
             CDWeights = weightVM.weights
-            //let testDifferences = testingData.difference(from: CDWeights)
             
             var testingArrayData: [healthKitWeight] = []
             for HKweight in testingData {

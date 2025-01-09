@@ -9,17 +9,22 @@ import SwiftUI
 
 struct AddGoalCard: View {
     @AppStorage("isImperial") private var isImperial = true
-    @ObservedObject var WorkoutVM: WorkoutViewModel
+    @Environment(WorkoutViewModel.self) private var WorkoutVM
+    @Environment(WeightViewModel.self) private var WeightVM
     @Binding var type: WorkoutModel
     @Environment(\.dismiss) var dismiss
     @Binding var refresh: Bool
     @State private var goal: Double?
+    @State var targetValue : Double
     @Binding var isMetric: Bool
     
+    private var startingValue: Double {
+        return WeightVM.weights.last?.value ?? 0.0
+    }
     
-    @Binding var startingValue : Double
-    @State var targetValue : Double
-    @Binding var currentValue: Double
+    private var currentValue: Double {
+        return WeightVM.weights.first?.value ?? 0.0
+    }
     
     var progress: Double {
             guard startingValue != targetValue else { return 1.0 }
@@ -133,9 +138,11 @@ struct AddGoalCard: View {
                 if type.type == "Body Weight" {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
                         .padding()
+                        .tint(.green)
                 } else {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
                         .padding()
+                        .tint(.green)
                 }
             }
         }
