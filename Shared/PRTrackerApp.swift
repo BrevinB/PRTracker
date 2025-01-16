@@ -8,6 +8,7 @@
 import SwiftUI
 import RevenueCat
 import StoreKit
+import WishKit
 
 @main
 struct PRTrackerApp: App {
@@ -21,6 +22,10 @@ struct PRTrackerApp: App {
     let userManager = UserManager()
     let weightVM = WeightViewModel()
     let workoutVM = WorkoutViewModel()
+    
+    init() {
+        WishKit.configure(with: "API KEY")
+    }
     
     var body: some Scene {
         WindowGroup {
@@ -38,8 +43,6 @@ struct PRTrackerApp: App {
     
     private func incrementLaunchCount() {
         if let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            print("Launch Count Current Version \(currentVersion)")
-            print("Launch Count Last Version \(lastVersion)")
             // Check if the version has changed
             if currentVersion != lastVersion {
                 // Reset launch count and update the stored version
@@ -49,9 +52,8 @@ struct PRTrackerApp: App {
         }
         
         launchCount += 1
-        print("Launch Count \(launchCount)")
+        
         if launchCount == 5 {
-            print(launchCount)
             requestReview()
         }
     }

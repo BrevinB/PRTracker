@@ -10,6 +10,7 @@ import RevenueCat
 import StoreKit
 import RevenueCatUI
 import UniformTypeIdentifiers
+import WishKit
 
 struct SettingsView: View {
     @Environment(WorkoutViewModel.self) private var WorkoutVM
@@ -25,6 +26,7 @@ struct SettingsView: View {
     @State private var isImporting = false
     @State private var isPurchaseRestored = false
     @State private var draggedWorkout: WorkoutModel?
+    @State private var showingSheet = false
     
     var body: some View {
         NavigationView {
@@ -128,6 +130,14 @@ struct SettingsView: View {
                                   requestReview()
                                 }.tint(.green)
                                 .animation(.linear(duration: 1), value: 5)
+                        }
+                        
+                        Section("Suggest Features") {
+                            Button(action: { showingSheet = true}, label: { Text("Show Wishlist") })
+                                .sheet(isPresented: $showingSheet) {
+                                    WishKit.FeedbackListView().withNavigation()
+                                }
+                                .tint(.green)
                         }
                         
                         Section("Premium") {
