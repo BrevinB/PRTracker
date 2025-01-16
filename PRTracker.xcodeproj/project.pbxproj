@@ -25,6 +25,7 @@
 		2366F44928E0867E00391656 /* WeightsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44828E0867E00391656 /* WeightsList.swift */; };
 		2366F44B28E099E800391656 /* KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2366F44A28E099E800391656 /* KeyboardDismiss.swift */; };
 		2373C1BD2AEEE5A80037C229 /* EditWeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2373C1BC2AEEE5A80037C229 /* EditWeightView.swift */; };
+		237941D52D393FBA00375565 /* WishKit in Frameworks */ = {isa = PBXBuildFile; productRef = 237941D42D393FBA00375565 /* WishKit */; };
 		2384000A2AF0989900BB70BA /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238400082AEF1BC300BB70BA /* CloudKit.framework */; };
 		2395AE5A2A5CE50600176218 /* ArrayDifference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE592A5CE50600176218 /* ArrayDifference.swift */; };
 		2395AE762A68496000176218 /* WeightCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2395AE752A68496000176218 /* WeightCard.swift */; };
@@ -93,6 +94,7 @@
 				2301D9D92AF9622E004D8860 /* RevenueCat in Frameworks */,
 				2384000A2AF0989900BB70BA /* CloudKit.framework in Frameworks */,
 				23F5FF602A3A401A0070CB23 /* RevenueCat in Frameworks */,
+				237941D52D393FBA00375565 /* WishKit in Frameworks */,
 				2301D9DB2AF9622E004D8860 /* RevenueCatUI in Frameworks */,
 				230884BD2A3A3A5900E95426 /* StoreKit.framework in Frameworks */,
 			);
@@ -236,6 +238,7 @@
 				2301D9D82AF9622E004D8860 /* RevenueCat */,
 				2301D9DA2AF9622E004D8860 /* RevenueCatUI */,
 				2301DA1B2B06DBB8004D8860 /* ConfettiSwiftUI */,
+				237941D42D393FBA00375565 /* WishKit */,
 			);
 			productName = "PRTracker (iOS)";
 			productReference = 23A9C8CD28372FDF00C724BF /* PRTracker.app */;
@@ -268,6 +271,7 @@
 			packageReferences = (
 				23F5FF5E2A3A401A0070CB23 /* XCRemoteSwiftPackageReference "purchases-ios" */,
 				2301DA1A2B06DBB8004D8860 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				237941D32D393FBA00375565 /* XCRemoteSwiftPackageReference "wishkit-ios" */,
 			);
 			productRefGroup = 23A9C8CE28372FDF00C724BF /* Products */;
 			projectDirPath = "";
@@ -473,7 +477,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.51;
 				PRODUCT_BUNDLE_IDENTIFIER = co.brevinb.PRTracker;
 				PRODUCT_NAME = PRTracker;
 				SDKROOT = iphoneos;
@@ -508,7 +512,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.51;
 				PRODUCT_BUNDLE_IDENTIFIER = co.brevinb.PRTracker;
 				PRODUCT_NAME = PRTracker;
 				SDKROOT = iphoneos;
@@ -551,6 +555,14 @@
 				minimumVersion = 1.1.0;
 			};
 		};
+		237941D32D393FBA00375565 /* XCRemoteSwiftPackageReference "wishkit-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/wishkit/wishkit-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.7.0;
+			};
+		};
 		23F5FF5E2A3A401A0070CB23 /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
@@ -576,6 +588,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2301DA1A2B06DBB8004D8860 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
 			productName = ConfettiSwiftUI;
+		};
+		237941D42D393FBA00375565 /* WishKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 237941D32D393FBA00375565 /* XCRemoteSwiftPackageReference "wishkit-ios" */;
+			productName = WishKit;
 		};
 		23F5FF5F2A3A401A0070CB23 /* RevenueCat */ = {
 			isa = XCSwiftPackageProductDependency;
