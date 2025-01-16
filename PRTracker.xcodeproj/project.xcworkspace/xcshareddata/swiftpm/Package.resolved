@@ -1,5 +1,5 @@
 {
-  "originHash" : "3a1ab72acc550eeda0a8a121b0c710144eef2d31ebe977aca0e64a209ca6f92d",
+  "originHash" : "e4b86e39a2977c1a1405215563e4f6934564a0531f2999f16751cf5abe0c6c98",
   "pins" : [
     {
       "identity" : "confettiswiftui",
@@ -17,6 +17,24 @@
       "state" : {
         "revision" : "7d55b964114a3d4a76791227cdc28577617596db",
         "version" : "4.43.2"
+      }
+    },
+    {
+      "identity" : "wishkit-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/wishkit/wishkit-ios.git",
+      "state" : {
+        "revision" : "951b17b6b683c72d36627de77e8e26afcfbde6ae",
+        "version" : "4.7.0"
+      }
+    },
+    {
+      "identity" : "wishkit-ios-shared",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/wishkit/wishkit-ios-shared.git",
+      "state" : {
+        "revision" : "cd184932bcdbdc8766137ef8ecac63c424be93a7",
+        "version" : "1.5.0"
       }
     }
   ],
