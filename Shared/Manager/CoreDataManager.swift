@@ -19,8 +19,13 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     
     private init() {
-        
         persistentContainer = NSPersistentCloudKitContainer(name: "PRTrackerModel")
+
+        if let description = persistentContainer.persistentStoreDescriptions.first {
+            description.setOption(true as NSNumber, forKey: NSMigratePersistentStoresAutomaticallyOption)
+            description.setOption(true as NSNumber, forKey: NSInferMappingModelAutomaticallyOption)
+        }
+
         persistentContainer.loadPersistentStores { (description, error) in
             if let error = error {
                 fatalError("Failed to initialize Core Data \(error)")
@@ -102,6 +107,26 @@ class CoreDataManager {
         } catch {
             persistentContainer.viewContext.rollback()
             print("Failed to save a workout \(error)")
+        }
+    }
+
+    func  initializeWorkoutOrderIfNeeded() {
+        let context = persistentContainer.viewContext
+        let fetchRequest: NSFetchRequest<Workout> = Workout.fetchRequest()
+        fetchRequest.sortDescriptors = []
+
+        do {
+            let workouts = try context.fetch(fetchRequest)
+            let needsInitialization = workouts.allSatisfy { $0.orderIndex == 0 }
+
+            if needsInitialization {
+                for (index, workout) in workouts.enumerated() {
+                    workout.orderIndex = Int64(index)
+                }
+                try context.save()
+            }
+        } catch {
+            print("Failed to initialize orderIndex: \(error)")
         }
     }
     

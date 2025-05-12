@@ -55,13 +55,13 @@ struct SettingsView: View {
 //                               }, label: {
 //                                   Text("Import Previous 3 Months")
 //                               }).disabled(true)
-//                               
+//
 //                               Button(action: {
 //                                   print("Previous 6 months")
 //                               }, label: {
 //                                   Text("Import Previous 6 Months")
 //                               }).disabled(true)
-//                               
+//
 //                               Button(action: {
 //                                   print("Previous Year")
 //                                   //HealthVM.readBodyWeight()
@@ -74,7 +74,7 @@ struct SettingsView: View {
 //                               }, label: {
 //                                   Text("Import Previous 3 Months")
 //                               }).disabled(true)
-//                               
+//
 //                               Button(action: {
 //                                   isImporting = true
 //                                   print("Previous 6 months")
@@ -89,10 +89,10 @@ struct SettingsView: View {
 //                               }, label: {
 //                                   Text("Import Previous 6 Months")
 //                               }).disabled(true)
-//                               
+//
 //                               Button(action: {
 //                                   showPremium = true
-//                                   
+//
 //                               }, label: {
 //                                   Text("Import Previous Year")
 //                               }).disabled(true)
@@ -119,11 +119,11 @@ struct SettingsView: View {
                         Section("Workouts") {
                             ForEach(WorkoutVM.workouts, id: \.typeId) { workout in
                                 Text(workout.type ?? "")
-                                    
                             }
                             .onDelete(perform: deleteWorkout)
-                           
+                            .onMove(perform: moveWorkout)
                         }
+                        
                         
                         Section("Leave a Review") {
                             Button("Leave a review") {
@@ -187,6 +187,9 @@ struct SettingsView: View {
                         isPurchaseRestored = false
                     }
                 }
+                .toolbar {
+                    EditButton()
+                }
             }
         }
        
@@ -199,16 +202,21 @@ struct SettingsView: View {
             WorkoutVM.getAllWorkouts()
         }
     }
+
+    private func moveWorkout(from source: IndexSet, to destination: Int) {
+        WorkoutVM.workouts.move(fromOffsets: source, toOffset: destination)
+        WorkoutVM.updateWorkoutOrder(with: WorkoutVM.workouts)
+    }
     
 //    private func moveWorkoutOrder(at sets: IndexSet, destination: Int) {
 //        let itemToMove = sets.first!
-//        
+//
 //        if itemToMove < destination {
 //            var startIndex = itemToMove + 1
 //            let endIndex = destination + 1
 //            var startOrder = WorkoutVM.workouts[itemToMove]
 //        } else if destination < itemToMove {
-//            
+//
 //        }
 //    }
 }

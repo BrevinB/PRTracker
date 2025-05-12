@@ -25,6 +25,7 @@ struct PRTrackerApp: App {
     
     init() {
         WishKit.configure(with: "API KEY")
+        CoreDataManager.shared.initializeWorkoutOrderIfNeeded()
     }
     
     var body: some Scene {
