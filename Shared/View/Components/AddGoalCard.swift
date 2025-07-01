@@ -127,7 +127,8 @@ struct AddGoalCard: View {
             
             HStack(spacing: 56) {
                 Button(action: {
-                    WorkoutVM.addGoal(workout: type, goal: goal!)
+                    guard let validGoal = goal, validGoal > 0 else { return }
+                    WorkoutVM.addGoal(workout: type, goal: validGoal)
                     refresh.toggle()
                     self.hideKeyboard()
                     self.goal = nil
@@ -140,6 +141,7 @@ struct AddGoalCard: View {
                 .buttonStyle(.borderedProminent)
                 .tint(Color(.systemGreen))
                 .buttonBorderShape(.roundedRectangle(radius: 12))
+                .disabled(goal ?? 0 <= 0)
             }.padding(.bottom).padding(.trailing).padding(.leading)
             
             if targetValue != 0.0 {
