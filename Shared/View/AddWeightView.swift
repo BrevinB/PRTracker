@@ -29,16 +29,16 @@ struct AddWeightView: View {
     var type: WorkoutModel
     
     var body: some View {
-        VStack(spacing: 16) {
+        Form {
             HStack(alignment: .firstTextBaseline) {
                 Text(type.type ?? "No Data")
                     .font(.title)
                     .fontWeight(.bold)
-                .padding()
-                
+                    .padding()
+
                 Spacer()
             }
-            VStack() {
+            Section {
                 HStack(spacing: 40) {
                     HStack {
                         switch(type.type) {
@@ -57,7 +57,6 @@ struct AddWeightView: View {
                         HStack {
                             TextField("Weight", text: $weight)
                                 .keyboardType(.decimalPad)
-                                .frame(width: 150)
                                 .padding(10)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 5)
@@ -71,27 +70,24 @@ struct AddWeightView: View {
                     }
                     }
             }
-            .foregroundColor(.primary)
-            .onTapGesture {
-                self.hideKeyboard()
-            }
-            
-            HStack {
-                Spacer()
+
+            Section {
                 DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
                     .datePickerStyle(.compact)
-                Spacer()
             }
-                
-            TextField("Enter Note", text: $note)
-                .padding(.leading)
-            
-            Button(action: {
-                dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
-                result = validate()
-                if result == "Valid" {
-                    if isMetric {
-                        WeightVM.value = Double(weight)?.convertToImperial ?? 0.0
+
+            Section {
+                TextField("Enter Note", text: $note)
+                    .padding(.leading)
+            }
+
+            Section {
+                Button(action: {
+                    dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+                    result = validate()
+                    if result == "Valid" {
+                        if isMetric {
+                            WeightVM.value = Double(weight)?.convertToImperial ?? 0.0
                     } else {
                         WeightVM.value = Double(weight) ?? 0.0
                     }
@@ -115,21 +111,27 @@ struct AddWeightView: View {
                     error = true
                 }
             }, label: {
-                Text("Submit")
-                    .frame(width: 200)
-            })
-            .buttonStyle(.borderedProminent)
-            .tint(Color(.systemGreen))
-            .buttonBorderShape(.roundedRectangle(radius: 12))
-            .alert(result, isPresented: $error) {
-                Button("Ok", role: .cancel) { }
+                    Text("Submit")
+                        .frame(width: 200)
+                })
+                .buttonStyle(.borderedProminent)
+                .tint(Color(.systemGreen))
+                .buttonBorderShape(.roundedRectangle(radius: 12))
             }
-            .sheet(isPresented: $promptPremium,  onDismiss: {
-                promptPremium = false
-            }, content: {
-                Paywall(isPaywallPresented: $promptPremium)
-            })
-        }.onAppear {
+        }
+        .foregroundColor(.primary)
+        .onTapGesture {
+            self.hideKeyboard()
+        }
+        .alert(result, isPresented: $error) {
+            Button("Ok", role: .cancel) { }
+        }
+        .sheet(isPresented: $promptPremium,  onDismiss: {
+            promptPremium = false
+        }, content: {
+            Paywall(isPaywallPresented: $promptPremium)
+        })
+        .onAppear {
             isMetric = UserDefaults.standard.bool(forKey: "isMetric")
         }
     }
