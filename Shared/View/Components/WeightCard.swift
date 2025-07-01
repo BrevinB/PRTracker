@@ -25,7 +25,11 @@ struct WeightCard: View {
 
 struct WeightCard_Previews: PreviewProvider {
     static var previews: some View {
-        WeightCard()
-            
+        Group {
+            WeightCard()
+
+            WeightCard()
+                .preferredColorScheme(.dark)
+        }
     }
 }

@@ -222,11 +222,17 @@ struct SettingsView: View {
 }
 
 struct SettingsView_Previews: PreviewProvider {
-    
+
     static let userViewModel = UserManager()
-    
+
     static var previews: some View {
-        SettingsView(isMetric: .constant(false))
-            .environment(userViewModel)
+        Group {
+            SettingsView(isMetric: .constant(false))
+                .environment(userViewModel)
+
+            SettingsView(isMetric: .constant(false))
+                .environment(userViewModel)
+                .preferredColorScheme(.dark)
+        }
     }
 }
