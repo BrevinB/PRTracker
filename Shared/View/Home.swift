@@ -107,12 +107,14 @@ struct Home: View {
                                         .font(.largeTitle.bold())
                                     if(currentChartTypeTab.type == "Deadlift") {
                                         Image(systemName: "figure.strengthtraining.traditional")
+                                            .accessibilityHidden(true)
                                     }
                                 } else {
                                     Text("PR: \(max.doubleFormat)")
                                         .font(.largeTitle.bold())
                                     if(currentChartTypeTab.type == "Deadlift") {
                                         Image(systemName: "figure.strengthtraining.traditional")
+                                            .accessibilityHidden(true)
                                     }
                                 }
                             }
@@ -188,12 +190,14 @@ struct Home: View {
                     }, label: {
                         Image(systemName: "gear")
                             .tint(.green)
+                            .accessibilityLabel("Settings")
                     })
                     Button(action: {
                         showNewWeight.toggle()
                     }, label: {
                         Image(systemName: "plus.circle")
                             .tint(.green)
+                            .accessibilityLabel("Add weight")
                     })
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {

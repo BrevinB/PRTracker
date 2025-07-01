@@ -166,6 +166,7 @@ struct SettingsView: View {
                         dismiss()
                     }, label: {
                         Image(systemName: "xmark")
+                            .accessibilityLabel("Close")
                     })
                 }
                 .sheet(isPresented: $showPremium, onDismiss: {

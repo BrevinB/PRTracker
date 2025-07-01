@@ -44,14 +44,19 @@ struct AddWeightView: View {
                         switch(type.type) {
                         case "Body Weight":
                             Image(systemName: "scalemass")
+                                .accessibilityLabel("Weight icon")
                         case "Squat":
                             Image(systemName: "scalemass")
+                                .accessibilityLabel("Weight icon")
                         case "Bench":
                             Image(systemName: "scalemass")
+                                .accessibilityLabel("Weight icon")
                         case "Deadlift":
                             Image(systemName: "figure.strengthtraining.traditional")
+                                .accessibilityLabel("Deadlift icon")
                         default:
                             Image(systemName: "scalemass")
+                                .accessibilityLabel("Weight icon")
                         }
                         
                         HStack {

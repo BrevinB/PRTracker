@@ -60,14 +60,19 @@ struct AddGoalCard: View {
                     switch(type.type) {
                     case "Body Weight":
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     case "Squat":
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     case "Bench":
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     case "Deadlift":
                         Image(systemName: "figure.strengthtraining.traditional")
+                            .accessibilityHidden(true)
                     default:
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     }
                     if type.goal == 0.0 {
                         TextField("Enter Goal", value: $goal, format: .number)
