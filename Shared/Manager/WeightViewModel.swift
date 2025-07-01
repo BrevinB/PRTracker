@@ -36,16 +36,10 @@ import SwiftUI
     func filterWeights(month: Int) {
         DispatchQueue.main.async {
             self.filterAllTime()
-            switch month {
-            case -3:
-                self.filterThreeMonth()
-            case -6:
-                self.filterSixMonth()
-            case -12:
-                self.filterOneYear()
-            default:
-                break
-            }
+            self.filterThreeMonth()
+            self.filterSixMonth()
+            self.filterOneYear()
+            self.filterAllTime()
         }
     }
     
