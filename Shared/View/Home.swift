@@ -189,12 +189,14 @@ struct Home: View {
                         Image(systemName: "gear")
                             .tint(.green)
                     })
+                    .accessibilityLabel("Settings")
                     Button(action: {
                         showNewWeight.toggle()
                     }, label: {
                         Image(systemName: "plus.circle")
                             .tint(.green)
                     })
+                    .accessibilityLabel("Add weight")
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {
                     isLoading = true

@@ -60,18 +60,24 @@ struct AddGoalCard: View {
                     switch(type.type) {
                     case "Body Weight":
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     case "Squat":
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     case "Bench":
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     case "Deadlift":
                         Image(systemName: "figure.strengthtraining.traditional")
+                            .accessibilityHidden(true)
                     default:
                         Image(systemName: "scalemass")
+                            .accessibilityHidden(true)
                     }
                     if type.goal == 0.0 {
                         TextField("Enter Goal", value: $goal, format: .number)
                             .keyboardType(.decimalPad)
+                            .accessibilityLabel("Goal")
                             .textFieldStyle(.automatic)
                             .background(
                                 ZStack(alignment: .trailing) {
@@ -86,6 +92,7 @@ struct AddGoalCard: View {
                         if isMetric {
                             TextField("Current Goal: \(type.goal!.convertToMetric.formatted())", value: $goal, format: .number)
                                 .keyboardType(.decimalPad)
+                                .accessibilityLabel("Goal")
                                 .textFieldStyle(.automatic)
                                 .background(
                                     ZStack(alignment: .trailing) {
@@ -99,6 +106,7 @@ struct AddGoalCard: View {
                         } else {
                             TextField("Current Goal: \(type.goal!.formatted())", value: $goal, format: .number)
                                 .keyboardType(.decimalPad)
+                                .accessibilityLabel("Goal")
                                 .textFieldStyle(.automatic)
                                 .background(
                                     ZStack(alignment: .trailing) {

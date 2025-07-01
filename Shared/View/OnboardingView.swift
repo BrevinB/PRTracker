@@ -36,21 +36,25 @@ struct OnboardingView: View {
                 VStack(alignment: .leading, spacing: 40) {
                     HStack {
                         Image(systemName: "plus.circle")
+                            .accessibilityHidden(true)
                         Text("Add new records to your charts to track progress!")
                     }
                     
                     HStack {
                         Image(systemName: "gear")
+                            .accessibilityHidden(true)
                         Text("With premium, add additional workout variations to track like overhead press!")
                     }
                     
                     HStack {
                         Image(systemName: "star")
+                            .accessibilityHidden(true)
                         Text("With premium, add goals to help better track your progress!")
                     }
                     
                     HStack {
                         Image(systemName: "note.text")
+                            .accessibilityHidden(true)
                         Text("Add notes to your weights to remind yourself how you feel!")
                     }
                     
@@ -70,6 +74,7 @@ struct OnboardingView: View {
                 .tint(.green)
                 .controlSize(.large)
                 .padding()
+                .accessibilityHint("Open premium purchase options")
             }
             .sheet(isPresented: $showPremium, onDismiss: {
                 loadingData = true
