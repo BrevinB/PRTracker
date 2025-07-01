@@ -35,6 +35,7 @@ import SwiftUI
     
     func filterWeights(month: Int) {
         DispatchQueue.main.async {
+            self.filterAllTime()
             self.filterThreeMonth()
             self.filterSixMonth()
             self.filterOneYear()
@@ -109,9 +110,9 @@ import SwiftUI
 }
 
 struct WeightModel: Comparable, Identifiable {
-    
-    var id: ObjectIdentifier {
-        return weight.id
+
+    var id: NSManagedObjectID {
+        return weight.objectID
     }
     
     static func < (lhs: WeightModel, rhs: WeightModel) -> Bool {
