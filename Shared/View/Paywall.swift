@@ -33,21 +33,25 @@ struct Paywall: View {
                     VStack(spacing: 40) {
                         HStack {
                             Image(systemName: "dumbbell")
+                                .accessibilityHidden(true)
                             Text("Unlimited entries for any workout")
                         }
                         
                         HStack {
                             Image(systemName: "plus.circle")
+                                .accessibilityHidden(true)
                             Text("Add additional workout options to track")
                         }
                         
                         HStack {
                             Image(systemName: "paintpalette")
+                                .accessibilityHidden(true)
                             Text("Customize chart colors and more")
                         }
                         
                         HStack {
                             Image(systemName: "arrow.up.heart")
+                                .accessibilityHidden(true)
                             Text("Import old data from HealthKit")
                         }
                     }
