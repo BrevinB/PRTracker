@@ -131,11 +131,11 @@ struct Home: View {
                                 if currentChartTypeTab.goal == 0.0 {
                                     Text("Add Goal")
                                         .fontWeight(.bold)
-                                        .tint(.green)
+                                        .tint(Color("PrimaryAccent"))
                                 } else {
                                     Text("Edit Goal")
                                         .fontWeight(.bold)
-                                        .tint(.green)
+                                        .tint(Color("PrimaryAccent"))
                                 }
                             })
                         }
@@ -187,13 +187,13 @@ struct Home: View {
                         showSettings.toggle()
                     }, label: {
                         Image(systemName: "gear")
-                            .tint(.green)
+                            .tint(Color("PrimaryAccent"))
                     })
                     Button(action: {
                         showNewWeight.toggle()
                     }, label: {
                         Image(systemName: "plus.circle")
-                            .tint(.green)
+                            .tint(Color("PrimaryAccent"))
                     })
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {

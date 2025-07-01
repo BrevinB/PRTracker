@@ -67,7 +67,7 @@ struct OnboardingView: View {
                 })
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.capsule)
-                .tint(.green)
+                .tint(Color("PrimaryAccent"))
                 .controlSize(.large)
                 .padding()
             }

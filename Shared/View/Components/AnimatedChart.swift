@@ -25,7 +25,7 @@ struct AnimatedChart: View {
     @State private var selectedWeight: WeightModel?
     
     var body: some View {
-        let curColor = Color(.systemGreen)
+        let curColor = Color("PrimaryAccent")
         let curGradient = LinearGradient(
             gradient: Gradient(colors: [curColor, curColor.opacity(0.2)]),
             startPoint: .bottom,

@@ -51,7 +51,7 @@ struct EditWeightView: View {
                 Text("Update")
                     .frame(width: 200)
             }.buttonStyle(.borderedProminent)
-                .tint(Color(.systemGreen))
+                .tint(Color("PrimaryAccent"))
                 .buttonBorderShape(.roundedRectangle(radius: 12))
         }
         .padding(.vertical, 20)
