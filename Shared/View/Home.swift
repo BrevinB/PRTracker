@@ -192,6 +192,7 @@ struct Home: View {
                             .tint(.green)
                             .accessibilityLabel("Settings")
                     })
+                    .accessibilityLabel("Settings")
                     Button(action: {
                         showNewWeight.toggle()
                     }, label: {
@@ -199,6 +200,7 @@ struct Home: View {
                             .tint(.green)
                             .accessibilityLabel("Add weight")
                     })
+                    .accessibilityLabel("Add weight")
                 }
                 .sheet(isPresented: $showNewWeight, onDismiss: {
                     isLoading = true

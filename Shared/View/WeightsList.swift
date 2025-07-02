@@ -57,6 +57,9 @@ struct WeightsList: View {
                                         Text(weight.note ?? "")
                                             .font(.subheadline)
                                     }
+                                    .accessibilityElement(children: .combine)
+                                    .accessibilityLabel("Weight \(checkInt(val: weight.value) ? weight.value.intFormat : weight.value.doubleFormat) on \(weight.date?.formatted(date: .numeric, time: .omitted) ?? "")")
+                                    .accessibilityHint(weight.note ?? "")
                                 }
                             }.onDelete(perform: deleteValue)
                         }

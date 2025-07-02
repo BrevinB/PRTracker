@@ -74,6 +74,7 @@ struct OnboardingView: View {
                 .tint(.green)
                 .controlSize(.large)
                 .padding()
+                .accessibilityHint("Open premium purchase options")
             }
             .sheet(isPresented: $showPremium, onDismiss: {
                 loadingData = true

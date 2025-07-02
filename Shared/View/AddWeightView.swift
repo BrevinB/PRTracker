@@ -62,6 +62,7 @@ struct AddWeightView: View {
                         HStack {
                             TextField("Weight", text: $weight)
                                 .keyboardType(.decimalPad)
+                                .accessibilityLabel("Weight")
                                 .frame(width: 150)
                                 .padding(10)
                                 .overlay(
@@ -71,6 +72,7 @@ struct AddWeightView: View {
                                 .tint(.green)
                             Text(isMetric ? "kg" : "lbs")
                                 .padding(.leading, 5)
+                                .accessibilityHidden(true)
                         }
                         .padding(.horizontal)
                     }
@@ -85,11 +87,13 @@ struct AddWeightView: View {
                 Spacer()
                 DatePicker("Date", selection: $date, in: ...Date.now, displayedComponents: .date)
                     .datePickerStyle(.compact)
+                    .accessibilityLabel("Date")
                 Spacer()
             }
                 
             TextField("Enter Note", text: $note)
                 .padding(.leading)
+                .accessibilityLabel("Note")
             
             Button(action: {
                 dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
@@ -123,6 +127,7 @@ struct AddWeightView: View {
                 Text("Submit")
                     .frame(width: 200)
             })
+            .accessibilityLabel("Submit weight")
             .buttonStyle(.borderedProminent)
             .tint(Color(.systemGreen))
             .buttonBorderShape(.roundedRectangle(radius: 12))

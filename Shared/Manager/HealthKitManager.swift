@@ -1,5 +1,5 @@
 //
-//  HealthKitViewModel.swift
+//  HealthKitManager.swift
 //  PRTracker
 //
 //  Created by Brevin Blalock on 3/24/23.
