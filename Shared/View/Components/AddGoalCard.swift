@@ -83,7 +83,7 @@ struct AddGoalCard: View {
                                 ZStack(alignment: .trailing) {
                                     if goal !=  nil {
                                         Text("\(isMetric ? "kgs" : "lbs")")
-                                            .font(.system(size: 16, weight: .semibold))
+                                            .font(.subheadline.weight(.semibold))
                                             .padding(.leading, 50)
                                     }
                                 }
@@ -98,7 +98,7 @@ struct AddGoalCard: View {
                                     ZStack(alignment: .trailing) {
                                         if goal !=  nil {
                                             Text("kgs")
-                                                .font(.system(size: 16, weight: .semibold))
+                                                .font(.subheadline.weight(.semibold))
                                                 .padding(.leading, 50)
                                         }
                                     }
@@ -112,7 +112,7 @@ struct AddGoalCard: View {
                                     ZStack(alignment: .trailing) {
                                         if goal !=  nil {
                                             Text("lbs")
-                                                .font(.system(size: 16, weight: .semibold))
+                                                .font(.subheadline.weight(.semibold))
                                                 .padding(.leading, 50)
                                         }
                                     }
