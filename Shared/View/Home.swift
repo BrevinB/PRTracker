@@ -107,12 +107,14 @@ struct Home: View {
                                         .font(.largeTitle.bold())
                                     if(currentChartTypeTab.type == "Deadlift") {
                                         Image(systemName: "figure.strengthtraining.traditional")
+                                            .accessibilityHidden(true)
                                     }
                                 } else {
                                     Text("PR: \(max.doubleFormat)")
                                         .font(.largeTitle.bold())
                                     if(currentChartTypeTab.type == "Deadlift") {
                                         Image(systemName: "figure.strengthtraining.traditional")
+                                            .accessibilityHidden(true)
                                     }
                                 }
                             }
@@ -188,6 +190,7 @@ struct Home: View {
                     }, label: {
                         Image(systemName: "gear")
                             .tint(.green)
+                            .accessibilityLabel("Settings")
                     })
                     .accessibilityLabel("Settings")
                     Button(action: {
@@ -195,6 +198,7 @@ struct Home: View {
                     }, label: {
                         Image(systemName: "plus.circle")
                             .tint(.green)
+                            .accessibilityLabel("Add weight")
                     })
                     .accessibilityLabel("Add weight")
                 }
