@@ -41,6 +41,10 @@ struct PickerComponent: View {
 
 struct PickerComponent_Previews: PreviewProvider {
     static var previews: some View {
-        PickerComponent()
+        Group {
+            PickerComponent()
+            PickerComponent()
+                .preferredColorScheme(.dark)
+        }
     }
 }

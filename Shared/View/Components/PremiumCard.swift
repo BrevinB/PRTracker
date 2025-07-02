@@ -50,10 +50,17 @@ struct PremiumCard: View {
 
 struct PremiumCard_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
-            PremiumCard(cardTitle: "Monthly Plan", cardDescription: "$0.99 / month", secondCardDescription: "Billed monthly")
-                
+        Group {
+            VStack {
+                PremiumCard(cardTitle: "Monthly Plan", cardDescription: "$0.99 / month", secondCardDescription: "Billed monthly")
+
+            }
+
+            VStack {
+                PremiumCard(cardTitle: "Monthly Plan", cardDescription: "$0.99 / month", secondCardDescription: "Billed monthly")
+
+            }
+            .preferredColorScheme(.dark)
         }
-        
     }
 }

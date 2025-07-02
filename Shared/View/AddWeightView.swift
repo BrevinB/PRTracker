@@ -175,13 +175,18 @@ struct AddWeightView: View {
 }
 
 struct AddWeightView_Previews: PreviewProvider {
-    
+
     static let userViewModel = UserManager()
-    
+
     static var previews: some View {
         let workout = WorkoutModel(workout: Workout(context: CoreDataManager.shared.viewContext))
-        AddWeightView(type: workout)
-            .environment(userViewModel)
-            
+        Group {
+            AddWeightView(type: workout)
+                .environment(userViewModel)
+
+            AddWeightView(type: workout)
+                .environment(userViewModel)
+                .preferredColorScheme(.dark)
+        }
     }
 }
