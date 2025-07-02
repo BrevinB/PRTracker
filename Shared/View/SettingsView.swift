@@ -29,7 +29,7 @@ struct SettingsView: View {
     @State private var showingSheet = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 VStack {
                     List {
