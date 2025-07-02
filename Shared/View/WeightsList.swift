@@ -68,7 +68,7 @@ struct WeightsList: View {
                     .frame(minWidth: 400, minHeight: 500)
                 }
             }
-        }.tint(.green)
+        }.tint(Color("PrimaryAccent"))
     }
     
     private func deleteValue(at offsets: IndexSet) {

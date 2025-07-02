@@ -112,7 +112,7 @@ struct SettingsView: View {
                                             showPremium = true
                                         }
                                     }
-                                }.tint(.green)
+                                }.tint(Color("PrimaryAccent"))
                             }
                         }
                         
@@ -128,7 +128,7 @@ struct SettingsView: View {
                         Section("Leave a Review") {
                             Button("Leave a review") {
                                   requestReview()
-                                }.tint(.green)
+                                }.tint(Color("PrimaryAccent"))
                                 .animation(.linear(duration: 1), value: 5)
                         }
                         
@@ -137,7 +137,7 @@ struct SettingsView: View {
                                 .sheet(isPresented: $showingSheet) {
                                     WishKit.FeedbackListView().withNavigation()
                                 }
-                                .tint(.green)
+                                .tint(Color("PrimaryAccent"))
                         }
                         
                         Section("Premium") {
@@ -150,14 +150,14 @@ struct SettingsView: View {
                                         isPurchaseRestored = true
                                     }
                                 }
-                            }.tint(.green)
+                            }.tint(Color("PrimaryAccent"))
                         }
                         
                         Section() {
                             Text("[Terms of Service](https://sites.google.com/view/pr-tracker-tos/home)")
                             Text("[Privacy Policy](https://sites.google.com/view/pr-tracker-privacy-policy/home)")
                             Text("[Terms of Use](http://www.apple.com/legal/itunes/appstore/dev/stdeula)")
-                        }.tint(.green)
+                        }.tint(Color("PrimaryAccent"))
                     }
                 }
                 .navigationTitle("Settings")

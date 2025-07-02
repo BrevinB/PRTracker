@@ -139,7 +139,7 @@ struct AddGoalCard: View {
                         //.foregroundColor(.green)
                 })
                 .buttonStyle(.borderedProminent)
-                .tint(Color(.systemGreen))
+                .tint(Color("PrimaryAccent"))
                 .buttonBorderShape(.roundedRectangle(radius: 12))
                 .disabled(goal ?? 0 <= 0)
             }.padding(.bottom).padding(.trailing).padding(.leading)
@@ -148,11 +148,11 @@ struct AddGoalCard: View {
                 if type.type == "Body Weight" {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress)
                         .padding()
-                        .tint(.green)
+                        .tint(Color("PrimaryAccent"))
                 } else {
                     ProgressView("\(type.type ?? "Body Weight") Progress:", value: progress2)
                         .padding()
-                        .tint(.green)
+                        .tint(Color("PrimaryAccent"))
                 }
             }
         }

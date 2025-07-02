@@ -69,7 +69,7 @@ struct AddWeightView: View {
                                     RoundedRectangle(cornerRadius: 5)
                                         .stroke(Color.green, lineWidth: 1)
                                 )
-                                .tint(.green)
+                                .tint(Color("PrimaryAccent"))
                             Text(isMetric ? "kg" : "lbs")
                                 .padding(.leading, 5)
                                 .accessibilityHidden(true)
@@ -129,7 +129,7 @@ struct AddWeightView: View {
             })
             .accessibilityLabel("Submit weight")
             .buttonStyle(.borderedProminent)
-            .tint(Color(.systemGreen))
+            .tint(Color("PrimaryAccent"))
             .buttonBorderShape(.roundedRectangle(radius: 12))
             .alert(result, isPresented: $error) {
                 Button("Ok", role: .cancel) { }
