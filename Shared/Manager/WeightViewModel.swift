@@ -76,6 +76,8 @@ import SwiftUI
     var value: Double = 0.0
     var date: Date = Date()
     var note: String = ""
+    var imageData: Data? = nil
+    var videoData: Data? = nil
     
     func addWeightForWorkout(workoutModel: WorkoutModel) {
         let type = CoreDataManager.shared.getWorkoutById(id: workoutModel.typeId)
@@ -84,9 +86,13 @@ import SwiftUI
         weight.value = value
         weight.date = date
         weight.note = note
+        weight.setValue(imageData, forKey: "photo")
+        weight.setValue(videoData, forKey: "video")
         weight.type = type
-        
+
         CoreDataManager.shared.save()
+        imageData = nil
+        videoData = nil
     }
     
     func deleteWeight(weight: WeightModel) {
@@ -97,13 +103,15 @@ import SwiftUI
         }
     }
     
-    func updateWeight(weightId: NSManagedObjectID, weight: Double, note: String, date: Date) {
+    func updateWeight(weightId: NSManagedObjectID, weight: Double, note: String, date: Date, photo: Data?, video: Data?) {
         let value = CoreDataManager.shared.getWeightById(id: weightId)
-        
+
         if let value = value {
             value.value = weight
             value.note = note
             value.date = date
+            value.setValue(photo, forKey: "photo")
+            value.setValue(video, forKey: "video")
             CoreDataManager.shared.save()
         }
     }
@@ -135,5 +143,13 @@ struct WeightModel: Comparable, Identifiable {
     
     var note: String? {
         return weight.note
+    }
+
+    var photo: Data? {
+        return weight.value(forKey: "photo") as? Data
+    }
+
+    var video: Data? {
+        return weight.value(forKey: "video") as? Data
     }
 }

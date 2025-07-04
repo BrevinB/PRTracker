@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreData
 import Combine
+import PhotosUI
 struct AddWeightView: View {
     @Environment(WorkoutViewModel.self) private var WorkoutVM
     @Environment(WeightViewModel.self) private var WeightVM
@@ -22,6 +23,10 @@ struct AddWeightView: View {
     @State private var result = ""
     @State private var isMetric = false
     @State private var promptPremium = false
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var selectedVideo: PhotosPickerItem? = nil
+    @State private var imageData: Data? = nil
+    @State private var videoData: Data? = nil
     
     let dateFormatter = DateFormatter()
     
@@ -94,6 +99,29 @@ struct AddWeightView: View {
             TextField("Enter Note", text: $note)
                 .padding(.leading)
                 .accessibilityLabel("Note")
+
+            HStack {
+                PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                    Label("Add Photo", systemImage: "photo")
+                }
+                PhotosPicker(selection: $selectedVideo, matching: .videos) {
+                    Label("Add Video", systemImage: "video")
+                }
+            }
+            .onChange(of: selectedPhoto) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        imageData = data
+                    }
+                }
+            }
+            .onChange(of: selectedVideo) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        videoData = data
+                    }
+                }
+            }
             
             Button(action: {
                 dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
@@ -108,6 +136,8 @@ struct AddWeightView: View {
                     let formattedDate = dateFormatter.string(from: date)
                     WeightVM.date = dateFormatter.date(from: formattedDate) ?? Date.now
                     WeightVM.note = note
+                    WeightVM.imageData = imageData
+                    WeightVM.videoData = videoData
                     WeightVM.addWeightForWorkout(workoutModel: type)
                     if type.type == "Body Weight" && HealthKitVM.isAuthorized {
                         HealthKitVM.importIntoHealthKit(date: dateFormatter.string(from: date), bodyMass: Double(weight) ?? 0.0)
@@ -118,8 +148,10 @@ struct AddWeightView: View {
                     self.value = nil
                     
                     WeightVM.getWeightsByType(workoutModel: type)
-                    
+
                     dismiss()
+                    imageData = nil
+                    videoData = nil
                 } else {
                     error = true
                 }

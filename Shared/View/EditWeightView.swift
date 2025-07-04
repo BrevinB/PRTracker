@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct EditWeightView: View {
     @Environment(WeightViewModel.self) private var WeightVM
@@ -15,6 +16,10 @@ struct EditWeightView: View {
     @State private var dateValue: Date? = nil
     @State private var noteValue: String = ""
     @Binding var isMetric: Bool
+    @State private var selectedPhoto: PhotosPickerItem? = nil
+    @State private var selectedVideo: PhotosPickerItem? = nil
+    @State private var imageData: Data? = nil
+    @State private var videoData: Data? = nil
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -41,6 +46,29 @@ struct EditWeightView: View {
                 .foregroundColor(.primary)
                 .font(.headline)
                 .padding(.horizontal)
+
+            HStack {
+                PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                    Label("Add Photo", systemImage: "photo")
+                }
+                PhotosPicker(selection: $selectedVideo, matching: .videos) {
+                    Label("Add Video", systemImage: "video")
+                }
+            }
+            .onChange(of: selectedPhoto) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        imageData = data
+                    }
+                }
+            }
+            .onChange(of: selectedVideo) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self) {
+                        videoData = data
+                    }
+                }
+            }
         }.padding()
         
         VStack() {
@@ -63,6 +91,8 @@ struct EditWeightView: View {
             }
             dateValue = weight.date ?? Date.now
             noteValue = weight.note ?? ""
+            imageData = weight.photo
+            videoData = weight.video
         }
     }
     
@@ -70,9 +100,9 @@ struct EditWeightView: View {
         
         if isMetric {
             let newVal = weightValue.convertToImperial
-            WeightVM.updateWeight(weightId: weight.weightId, weight: newVal, note: noteValue, date: dateValue ?? Date.now)
+            WeightVM.updateWeight(weightId: weight.weightId, weight: newVal, note: noteValue, date: dateValue ?? Date.now, photo: imageData, video: videoData)
         } else {
-            WeightVM.updateWeight(weightId: weight.weightId, weight: weightValue, note: noteValue, date: dateValue ?? Date.now)
+            WeightVM.updateWeight(weightId: weight.weightId, weight: weightValue, note: noteValue, date: dateValue ?? Date.now, photo: imageData, video: videoData)
         }
     }
 }
