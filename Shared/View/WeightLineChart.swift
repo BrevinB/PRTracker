@@ -16,11 +16,11 @@ struct mocData: Identifiable {
 
 
 struct WeightLineChart: View {
-    @Environment(WeightViewModel.self) private var WeightManger
     @Environment(UserManager.self) private var userManager
     @State private var rawSelectedDate: Date?
     var chartData: [WeightModel]
     var workout: WorkoutModel
+    var height: CGFloat = 150
     let testData: [mocData] = [mocData(date: Date.now, value: 285),
                                mocData(date: Calendar.current.date(byAdding: .day, value: -1, to: .now), value: 287),
                                mocData(date: Calendar.current.date(byAdding: .day, value: -2, to: .now), value: 288),
@@ -37,8 +37,8 @@ struct WeightLineChart: View {
     
     var selectedWeight: WeightModel? {
         guard let rawSelectedDate else { return nil }
-        return self.WeightManger.weights.first {
-            Calendar.current.isDate(rawSelectedDate, inSameDayAs: $0.date ?? Date.now)
+        return chartData.first {
+            Calendar.current.isDate(rawSelectedDate, inSameDayAs: $0.date ?? Date())
         }
     }
     
@@ -81,7 +81,7 @@ struct WeightLineChart: View {
                         .symbol(.circle)
                     }
                 }
-                .frame(height: 150)
+                .frame(height: height)
                 .chartXSelection(value: $rawSelectedDate)
                 .chartYScale(domain: .automatic(includesZero: false))
                 .chartXAxis {
@@ -100,9 +100,6 @@ struct WeightLineChart: View {
             }
             .padding()
             .background(RoundedRectangle(cornerRadius: 12).fill(Color(.secondarySystemBackground)))
-            .task {
-                WeightManger.getWeightsByType(workoutModel: workout)
-            }
         }
     }
     

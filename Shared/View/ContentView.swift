@@ -21,12 +21,22 @@ struct ContentView: View {
         VStack {
             if authorizeHealthkit {
                 if initialWorkoutSet {
-                    Home(moc: moc)
+                    TabView {
+                        Home(moc: moc)
+                            .tabItem {
+                                Label("Home", systemImage: "chart.line.uptrend.xyaxis")
+                            }
+
+                        DashboardView()
+                            .tabItem {
+                                Label("Dashboard", systemImage: "list.bullet")
+                            }
+                    }
                 } else {
                     OnboardingView()
                 }
             } else {
-                
+
             }
         }
         .onAppear {
